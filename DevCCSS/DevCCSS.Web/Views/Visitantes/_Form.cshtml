@@ -1,0 +1,35 @@
+@model DevCCSS.Web.Contracts.VisitanteDto
+
+<div class="row g-3">
+    <input type="hidden" asp-for="IdVisita" />
+    <div class="col-md-6">
+        <label class="form-label">Identificacion del visitante</label>
+        <input asp-for="Identificacion" class="form-control" />
+        <span asp-validation-for="Identificacion" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Nombre completo</label>
+        <input asp-for="NombreCompleto" class="form-control" />
+        <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Paciente a visitar</label>
+        <select asp-for="IdPacienteAVisitar" class="form-select">
+            <option value="">-- Seleccione --</option>
+            @foreach (var p in (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Pacientes)
+            {
+                <option value="@p.IdPaciente">@p.Nombre @p.Apellidos</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Fecha y hora de entrada</label>
+        <input asp-for="FechaHoraEntrada" type="datetime-local" class="form-control" />
+        <span asp-validation-for="FechaHoraEntrada" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Fecha y hora de salida</label>
+        <input asp-for="FechaHoraSalida" type="datetime-local" class="form-control" />
+        <span asp-validation-for="FechaHoraSalida" class="text-danger small"></span>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿@model DevCCSS.Web.Contracts.CitaDto
+
+@{
+    ViewData["Title"] = "Eliminar cita";
+}
+
+<h2 class="mb-3 text-danger">
+    <i class="bi bi-exclamation-triangle"></i> Eliminar cita
+</h2>
+
+
+<div class="card shadow-sm border-danger">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Paciente</dt>
+            <dd class="col-sm-9">@Model.PacienteNombreCompleto <small class="text-muted">(@Model.PacienteIdentificacion)</small></dd>
+
+            <dt class="col-sm-3">Médico</dt>
+            <dd class="col-sm-9">@Model.MedicoNombreCompleto <small class="text-muted">@Model.Especialidad</small></dd>
+
+            <dt class="col-sm-3">Fecha y hora</dt>
+            <dd class="col-sm-9">@Model.FechaHoraCita.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Estado</dt>
+            <dd class="col-sm-9"><span class="badge bg-secondary">@Model.EstadoCita</span></dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.IdCita" />
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Sí, eliminar
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

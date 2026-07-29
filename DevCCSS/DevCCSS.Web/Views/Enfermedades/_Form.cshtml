@@ -1,0 +1,20 @@
+@model DevCCSS.Web.Contracts.EnfermedadDto
+
+<div class="row g-3">
+    <input type="hidden" asp-for="IdEnfermedad" />
+    <div class="col-md-6">
+        <label class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger small"></span>
+    </div>
+    <div class="col-12">
+        <label class="form-label">Descripcion</label>
+        <textarea asp-for="Descripcion" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger small"></span>
+    </div>
+    <div class="col-12">
+        <label class="form-label">Recomendaciones generales</label>
+        <textarea asp-for="RecomendacionesGenerales" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="RecomendacionesGenerales" class="text-danger small"></span>
+    </div>
+</div>

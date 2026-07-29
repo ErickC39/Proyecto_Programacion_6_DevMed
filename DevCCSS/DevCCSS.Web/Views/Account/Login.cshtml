@@ -1,0 +1,66 @@
+@model DevCCSS.Web.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar sesion";
+    ViewData["OcultarNavbar"] = true;
+}
+<div class="login-page">
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <img src="~/imagenes/logo_login.png"
+                         asp-append-version="true"
+                         alt="DevMed"
+                         class="img-fluid mb-3"
+                         style="max-width:150px;" />
+
+                    <h3 class="fw-bold">Hospital DevMed</h3>
+                    <p class="text-muted small">
+                        Ingresa tus credenciales para continuar.
+                    </p>
+                </div>
+
+                <form asp-action="Login" method="post" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label class="form-label">Usuario</label>
+                        <input asp-for="Username" class="form-control" autocomplete="username" />
+                        <span asp-validation-for="Username" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <input asp-for="Password" id="passwordInput" class="form-control" autocomplete="current-password" />
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1" aria-label="Mostrar contrasenia">
+                                <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="text-danger small mb-3">
+                        @Html.ValidationSummary()
+                    </div>
+
+                    <button class="btn btn-primary w-100" type="submit">Ingresar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const input = document.getElementById('passwordInput');
+            const icon = document.getElementById('togglePasswordIcon');
+            const esOculta = input.type === 'password';
+            input.type = esOculta ? 'text' : 'password';
+            icon.classList.toggle('bi-eye', !esOculta);
+            icon.classList.toggle('bi-eye-slash', esOculta);
+        });
+    </script>
+}

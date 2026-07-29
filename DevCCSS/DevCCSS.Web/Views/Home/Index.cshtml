@@ -1,0 +1,144 @@
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="p-4 mb-4 bg-white rounded-3 shadow-sm">
+    <h1 class="display-6">Bienvenido, @User.Identity?.Name</h1>
+    <p class="lead text-muted mb-2">Sistema de gestion hospitalaria DevMed.</p>
+    <p class="small mb-0">
+        Roles:
+        @foreach (var c in User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role))
+        {
+            <span class="badge bg-secondary">@c.Value</span>
+        }
+    </p>
+</div>
+
+<!-- Estadisticas rapidas -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+                    <i class="bi bi-people text-primary fs-3"></i>
+                </div>
+                <div>
+                    <div class="fs-2 fw-bold">@ViewBag.TotalPacientes</div>
+                    <div class="text-muted small">Pacientes registrados</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+                    <i class="bi bi-box-seam text-success fs-3"></i>
+                </div>
+                <div>
+                    <div class="fs-2 fw-bold">@ViewBag.TotalInventario</div>
+                    <div class="text-muted small">Productos en inventario</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
+                    <i class="bi bi-capsule text-info fs-3"></i>
+                </div>
+                <div>
+                    <div class="fs-2 fw-bold">@ViewBag.TotalMedicamentos</div>
+                    <div class="text-muted small">Medicamentos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5 class="mb-3 text-muted">Modulos del sistema</h5>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-people"></i> Pacientes</h5>
+                <p class="card-text small text-muted">Registro, expediente y control de pacientes.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Pacientes" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-box-seam"></i> Inventario</h5>
+                <p class="card-text small text-muted">Insumos medicos y productos de venta.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Inventario" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-capsule"></i> Medicamentos</h5>
+                <p class="card-text small text-muted">Indicaciones, restricciones y horas de aplicacion.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Medicamentos" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-calendar-check"></i> Citas</h5>
+                <p class="card-text small text-muted">Agenda y control de citas medicas.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Citas" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-person-badge"></i> Empleados</h5>
+                <p class="card-text small text-muted">Personal del hospital.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Empleados" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-virus"></i> Enfermedades</h5>
+                <p class="card-text small text-muted">Catalogo de enfermedades y tratamientos.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Enfermedades" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-receipt"></i> Ventas</h5>
+                <p class="card-text small text-muted">Facturacion y control de ventas.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Ventas" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-door-open"></i> Visitantes</h5>
+                <p class="card-text small text-muted">Control de entrada y salida de visitantes.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Visitantes" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-shield-lock"></i> Administracion</h5>
+                <p class="card-text small text-muted">Usuarios, roles y bitacoras.</p>
+                <a class="btn btn-sm btn-outline-secondary" asp-controller="Usuarios" asp-action="Index">Entrar</a>
+            </div>
+        </div>
+    </div>
+</div>

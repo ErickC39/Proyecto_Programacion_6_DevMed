@@ -1,0 +1,25 @@
+﻿@model DevCCSS.Web.Contracts.MedicamentoDto
+
+<div class="row g-3">
+    <input type="hidden" asp-for="IdMedicamento" />
+
+    <div class="col-md-8">
+        <label class="form-label">Nombre del medicamento</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Horas de aplicacion</label>
+        <input asp-for="HorasAplicacionRecomendada" class="form-control" placeholder="Cada 8 horas" />
+    </div>
+
+    <div class="col-12">
+        <label class="form-label">Indicaciones de uso</label>
+        <textarea asp-for="IndicacionesUso" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="IndicacionesUso" class="text-danger small"></span>
+    </div>
+    <div class="col-12">
+        <label class="form-label">Restricciones</label>
+        <textarea asp-for="Restricciones" class="form-control" rows="2"></textarea>
+    </div>
+</div>

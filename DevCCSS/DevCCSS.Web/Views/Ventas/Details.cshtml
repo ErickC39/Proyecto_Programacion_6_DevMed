@@ -1,0 +1,90 @@
+﻿@model DevCCSS.Web.Contracts.VentaDto
+@{
+    ViewData["Title"] = "Factura #" + Model.IdFactura;
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <h2><i class="bi bi-receipt"></i> Factura #@Model.IdFactura</h2>
+    <div class="d-print-none">
+        <a class="btn btn-outline-success btn-sm" asp-action="ExportarExcel" asp-route-id="@Model.IdFactura">
+            <i class="bi bi-file-earmark-excel"></i> Excel
+        </a>
+        <a class="btn btn-outline-danger btn-sm" asp-action="ExportarPdf" asp-route-id="@Model.IdFactura">
+            <i class="bi bi-file-earmark-pdf"></i> PDF
+        </a>
+        <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+            <i class="bi bi-printer"></i> Imprimir
+        </button>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h6 class="text-muted">Cliente</h6>
+                <p class="mb-1 fw-bold">@(Model.ClienteNombreCompleto ?? "Cliente ocasional")</p>
+                @if (!string.IsNullOrEmpty(Model.ClienteIdentificacion))
+                {
+                    <p class="mb-0 text-muted small">Cédula: @Model.ClienteIdentificacion</p>
+                }
+            </div>
+            <div class="col-md-6 text-md-end">
+                <h6 class="text-muted">Detalles de la factura</h6>
+                <p class="mb-1">Fecha: <strong>@Model.FechaFactura.ToString("dd/MM/yyyy HH:mm")</strong></p>
+                <p class="mb-1">Atendido por: <strong>@(Model.EmpleadoNombreCompleto ?? "-")</strong></p>
+                <p class="mb-0">Método de pago: <span class="badge bg-secondary">@Model.MetodoPago</span></p>
+            </div>
+        </div>
+
+        <table class="table table-sm table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Producto</th>
+                    <th class="text-end">Cantidad</th>
+                    <th class="text-end">Precio unit.</th>
+                    <th class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int linea = 1;
+                }
+                @foreach (var d in Model.Detalle)
+                {
+                    <tr>
+                        <td>@linea</td>
+                        <td>@d.NombreProducto</td>
+                        <td class="text-end">@d.Cantidad</td>
+                        <td class="text-end">₡@d.PrecioUnitario.ToString("N2")</td>
+                        <td class="text-end">₡@d.SubtotalLinea.ToString("N2")</td>
+                    </tr>
+                    linea++;
+                }
+            </tbody>
+        </table>
+
+        <div class="row justify-content-end">
+            <div class="col-md-5">
+                <dl class="row mb-0">
+                    <dt class="col-7">Subtotal</dt>
+                    <dd class="col-5 text-end">₡@Model.Subtotal.ToString("N2")</dd>
+
+                    <dt class="col-7">Descuento</dt>
+                    <dd class="col-5 text-end text-danger">- ₡@Model.Descuento.ToString("N2")</dd>
+
+                    <dt class="col-7">Impuestos (IVA 13%)</dt>
+                    <dd class="col-5 text-end">+ ₡@Model.Impuestos.ToString("N2")</dd>
+
+                    <dt class="col-7 fs-5 fw-bold border-top pt-2">Total</dt>
+                    <dd class="col-5 fs-5 fw-bold border-top pt-2 text-end">₡@Model.Total.ToString("N2")</dd>
+                </dl>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<a class="btn btn-secondary mt-3 d-print-none" asp-action="Index">Volver</a>

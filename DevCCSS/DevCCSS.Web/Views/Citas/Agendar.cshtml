@@ -1,0 +1,72 @@
+﻿@model DevCCSS.Web.Contracts.AgendarCitaDto
+
+@{
+    ViewData["Title"] = "Agendar cita";
+}
+
+<h2>Agendar cita</h2>
+
+<form asp-action="Agendar" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    @if (ViewBag.HoraSugerida != null)
+    {
+        <div class="alert alert-warning">
+            No hay espacio a esa hora. Próxima hora disponible ese día:
+            <strong>@ViewBag.HoraSugerida</strong>
+        </div>
+    }
+
+    <div class="row g-3">
+
+        <div class="col-md-6">
+            <label class="form-label">Identificación del paciente</label>
+            <input asp-for="PacienteIdentificacion" class="form-control" placeholder="Cedula del paciente" />
+            <span asp-validation-for="PacienteIdentificacion" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Médico</label>
+            <select asp-for="IdMedico" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var m in (List<DevCCSS.Web.Contracts.EmpleadoDto>)ViewBag.Medicos)
+                {
+                    <option value="@m.IdEmpleado">@m.Nombre @m.Apellidos — @m.Especialidad</option>
+                }
+            </select>
+            <span asp-validation-for="IdMedico" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Fecha y hora</label>
+            <input asp-for="FechaHoraCita" class="form-control" value="@DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm")" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+            <span asp-validation-for="FechaHoraCita" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Prioridad de cita</label>
+
+            <select asp-for="PrioridadCita" class="form-select">
+                <option value="Normal">Normal</option>
+                <option value="Alta">Urgencia</option>
+            </select>
+
+            <span asp-validation-for="PrioridadCita" class="text-danger"></span>
+        </div>
+
+    </div>
+
+    <div class="mt-4">
+        <button class="btn btn-primary" type="submit">
+            <i class="bi bi-save"></i> Agendar
+        </button>
+
+        <a class="btn btn-secondary" asp-action="Index">
+            Volver
+        </a>
+    </div>
+
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,28 @@
+@model DevCCSS.Web.Contracts.PacienteDto
+@{
+    ViewData["Title"] = "Detalle del paciente";
+}
+<h2 class="mb-3"><i class="bi bi-person-vcard"></i> @Model.Nombre @Model.Apellidos</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Identificacion</dt><dd class="col-sm-9">@Model.Identificacion</dd>
+            <dt class="col-sm-3">Nacimiento</dt><dd class="col-sm-9">@Model.FechaNacimiento.ToString("dd/MM/yyyy")</dd>
+            <dt class="col-sm-3">Genero</dt>
+            <dd class="col-sm-9">@Model.SexoBiologico</dd>
+            <dt class="col-sm-3">Orientacion sexual</dt>
+            <dd class="col-sm-9">@Model.IdentidadGenero</dd>
+            <dt class="col-sm-3">Tipo de sangre</dt><dd class="col-sm-9">@Model.TipoSangre</dd>
+            <dt class="col-sm-3">Peso</dt><dd class="col-sm-9">@Model.Peso kg</dd>
+            <dt class="col-sm-3">Estatura</dt><dd class="col-sm-9">@Model.Estatura m</dd>
+            <dt class="col-sm-3">Antecedentes</dt><dd class="col-sm-9">@Model.AntecedentesMedicos</dd>
+            <dt class="col-sm-3">Alergias</dt><dd class="col-sm-9">@Model.Alergias</dd>
+            <dt class="col-sm-3">Recien nacido</dt><dd class="col-sm-9">@(Model.EsRecienNacido ? "Si" : "No")</dd>
+        </dl>
+    </div>
+</div>
+<div class="mt-3">
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.IdPaciente">Editar</a>
+    <a class="btn btn-secondary" asp-action="Index">Volver</a>
+</div>

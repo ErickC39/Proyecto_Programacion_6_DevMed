@@ -1,0 +1,48 @@
+﻿@model DevCCSS.Web.Contracts.FinalizarCitaDto
+@{
+    ViewData["Title"] = "Finalizar cita";
+}
+<h2 class="mb-3"><i class="bi bi-check2-circle"></i> Finalizar cita #@Model.IdCita</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Finalizar" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+            <input type="hidden" asp-for="IdCita" />
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label">Resultado de la consulta</label>
+                    <textarea asp-for="ResultadoConsulta" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="ResultadoConsulta" class="text-danger small"></span>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check">
+                        <input asp-for="RequiereControl" class="form-check-input" id="chkControl" />
+                        <label class="form-check-label" asp-for="RequiereControl">Requiere cita de control</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de control</label>
+                    <input asp-for="FechaControl" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Detalles del control</label>
+                    <input asp-for="DetallesControl" class="form-control" placeholder="Indicaciones del medico" />
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button class="btn btn-success" type="submit"><i class="bi bi-save"></i> Finalizar</button>
+                <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
