@@ -1,0 +1,18 @@
+@model DevCCSS.Web.Contracts.PacienteDto
+@{
+    ViewData["Title"] = "Eliminar paciente";
+}
+<h2 class="mb-3 text-danger"><i class="bi bi-exclamation-triangle"></i> Eliminar paciente</h2>
+
+<div class="card border-danger shadow-sm">
+    <div class="card-body">
+        <p>Estas seguro de eliminar a este paciente?</p>
+        <p><strong>@Model.Nombre @Model.Apellidos</strong> (@Model.Identificacion)</p>
+        <form asp-action="Delete" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="IdPaciente" />
+            <button class="btn btn-danger" type="submit"><i class="bi bi-trash"></i> Si, eliminar</button>
+            <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+        </form>
+    </div>
+</div>

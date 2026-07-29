@@ -1,0 +1,27 @@
+@model DevCCSS.Web.Contracts.UsuarioDto
+
+<div class="row g-3">
+    <input type="hidden" asp-for="IdUsuario" />
+
+    <div class="col-md-6">
+        <label class="form-label">Nombre de usuario</label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Rol</label>
+        <select asp-for="IdRol" class="form-select">
+            <option value="">-- Seleccione --</option>
+            @foreach (var rol in (List<DevCCSS.Web.Contracts.RolDto>)ViewBag.Roles)
+            {
+                <option value="@rol.IdRol">@rol.NombreRol</option>
+            }
+        </select>
+    </div>
+    <div class="col-12">
+        <div class="form-check">
+            <input asp-for="Activo" class="form-check-input" />
+            <label class="form-check-label" asp-for="Activo">Usuario activo</label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+@model DevCCSS.Web.Contracts.ProductoDto
+
+<div class="row g-3">
+    <input type="hidden" asp-for="IdProducto" />
+    <div class="col-md-6">
+        <label class="form-label">Nombre del producto</label>
+        <input asp-for="NombreProducto" class="form-control" />
+        <span asp-validation-for="NombreProducto" class="text-danger small"></span>
+    </div>
+    <div class="col-12">
+        <label class="form-label">Descripcion</label>
+        <textarea asp-for="Descripcion" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Stock</label>
+        <input asp-for="CantidadStock" type="number" class="form-control" />
+        <span asp-validation-for="CantidadStock" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Precio unitario</label>
+        <input asp-for="PrecioUnitario" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="PrecioUnitario" class="text-danger small"></span>
+    </div>
+    <div class="col-12">
+        <div class="form-check">
+            <input asp-for="EsInsumoMedico" class="form-check-input" />
+            <label class="form-check-label" asp-for="EsInsumoMedico">Es insumo medico</label>
+        </div>
+    </div>
+</div>

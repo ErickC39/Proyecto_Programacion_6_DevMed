@@ -1,0 +1,57 @@
+﻿@model DevCCSS.Web.Contracts.AgendarEmergenciaDto
+
+@{
+    ViewData["Title"] = "Cita de emergencia";
+}
+
+<h2 class="text-danger"><i class="bi bi-exclamation-octagon"></i> Agendar cita de emergencia</h2>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-action="AgendarEmergencia" method="post">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Empleado (paciente de emergencia)</label>
+            <select asp-for="IdEmpleado" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var e in (List<DevCCSS.Web.Contracts.EmpleadoDto>)ViewBag.EmpleadosVinculados)
+                {
+                    <option value="@e.IdEmpleado">@e.Nombre @e.Apellidos</option>
+                }
+            </select>
+            <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+            @if (!((List<DevCCSS.Web.Contracts.EmpleadoDto>)ViewBag.EmpleadosVinculados).Any())
+            {
+                <small class="text-danger">No hay empleados vinculados a un paciente todavía. Vincule uno desde Empleados.</small>
+            }
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Médico</label>
+            <select asp-for="IdMedico" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var m in (List<DevCCSS.Web.Contracts.EmpleadoDto>)ViewBag.Medicos)
+                {
+                    <option value="@m.IdEmpleado">@m.Nombre @m.Apellidos — @m.Especialidad</option>
+                }
+            </select>
+            <span asp-validation-for="IdMedico" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Fecha y hora</label>
+            <input asp-for="FechaHoraCita" class="form-control" value="@DateTime.Now.AddMinutes(15).ToString("yyyy-MM-ddTHH:mm")" />
+            <span asp-validation-for="FechaHoraCita" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button class="btn btn-danger" type="submit">
+            <i class="bi bi-lightning-charge"></i> Agendar de emergencia
+        </button>
+        <a class="btn btn-secondary" asp-action="Index">Volver</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

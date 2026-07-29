@@ -1,0 +1,76 @@
+@model DevCCSS.Web.Contracts.PacienteDto
+
+<div class="row g-3">
+    <input type="hidden" asp-for="IdPaciente" />
+
+    <div class="col-md-6">
+        <label class="form-label">Identificacion</label>
+        <input asp-for="Identificacion" class="form-control" />
+        <span asp-validation-for="Identificacion" class="text-danger small"></span>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Genero</label>
+        <select asp-for="IdSexoBiologico" class="form-select">
+            <option value="">-- Seleccione --</option>
+            @foreach (var s in (List<DevCCSS.Web.Contracts.SexoBiologicoDto>)ViewBag.SexosBiologicos)
+            {
+                <option value="@s.IdSexoBiologico">@s.Descripcion</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Orientacion sexual</label>
+        <select asp-for="IdIdentidadGenero" class="form-select">
+            <option value="">-- Seleccione --</option>
+            @foreach (var i in (List<DevCCSS.Web.Contracts.IdentidadGeneroDto>)ViewBag.IdentidadesGenero)
+            {
+                <option value="@i.IdIdentidadGenero">@i.Descripcion</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Tipo de sangre</label>
+        <select asp-for="IdTipoSangre" class="form-select">
+            <option value="">-- Seleccione --</option>
+            @foreach (var t in (List<DevCCSS.Web.Contracts.TipoSangreDto>)ViewBag.TiposSangre)
+            {
+                <option value="@t.IdTipoSangre">@t.Descripcion</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Apellidos</label>
+        <input asp-for="Apellidos" class="form-control" />
+        <span asp-validation-for="Apellidos" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Fecha de nacimiento</label>
+        <input asp-for="FechaNacimiento" type="date" class="form-control" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Peso (kg)</label>
+        <input asp-for="Peso" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Estatura (m)</label>
+        <input asp-for="Estatura" type="number" step="0.01" class="form-control" />
+    </div>
+
+    <div class="col-12">
+        <label class="form-label">Antecedentes medicos</label>
+        <textarea asp-for="AntecedentesMedicos" class="form-control" rows="2"></textarea>
+    </div>
+    <div class="col-12">
+        <label class="form-label">Alergias</label>
+        <textarea asp-for="Alergias" class="form-control" rows="2"></textarea>
+    </div>
+
+    <input type="hidden" asp-for="EsRecienNacido" />
+</div>
