@@ -9,10 +9,14 @@ namespace DevCCSS.Web.Controllers
     public class PacientesController : Controller
     {
         private readonly PacienteClient _pacientes;
+        private readonly ExamenMedicoClient _examenes;
 
-        public PacientesController(PacienteClient pacientes)
+        public PacientesController(
+            PacienteClient pacientes,
+            ExamenMedicoClient examenes)
         {
             _pacientes = pacientes;
+            _examenes = examenes;
         }
 
         // Carga los catalogos (sangre, sexo, identidad) para los dropdowns
@@ -117,6 +121,7 @@ namespace DevCCSS.Web.Controllers
         }
 
         // GET: /Pacientes/Expediente/5
+        [Authorize(Roles = "Administrador,Medico,Enfermeria")]
         public async Task<IActionResult> Expediente(int id)
         {
             var p = await _pacientes.ObtenerPorIdAsync(id);
@@ -132,6 +137,7 @@ namespace DevCCSS.Web.Controllers
                 Alergias = p.Alergias
             };
             ViewData["NombrePaciente"] = $"{p.Nombre} {p.Apellidos}";
+            ViewBag.ExamenesMedicos = await _examenes.ListarPorPacienteAsync(id);
             await CargarCatalogos();
             return View(exp);
         }
@@ -139,6 +145,7 @@ namespace DevCCSS.Web.Controllers
         // POST: /Pacientes/Expediente
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador,Medico,Enfermeria")]
         public async Task<IActionResult> Expediente(ExpedienteDto model)
         {
             var r = await _pacientes.GuardarExpedienteAsync(model);
@@ -146,6 +153,7 @@ namespace DevCCSS.Web.Controllers
             {
                 ModelState.AddModelError("", r.Mensaje);
                 ViewData["NombrePaciente"] = "Paciente #" + model.IdPaciente;
+                ViewBag.ExamenesMedicos = await _examenes.ListarPorPacienteAsync(model.IdPaciente);
                 await CargarCatalogos();
                 return View(model);
             }

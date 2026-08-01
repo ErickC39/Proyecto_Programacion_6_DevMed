@@ -27,6 +27,7 @@ builder.Services.AddTransient<NacimientoService>();
 builder.Services.AddTransient<VentaService>();
 builder.Services.AddTransient<BitacoraService>();
 builder.Services.AddTransient<PermisoService>();
+builder.Services.AddTransient<ExamenMedicoService>();
 //  agregar aqui EmpleadoService, CitaService, etc.
 
 var app = builder.Build();
@@ -109,6 +110,11 @@ app.UseServiceModel(serviceBuilder =>
     serviceBuilder.AddServiceEndpoint<PermisoService, IPermisoService>(
         binding,
         "/PermisoService.svc");
+
+    serviceBuilder.AddService<ExamenMedicoService>();
+    serviceBuilder.AddServiceEndpoint<ExamenMedicoService, IExamenMedicoService>(
+        binding,
+        "/ExamenMedicoService.svc");
 
     //  cada modulo agrega su AddService + AddServiceEndpoint aqui.
 });
