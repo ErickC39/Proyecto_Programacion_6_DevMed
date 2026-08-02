@@ -1,0 +1,56 @@
+@model DevCCSS.Web.Contracts.ExamenMedicoDto
+@{
+    ViewData["Title"] = "Detalle del examen medico";
+    var badge = Model.EstadoExamen switch
+    {
+        "Solicitado" => "bg-secondary",
+        "En proceso" => "bg-warning text-dark",
+        "Completado" => "bg-success",
+        "Cancelado" => "bg-danger",
+        _ => "bg-secondary"
+    };
+}
+
+<h2 class="mb-3"><i class="bi bi-clipboard2-pulse"></i> Detalle del examen medico</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Paciente</dt>
+            <dd class="col-sm-9">@Model.PacienteNombreCompleto (@Model.PacienteIdentificacion)</dd>
+
+            <dt class="col-sm-3">Medico solicitante</dt>
+            <dd class="col-sm-9">@Model.MedicoNombreCompleto</dd>
+
+            <dt class="col-sm-3">Tipo de examen</dt>
+            <dd class="col-sm-9">@Model.TipoExamen</dd>
+
+            <dt class="col-sm-3">Fecha de solicitud</dt>
+            <dd class="col-sm-9">@Model.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Estado</dt>
+            <dd class="col-sm-9"><span class="badge @badge">@Model.EstadoExamen</span></dd>
+
+            <dt class="col-sm-3">Fecha de resultado</dt>
+            <dd class="col-sm-9">
+                @(Model.FechaResultado?.ToString("dd/MM/yyyy HH:mm") ?? "Pendiente")
+            </dd>
+
+            <dt class="col-sm-3">Resultado</dt>
+            <dd class="col-sm-9" style="white-space: pre-wrap;">@(Model.Resultado ?? "Pendiente")</dd>
+
+            <dt class="col-sm-3">Observaciones</dt>
+            <dd class="col-sm-9" style="white-space: pre-wrap;">@(Model.Observaciones ?? "Sin observaciones")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    @if (User.IsInRole("Administrador") || User.IsInRole("Medico"))
+    {
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.IdExamenMedico">
+            <i class="bi bi-pencil"></i> Actualizar
+        </a>
+    }
+    <a class="btn btn-secondary" asp-action="Index">Volver</a>
+</div>

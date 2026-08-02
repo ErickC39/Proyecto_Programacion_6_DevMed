@@ -49,6 +49,66 @@
     </div>
 </div>
 
+<div class="card shadow-sm mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong><i class="bi bi-clipboard2-pulse"></i> Examenes medicos</strong>
+        @if (User.IsInRole("Administrador") || User.IsInRole("Medico"))
+        {
+            <a class="btn btn-sm btn-primary"
+               asp-controller="ExamenesMedicos"
+               asp-action="Create"
+               asp-route-idPaciente="@Model.IdPaciente">
+                <i class="bi bi-plus-lg"></i> Solicitar examen
+            </a>
+        }
+    </div>
+    <div class="card-body p-0">
+        @{
+            var examenes = ViewBag.ExamenesMedicos as List<DevCCSS.Web.Contracts.ExamenMedicoDto>
+                ?? new List<DevCCSS.Web.Contracts.ExamenMedicoDto>();
+        }
+        @if (examenes.Count == 0)
+        {
+            <p class="text-muted p-3 mb-0">El paciente no tiene examenes medicos registrados.</p>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Medico</th>
+                            <th>Estado</th>
+                            <th class="text-end">Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var examen in examenes)
+                        {
+                            <tr>
+                                <td>@examen.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@examen.TipoExamen</td>
+                                <td>@examen.MedicoNombreCompleto</td>
+                                <td>@examen.EstadoExamen</td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                       asp-controller="ExamenesMedicos"
+                                       asp-action="Details"
+                                       asp-route-id="@examen.IdExamenMedico">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

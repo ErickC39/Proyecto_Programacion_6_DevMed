@@ -1,0 +1,84 @@
+@model DevCCSS.Web.Contracts.ExamenMedicoDto
+
+<div class="row g-3">
+    <input type="hidden" asp-for="IdExamenMedico" />
+
+    <div class="col-md-6">
+        <label class="form-label">Paciente</label>
+        <select asp-for="IdPaciente" class="form-select">
+            <option value="0">-- Seleccione --</option>
+            @foreach (var paciente in (List<DevCCSS.Web.Contracts.PacienteExamenDto>)ViewBag.Pacientes)
+            {
+                <option value="@paciente.IdPaciente">
+                    @paciente.NombreCompleto (@paciente.Identificacion)
+                </option>
+            }
+        </select>
+        <span asp-validation-for="IdPaciente" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Medico solicitante</label>
+        <select asp-for="IdEmpleadoMedico" class="form-select">
+            <option value="0">-- Seleccione --</option>
+            @foreach (var medico in (List<DevCCSS.Web.Contracts.MedicoExamenDto>)ViewBag.Medicos)
+            {
+                <option value="@medico.IdEmpleado">
+                    @medico.NombreCompleto - @medico.Especialidad
+                </option>
+            }
+        </select>
+        <span asp-validation-for="IdEmpleadoMedico" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Tipo de examen</label>
+        <select asp-for="IdTipoExamen" class="form-select">
+            <option value="0">-- Seleccione --</option>
+            @foreach (var tipo in (List<DevCCSS.Web.Contracts.TipoExamenDto>)ViewBag.TiposExamen)
+            {
+                <option value="@tipo.IdTipoExamen">@tipo.Descripcion</option>
+            }
+        </select>
+        <span asp-validation-for="IdTipoExamen" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Fecha de solicitud</label>
+        <input asp-for="FechaSolicitud" type="datetime-local" class="form-control"
+               value="@Model.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm")" />
+        <span asp-validation-for="FechaSolicitud" class="text-danger small"></span>
+    </div>
+
+    @if (Model.IdExamenMedico > 0)
+    {
+        <div class="col-md-6">
+            <label class="form-label">Estado</label>
+            <select asp-for="IdEstadoExamen" class="form-select">
+                <option value="0">-- Seleccione --</option>
+                @foreach (var estado in (List<DevCCSS.Web.Contracts.EstadoExamenDto>)ViewBag.EstadosExamen)
+                {
+                    <option value="@estado.IdEstadoExamen">@estado.Descripcion</option>
+                }
+            </select>
+            <span asp-validation-for="IdEstadoExamen" class="text-danger small"></span>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">Resultado obtenido</label>
+            <textarea asp-for="Resultado" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Resultado" class="text-danger small"></span>
+            <div class="form-text">El estado Completado requiere un resultado.</div>
+        </div>
+    }
+    else
+    {
+        <input type="hidden" asp-for="IdEstadoExamen" />
+    }
+
+    <div class="col-12">
+        <label class="form-label">Observaciones</label>
+        <textarea asp-for="Observaciones" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Observaciones" class="text-danger small"></span>
+    </div>
+</div>

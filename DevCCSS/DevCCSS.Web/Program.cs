@@ -21,6 +21,7 @@ builder.Services.AddScoped<NacimientoClient>();
 builder.Services.AddScoped<VentaClient>();
 builder.Services.AddScoped<BitacoraClient>();
 builder.Services.AddScoped<PermisoClient>();
+builder.Services.AddScoped<ExamenMedicoClient>();
 
 // Autenticacion por cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
