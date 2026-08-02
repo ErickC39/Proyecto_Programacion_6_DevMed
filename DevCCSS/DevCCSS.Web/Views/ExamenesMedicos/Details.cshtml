@@ -1,6 +1,6 @@
 @model DevCCSS.Web.Contracts.ExamenMedicoDto
 @{
-    ViewData["Title"] = "Detalle del examen medico";
+    ViewData["Title"] = "Detalle del examen médico";
     var badge = Model.EstadoExamen switch
     {
         "Solicitado" => "bg-secondary",
@@ -11,7 +11,7 @@
     };
 }
 
-<h2 class="mb-3"><i class="bi bi-clipboard2-pulse"></i> Detalle del examen medico</h2>
+<h2 class="mb-3"><i class="bi bi-clipboard2-pulse"></i> Detalle del examen médico</h2>
 
 <div class="card shadow-sm">
     <div class="card-body">
@@ -19,7 +19,7 @@
             <dt class="col-sm-3">Paciente</dt>
             <dd class="col-sm-9">@Model.PacienteNombreCompleto (@Model.PacienteIdentificacion)</dd>
 
-            <dt class="col-sm-3">Medico solicitante</dt>
+            <dt class="col-sm-3">Médico solicitante</dt>
             <dd class="col-sm-9">@Model.MedicoNombreCompleto</dd>
 
             <dt class="col-sm-3">Tipo de examen</dt>

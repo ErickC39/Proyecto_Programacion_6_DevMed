@@ -1,4 +1,4 @@
-﻿@model DevCCSS.Web.Contracts.CrearVentaDto
+@model DevCCSS.Web.Contracts.CrearVentaDto
 @{
     ViewData["Title"] = "Nueva venta";
     var productos = (List<DevCCSS.Web.Contracts.ProductoDto>)ViewBag.Productos;
@@ -12,7 +12,7 @@
     <div class="row g-3 mb-3">
         <div class="col-md-6">
             <label class="form-label">Cédula del paciente (opcional)</label>
-            <input asp-for="PacienteIdentificacion" class="form-control" placeholder="Dejar vacio si es cliente ocasional" />
+            <input asp-for="PacienteIdentificacion" class="form-control" placeholder="Dejar vacío si es cliente ocasional" />
         </div>
         <div class="col-md-3">
             <label class="form-label">Método de pago</label>

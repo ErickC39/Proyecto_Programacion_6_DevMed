@@ -1,0 +1,23 @@
+@model DevCCSS.Web.Contracts.HabitacionDto
+
+<div class="row g-3">
+    <input type="hidden" asp-for="IdHabitacion" />
+
+    <div class="col-md-6">
+        <label class="form-label">Número de habitación</label>
+        <input asp-for="NumeroHabitacion" class="form-control" maxlength="10" />
+        <span asp-validation-for="NumeroHabitacion" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Tipo de habitación</label>
+        <select asp-for="IdTipoHabitacion" class="form-select">
+            <option value="0">-- Seleccione --</option>
+            @foreach (var tipo in (List<DevCCSS.Web.Contracts.TipoHabitacionDto>)ViewBag.TiposHabitacion)
+            {
+                <option value="@tipo.IdTipoHabitacion">@tipo.Descripcion</option>
+            }
+        </select>
+        <span asp-validation-for="IdTipoHabitacion" class="text-danger small"></span>
+    </div>
+</div>

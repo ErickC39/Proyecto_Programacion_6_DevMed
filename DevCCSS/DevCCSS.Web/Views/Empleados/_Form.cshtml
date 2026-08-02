@@ -2,11 +2,21 @@
 
 <div class="row g-3">
     <input type="hidden" asp-for="IdEmpleado" />
-    <div class="col-md-6">
-        <label class="form-label">Identificacion</label>
-        <input asp-for="Identificacion" class="form-control" />
-        <span asp-validation-for="Identificacion" class="text-danger small"></span>
-    </div>
+    @if (Model.IdEmpleado > 0)
+    {
+        <div class="col-md-6">
+            <label class="form-label">Identificación</label>
+            <input asp-for="Identificacion" class="form-control" />
+            <span asp-validation-for="Identificacion" class="text-danger small"></span>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-6">
+            <label class="form-label">Identificación</label>
+            <input class="form-control" value="Se asignará automáticamente (EMP-###)" disabled />
+        </div>
+    }
     <div class="col-md-6">
         <label class="form-label">Nombre</label>
         <input asp-for="Nombre" class="form-control" />

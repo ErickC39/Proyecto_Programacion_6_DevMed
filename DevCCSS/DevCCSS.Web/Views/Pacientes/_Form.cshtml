@@ -4,12 +4,12 @@
     <input type="hidden" asp-for="IdPaciente" />
 
     <div class="col-md-6">
-        <label class="form-label">Identificacion</label>
+        <label class="form-label">Identificación</label>
         <input asp-for="Identificacion" class="form-control" />
         <span asp-validation-for="Identificacion" class="text-danger small"></span>
     </div>
     <div class="col-md-3">
-        <label class="form-label">Genero</label>
+        <label class="form-label">Género</label>
         <select asp-for="IdSexoBiologico" class="form-select">
             <option value="">-- Seleccione --</option>
             @foreach (var s in (List<DevCCSS.Web.Contracts.SexoBiologicoDto>)ViewBag.SexosBiologicos)
@@ -19,7 +19,7 @@
         </select>
     </div>
     <div class="col-md-3">
-        <label class="form-label">Orientacion sexual</label>
+        <label class="form-label">Orientación sexual</label>
         <select asp-for="IdIdentidadGenero" class="form-select">
             <option value="">-- Seleccione --</option>
             @foreach (var i in (List<DevCCSS.Web.Contracts.IdentidadGeneroDto>)ViewBag.IdentidadesGenero)
@@ -64,7 +64,7 @@
     </div>
 
     <div class="col-12">
-        <label class="form-label">Antecedentes medicos</label>
+        <label class="form-label">Antecedentes médicos</label>
         <textarea asp-for="AntecedentesMedicos" class="form-control" rows="2"></textarea>
     </div>
     <div class="col-12">

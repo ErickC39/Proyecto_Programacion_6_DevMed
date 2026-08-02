@@ -1,4 +1,4 @@
-﻿@model DevCCSS.Web.Contracts.CitaDto
+@model DevCCSS.Web.Contracts.CitaDto
 
 @{
     ViewData["Title"] = "Detalle de la cita";
@@ -46,7 +46,7 @@
                 @if (Model.TiempoEsperaMinutos > 60)
                 {
                     <span class="badge bg-danger ms-2">
-                        <i class="bi bi-exclamation-triangle"></i> Excede el maximo permitido (1 hora)
+                        <i class="bi bi-exclamation-triangle"></i> Excede el máximo permitido (1 hora)
                     </span>
                 }
             </dd>

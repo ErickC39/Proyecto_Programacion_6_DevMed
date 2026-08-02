@@ -1,0 +1,62 @@
+@model DevCCSS.Web.Contracts.AsignarHabitacionDto
+@{
+    ViewData["Title"] = "Asignar habitación";
+}
+
+<h2 class="mb-3"><i class="bi bi-person-check"></i> Asignar paciente a la habitación</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Asignar" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+            <input type="hidden" asp-for="IdHabitacion" />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Paciente</label>
+                    <select asp-for="IdPaciente" class="form-select">
+                        <option value="0">-- Seleccione --</option>
+                        @foreach (var paciente in (List<DevCCSS.Web.Contracts.PacienteHabitacionDto>)ViewBag.Pacientes)
+                        {
+                            <option value="@paciente.IdPaciente">
+                                @paciente.NombreCompleto (@paciente.Identificacion)
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="IdPaciente" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Responsable del registro</label>
+                    <select asp-for="IdEmpleadoResponsable" class="form-select">
+                        <option value="0">-- Seleccione --</option>
+                        @foreach (var empleado in (List<DevCCSS.Web.Contracts.EmpleadoHabitacionDto>)ViewBag.Empleados)
+                        {
+                            <option value="@empleado.IdEmpleado">@empleado.NombreCompleto</option>
+                        }
+                    </select>
+                    <span asp-validation-for="IdEmpleadoResponsable" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de ingreso</label>
+                    <input asp-for="FechaIngreso" type="datetime-local" class="form-control"
+                           value="@Model.FechaIngreso.ToString("yyyy-MM-ddTHH:mm")" />
+                    <span asp-validation-for="FechaIngreso" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button class="btn btn-success" type="submit">
+                    <i class="bi bi-save"></i> Asignar
+                </button>
+                <a class="btn btn-secondary" asp-action="Details" asp-route-id="@Model.IdHabitacion">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

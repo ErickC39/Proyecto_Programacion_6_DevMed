@@ -4,7 +4,12 @@
     <input type="hidden" asp-for="IdUsuario" />
 
     <div class="col-md-6">
-        <label class="form-label">Nombre de usuario</label>
+        <label class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Usuario (para iniciar sesión)</label>
         <input asp-for="Username" class="form-control" />
         <span asp-validation-for="Username" class="text-danger small"></span>
     </div>

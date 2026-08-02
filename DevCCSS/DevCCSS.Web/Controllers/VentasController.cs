@@ -11,8 +11,20 @@ namespace DevCCSS.Web.Controllers
     [Authorize(Roles = "Administrador,Facturacion")]
     public class VentasController : Controller
     {
+        private const string ColorPrimario = "#0F4A68";
+        private const string ColorSecundario = "#1F7F85";
+        private const string ColorPrimarioSubtle = "#D6E4EA";
+
         private readonly VentaClient _ventas;
-        public VentasController(VentaClient ventas) => _ventas = ventas;
+        private readonly IWebHostEnvironment _env;
+        public VentasController(VentaClient ventas, IWebHostEnvironment env)
+        {
+            _ventas = ventas;
+            _env = env;
+        }
+
+        private byte[] LeerLogo() =>
+            System.IO.File.ReadAllBytes(Path.Combine(_env.WebRootPath, "imagenes", "logo_devmed.png"));
 
         public async Task<IActionResult> Index()
         {
@@ -80,14 +92,24 @@ namespace DevCCSS.Web.Controllers
             using var workbook = new ClosedXML.Excel.XLWorkbook();
             var hoja = workbook.Worksheets.Add("Factura");
 
-            hoja.Cell("A1").Value = "Hospital DevCCSS";
-            hoja.Cell("A1").Style.Font.Bold = true;
-            hoja.Cell("A1").Style.Font.FontSize = 16;
-            hoja.Cell("A2").Value = $"Factura #{venta.IdFactura}";
-            hoja.Cell("A3").Value = $"Fecha: {venta.FechaFactura:dd/MM/yyyy HH:mm}";
-            hoja.Cell("A4").Value = $"Cliente: {venta.ClienteNombreCompleto ?? "Cliente ocasional"}";
-            hoja.Cell("A5").Value = $"Atendido por: {venta.EmpleadoNombreCompleto ?? "-"}";
-            hoja.Cell("A6").Value = $"Método de pago: {venta.MetodoPago}";
+            using (var logoStream = new MemoryStream(LeerLogo()))
+            {
+                hoja.AddPicture(logoStream, ClosedXML.Excel.Drawings.XLPictureFormat.Png)
+                    .MoveTo(hoja.Cell("A1"))
+                    .WithSize(55, 55);
+            }
+            hoja.Column(1).Width = 10;
+
+            hoja.Cell("B1").Value = "Hospital DevMed";
+            hoja.Cell("B1").Style.Font.Bold = true;
+            hoja.Cell("B1").Style.Font.FontSize = 16;
+            hoja.Cell("B1").Style.Font.FontColor = ClosedXML.Excel.XLColor.FromHtml(ColorPrimario);
+            hoja.Cell("B2").Value = $"Factura #{venta.IdFactura}";
+            hoja.Cell("B2").Style.Font.FontColor = ClosedXML.Excel.XLColor.FromHtml(ColorSecundario);
+            hoja.Cell("B3").Value = $"Fecha: {venta.FechaFactura:dd/MM/yyyy HH:mm}";
+            hoja.Cell("B4").Value = $"Cliente: {venta.ClienteNombreCompleto ?? "Cliente ocasional"}";
+            hoja.Cell("B5").Value = $"Atendido por: {venta.EmpleadoNombreCompleto ?? "-"}";
+            hoja.Cell("B6").Value = $"Método de pago: {venta.MetodoPago}";
 
             int filaEncabezado = 8;
             hoja.Cell(filaEncabezado, 1).Value = "#";
@@ -98,7 +120,8 @@ namespace DevCCSS.Web.Controllers
 
             var rangoEncabezado = hoja.Range(filaEncabezado, 1, filaEncabezado, 5);
             rangoEncabezado.Style.Font.Bold = true;
-            rangoEncabezado.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.LightGray;
+            rangoEncabezado.Style.Font.FontColor = ClosedXML.Excel.XLColor.White;
+            rangoEncabezado.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromHtml(ColorPrimario);
 
             int fila = filaEncabezado + 1;
             int numero = 1;
@@ -136,8 +159,12 @@ namespace DevCCSS.Web.Controllers
             hoja.Cell(fila, 5).Value = venta.Total;
             hoja.Cell(fila, 5).Style.NumberFormat.Format = "₡#,##0.00";
             hoja.Cell(fila, 5).Style.Font.Bold = true;
+            var rangoTotal = hoja.Range(fila, 4, fila, 5);
+            rangoTotal.Style.Font.FontColor = ClosedXML.Excel.XLColor.FromHtml(ColorPrimario);
+            rangoTotal.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromHtml(ColorPrimarioSubtle);
 
             hoja.Columns().AdjustToContents();
+            hoja.Column(1).Width = Math.Max(hoja.Column(1).Width, 10);
 
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
@@ -154,6 +181,8 @@ namespace DevCCSS.Web.Controllers
             var venta = await _ventas.ObtenerPorIdAsync(id);
             if (venta is null) return NotFound();
 
+            var logo = LeerLogo();
+
             var documento = Document.Create(container =>
             {
                 container.Page(page =>
@@ -164,9 +193,16 @@ namespace DevCCSS.Web.Controllers
 
                     page.Header().Column(col =>
                     {
-                        col.Item().Text("Hospital DevCCSS").FontSize(20).Bold();
-                        col.Item().Text($"Factura #{venta.IdFactura}").FontSize(14);
-                        col.Item().PaddingTop(5).LineHorizontal(1);
+                        col.Item().Row(row =>
+                        {
+                            row.ConstantItem(50).Image(logo);
+                            row.RelativeItem().PaddingLeft(10).Column(c =>
+                            {
+                                c.Item().Text("Hospital DevMed").FontSize(20).Bold().FontColor(ColorPrimario);
+                                c.Item().Text($"Factura #{venta.IdFactura}").FontSize(14).FontColor(ColorSecundario);
+                            });
+                        });
+                        col.Item().PaddingTop(8).LineHorizontal(2).LineColor(ColorPrimario);
                     });
 
                     page.Content().PaddingVertical(15).Column(col =>
@@ -201,12 +237,12 @@ namespace DevCCSS.Web.Controllers
 
                             tabla.Header(header =>
                             {
-                                header.Cell().Text("#").Bold();
-                                header.Cell().Text("Producto").Bold();
-                                header.Cell().AlignRight().Text("Cant.").Bold();
-                                header.Cell().AlignRight().Text("Precio").Bold();
-                                header.Cell().AlignRight().Text("Subtotal").Bold();
-                                header.Cell().ColumnSpan(5).PaddingTop(3).BorderBottom(1);
+                                static IContainer Encabezado(IContainer c) => c.Background(ColorPrimario).Padding(5).DefaultTextStyle(x => x.FontColor(Colors.White).Bold());
+                                header.Cell().Element(Encabezado).Text("#");
+                                header.Cell().Element(Encabezado).Text("Producto");
+                                header.Cell().Element(Encabezado).AlignRight().Text("Cant.");
+                                header.Cell().Element(Encabezado).AlignRight().Text("Precio");
+                                header.Cell().Element(Encabezado).AlignRight().Text("Subtotal");
                             });
 
                             int numero = 1;
@@ -226,12 +262,12 @@ namespace DevCCSS.Web.Controllers
                             c.Item().Text($"Subtotal: ₡{venta.Subtotal:N2}");
                             c.Item().Text($"Descuento: -₡{venta.Descuento:N2}");
                             c.Item().Text($"Impuestos (13%): +₡{venta.Impuestos:N2}");
-                            c.Item().PaddingTop(5).BorderTop(1).PaddingTop(3)
-                                .Text($"Total: ₡{venta.Total:N2}").FontSize(14).Bold();
+                            c.Item().PaddingTop(5).Background(ColorPrimarioSubtle).Padding(5)
+                                .Text($"Total: ₡{venta.Total:N2}").FontSize(14).Bold().FontColor(ColorPrimario);
                         });
                     });
 
-                    page.Footer().AlignCenter().Text("Hospital DevCCSS | GRUPO 2").FontSize(9);
+                    page.Footer().AlignCenter().Text("Hospital DevMed").FontSize(9).FontColor(ColorSecundario);
                 });
             });
 

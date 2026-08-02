@@ -2,9 +2,9 @@
     ViewData["Title"] = "Inicio";
 }
 
-<div class="p-4 mb-4 bg-white rounded-3 shadow-sm">
+<div class="p-4 mb-4 bg-body-tertiary rounded-3 shadow-sm">
     <h1 class="display-6">Bienvenido, @User.Identity?.Name</h1>
-    <p class="lead text-muted mb-2">Sistema de gestion hospitalaria DevMed.</p>
+    <p class="lead text-muted mb-2">Sistema de gestión hospitalaria DevMed.</p>
     <p class="small mb-0">
         Roles:
         @foreach (var c in User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role))
@@ -57,88 +57,133 @@
     </div>
 </div>
 
-<h5 class="mb-3 text-muted">Modulos del sistema</h5>
+<h5 class="mb-3 text-muted">Módulos del sistema</h5>
 
 <div class="row g-3">
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-people"></i> Pacientes</h5>
-                <p class="card-text small text-muted">Registro, expediente y control de pacientes.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Pacientes" asp-action="Index">Entrar</a>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Medico") || User.IsInRole("Enfermeria") || User.IsInRole("Recepcionista"))
+    {
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-people"></i> Pacientes</h5>
+                    <p class="card-text small text-muted">Registro, expediente y control de pacientes.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Pacientes" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-box-seam"></i> Inventario</h5>
-                <p class="card-text small text-muted">Insumos medicos y productos de venta.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Inventario" asp-action="Index">Entrar</a>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-calendar-check"></i> Citas</h5>
+                    <p class="card-text small text-muted">Agenda y control de citas médicas.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Citas" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-capsule"></i> Medicamentos</h5>
-                <p class="card-text small text-muted">Indicaciones, restricciones y horas de aplicacion.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Medicamentos" asp-action="Index">Entrar</a>
+    }
+    @if (User.IsInRole("Administrador"))
+    {
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-person-badge"></i> Empleados</h5>
+                    <p class="card-text small text-muted">Personal del hospital.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Empleados" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-calendar-check"></i> Citas</h5>
-                <p class="card-text small text-muted">Agenda y control de citas medicas.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Citas" asp-action="Index">Entrar</a>
+    }
+    @if (User.IsInRole("Administrador") || User.IsInRole("Medico") || User.IsInRole("Enfermeria"))
+    {
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-virus"></i> Enfermedades</h5>
+                    <p class="card-text small text-muted">Catálogo de enfermedades y tratamientos.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Enfermedades" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-person-badge"></i> Empleados</h5>
-                <p class="card-text small text-muted">Personal del hospital.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Empleados" asp-action="Index">Entrar</a>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-capsule"></i> Medicamentos</h5>
+                    <p class="card-text small text-muted">Indicaciones, restricciones y horas de aplicación.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Medicamentos" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-virus"></i> Enfermedades</h5>
-                <p class="card-text small text-muted">Catalogo de enfermedades y tratamientos.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Enfermedades" asp-action="Index">Entrar</a>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-clipboard2-pulse"></i> Exámenes médicos</h5>
+                    <p class="card-text small text-muted">Solicitud y resultados de exámenes.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="ExamenesMedicos" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-receipt"></i> Ventas</h5>
-                <p class="card-text small text-muted">Facturacion y control de ventas.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Ventas" asp-action="Index">Entrar</a>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-clipboard2-heart"></i> Nacimientos</h5>
+                    <p class="card-text small text-muted">Registro de recién nacidos y Apgar.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Nacimientos" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-door-open"></i> Visitantes</h5>
-                <p class="card-text small text-muted">Control de entrada y salida de visitantes.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Visitantes" asp-action="Index">Entrar</a>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-door-open"></i> Habitaciones</h5>
+                    <p class="card-text small text-muted">Control de ocupación de habitaciones.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Habitaciones" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-shield-lock"></i> Administracion</h5>
-                <p class="card-text small text-muted">Usuarios, roles y bitacoras.</p>
-                <a class="btn btn-sm btn-outline-secondary" asp-controller="Usuarios" asp-action="Index">Entrar</a>
+    }
+    @if (User.IsInRole("Administrador") || User.IsInRole("Facturacion"))
+    {
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-box-seam"></i> Inventario</h5>
+                    <p class="card-text small text-muted">Insumos médicos y productos de venta.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Inventario" asp-action="Index">Entrar</a>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-receipt"></i> Ventas</h5>
+                    <p class="card-text small text-muted">Facturación y control de ventas.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Ventas" asp-action="Index">Entrar</a>
+                </div>
+            </div>
+        </div>
+    }
+    @if (User.IsInRole("Administrador") || User.IsInRole("Recepcionista"))
+    {
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-person-lines-fill"></i> Visitantes</h5>
+                    <p class="card-text small text-muted">Control de entrada y salida de visitantes.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Visitantes" asp-action="Index">Entrar</a>
+                </div>
+            </div>
+        </div>
+    }
+    @if (User.IsInRole("Administrador"))
+    {
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-shield-lock"></i> Administración</h5>
+                    <p class="card-text small text-muted">Usuarios, roles y bitácoras.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Usuarios" asp-action="Index">Entrar</a>
+                </div>
+            </div>
+        </div>
+    }
 </div>

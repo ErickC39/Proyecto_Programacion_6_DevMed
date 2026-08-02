@@ -7,18 +7,18 @@
 <div class="card shadow-sm">
     <div class="card-body">
         <dl class="row mb-0">
-            <dt class="col-sm-3">Identificacion</dt><dd class="col-sm-9">@Model.Identificacion</dd>
+            <dt class="col-sm-3">Identificación</dt><dd class="col-sm-9">@Model.Identificacion</dd>
             <dt class="col-sm-3">Nacimiento</dt><dd class="col-sm-9">@Model.FechaNacimiento.ToString("dd/MM/yyyy")</dd>
-            <dt class="col-sm-3">Genero</dt>
+            <dt class="col-sm-3">Género</dt>
             <dd class="col-sm-9">@Model.SexoBiologico</dd>
-            <dt class="col-sm-3">Orientacion sexual</dt>
+            <dt class="col-sm-3">Orientación sexual</dt>
             <dd class="col-sm-9">@Model.IdentidadGenero</dd>
             <dt class="col-sm-3">Tipo de sangre</dt><dd class="col-sm-9">@Model.TipoSangre</dd>
             <dt class="col-sm-3">Peso</dt><dd class="col-sm-9">@Model.Peso kg</dd>
             <dt class="col-sm-3">Estatura</dt><dd class="col-sm-9">@Model.Estatura m</dd>
             <dt class="col-sm-3">Antecedentes</dt><dd class="col-sm-9">@Model.AntecedentesMedicos</dd>
             <dt class="col-sm-3">Alergias</dt><dd class="col-sm-9">@Model.Alergias</dd>
-            <dt class="col-sm-3">Recien nacido</dt><dd class="col-sm-9">@(Model.EsRecienNacido ? "Si" : "No")</dd>
+            <dt class="col-sm-3">Recién nacido</dt><dd class="col-sm-9">@(Model.EsRecienNacido ? "Sí" : "No")</dd>
         </dl>
     </div>
 </div>

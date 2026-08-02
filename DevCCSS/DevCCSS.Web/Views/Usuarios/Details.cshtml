@@ -2,13 +2,14 @@
 @{
     ViewData["Title"] = "Detalle del usuario";
 }
-<h2 class="mb-3"><i class="bi bi-person-vcard"></i> @Model.Username</h2>
+<h2 class="mb-3"><i class="bi bi-person-vcard"></i> @Model.Nombre</h2>
 <div class="card shadow-sm"><div class="card-body">
     <dl class="row mb-0">
+        <dt class="col-sm-4">Nombre</dt><dd class="col-sm-8">@Model.Nombre</dd>
         <dt class="col-sm-4">Usuario</dt><dd class="col-sm-8">@Model.Username</dd>
         <dt class="col-sm-4">Rol</dt><dd class="col-sm-8">@Model.Rol</dd>
         <dt class="col-sm-4">Estado</dt><dd class="col-sm-8">@(Model.Activo ? "Activo" : "Inactivo")</dd>
-        <dt class="col-sm-4">Fecha de creacion</dt><dd class="col-sm-8">@Model.FechaCreacion</dd>
+        <dt class="col-sm-4">Fecha de creación</dt><dd class="col-sm-8">@Model.FechaCreacion</dd>
     </dl>
 </div></div>
 <div class="mt-3">

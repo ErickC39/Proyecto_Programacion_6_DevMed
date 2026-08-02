@@ -6,6 +6,7 @@ namespace DevCCSS.Web.Contracts
     public class UsuarioDto
     {
         [DataMember] public int IdUsuario { get; set; }
+        [DataMember] public string Nombre { get; set; } = string.Empty;
         [DataMember] public string Username { get; set; } = string.Empty;
         [DataMember] public string? Password { get; set; }   // solo se usa al crear
         [DataMember] public int IdRol { get; set; }

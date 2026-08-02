@@ -6,13 +6,13 @@
 <h2 class="mb-3"><i class="bi bi-heart-pulse"></i> Detalle de nacimiento</h2>
 
 <div class="card shadow-sm mb-3">
-    <div class="card-header fw-bold">Datos del recien nacido</div>
+    <div class="card-header fw-bold">Datos del recién nacido</div>
     <div class="card-body">
         <dl class="row mb-0">
-            <dt class="col-sm-3">Identificacion</dt><dd class="col-sm-9">@d.Identificacion</dd>
+            <dt class="col-sm-3">Identificación</dt><dd class="col-sm-9">@d.Identificacion</dd>
             <dt class="col-sm-3">Nombre</dt><dd class="col-sm-9">@d.Nombre @d.Apellidos</dd>
             <dt class="col-sm-3">Nacimiento</dt><dd class="col-sm-9">@d.FechaNacimiento.ToString("dd/MM/yyyy")</dd>
-            <dt class="col-sm-3">Genero</dt><dd class="col-sm-9">@d.SexoBiologico</dd>
+            <dt class="col-sm-3">Género</dt><dd class="col-sm-9">@d.SexoBiologico</dd>
             <dt class="col-sm-3">Tipo de sangre</dt><dd class="col-sm-9">@d.TipoSangre</dd>
             <dt class="col-sm-3">Peso / Estatura</dt><dd class="col-sm-9">@d.Peso kg / @(d.Estatura.HasValue ? $"{d.Estatura.Value * 100:0.#}" : "-") cm</dd>
             <dt class="col-sm-3">Madre</dt><dd class="col-sm-9">@(d.NombreMadre ?? "-")</dd>
@@ -25,13 +25,13 @@
     <div class="card-body">
         @if (!Model.Apgar.Any())
         {
-            <p class="text-muted mb-0">No se registro Apgar para este nacimiento.</p>
+            <p class="text-muted mb-0">No se registró Apgar para este nacimiento.</p>
         }
         else
         {
             <table class="table table-bordered mb-0">
                 <thead class="table-light">
-                    <tr><th>Minuto</th><th>Apariencia</th><th>Pulso</th><th>Gesto</th><th>Actividad</th><th>Respiracion</th><th>Total</th></tr>
+                    <tr><th>Minuto</th><th>Apariencia</th><th>Pulso</th><th>Gesto</th><th>Actividad</th><th>Respiración</th><th>Total</th></tr>
                 </thead>
                 <tbody>
                     @foreach (var a in Model.Apgar)
@@ -49,15 +49,15 @@
 </div>
 
 <div class="card shadow-sm mb-3">
-    <div class="card-header fw-bold">Examen fisico</div>
+    <div class="card-header fw-bold">Examen físico</div>
     <div class="card-body">
         <dl class="row mb-0">
-            <dt class="col-sm-3">Perimetro cefalico</dt><dd class="col-sm-9">@(Model.PerimetroCefalico is null ? "-" : $"{Model.PerimetroCefalico} cm")</dd>
-            <dt class="col-sm-3">Perimetro toracico</dt><dd class="col-sm-9">@(Model.PerimetroToracico is null ? "-" : $"{Model.PerimetroToracico} cm")</dd>
+            <dt class="col-sm-3">Perímetro cefálico</dt><dd class="col-sm-9">@(Model.PerimetroCefalico is null ? "-" : $"{Model.PerimetroCefalico} cm")</dd>
+            <dt class="col-sm-3">Perímetro torácico</dt><dd class="col-sm-9">@(Model.PerimetroToracico is null ? "-" : $"{Model.PerimetroToracico} cm")</dd>
             <dt class="col-sm-3">Temperatura</dt><dd class="col-sm-9">@(Model.Temperatura is null ? "-" : $"{Model.Temperatura} °C")</dd>
-            <dt class="col-sm-3">Frecuencia cardiaca</dt><dd class="col-sm-9">@(Model.FrecuenciaCardiaca is null ? "-" : $"{Model.FrecuenciaCardiaca} lpm")</dd>
+            <dt class="col-sm-3">Frecuencia cardíaca</dt><dd class="col-sm-9">@(Model.FrecuenciaCardiaca is null ? "-" : $"{Model.FrecuenciaCardiaca} lpm")</dd>
             <dt class="col-sm-3">Frecuencia respiratoria</dt><dd class="col-sm-9">@(Model.FrecuenciaRespiratoria is null ? "-" : $"{Model.FrecuenciaRespiratoria} rpm")</dd>
-            <dt class="col-sm-3">Coloracion de piel</dt><dd class="col-sm-9">@(Model.ColoracionPiel ?? "-")</dd>
+            <dt class="col-sm-3">Coloración de piel</dt><dd class="col-sm-9">@(Model.ColoracionPiel ?? "-")</dd>
             <dt class="col-sm-3">Reflejos</dt><dd class="col-sm-9">@(Model.Reflejos ?? "-")</dd>
             <dt class="col-sm-3">Observaciones</dt><dd class="col-sm-9">@(Model.ObservacionesGenerales ?? "-")</dd>
         </dl>
@@ -74,7 +74,7 @@
                 {
                     <tr>
                         <td>@t.TipoTamizaje</td>
-                        <td>@(t.Realizado ? "Si" : "No")</td>
+                        <td>@(t.Realizado ? "Sí" : "No")</td>
                         <td>@(t.Resultado ?? "-")</td>
                     </tr>
                 }
