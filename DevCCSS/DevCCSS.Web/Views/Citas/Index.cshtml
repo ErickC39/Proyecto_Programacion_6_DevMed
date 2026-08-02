@@ -11,7 +11,7 @@
 <div class="row g-2 mb-3">
     <div class="col-md-6">
         <input type="text" id="buscador" class="form-control"
-               placeholder="Buscar por paciente, medico o identificacion..." />
+               placeholder="Buscar por paciente, médico o identificación..." />
     </div>
     <div class="col-md-3">
         <select id="filtroEstado" class="form-select" data-campo="estado">
@@ -36,7 +36,7 @@
         <thead class="table-dark">
             <tr>
                 <th>Paciente</th>
-                <th>Medico</th>
+                <th>Médico</th>
                 <th>Fecha y hora</th>
                 <th>Espera (min)</th>
                 <th>Estado</th>
@@ -64,7 +64,7 @@
                         @c.TiempoEsperaMinutos
                         @if (c.TiempoEsperaMinutos > 60)
                         {
-                            <i class="bi bi-exclamation-triangle-fill text-danger" title="Excede el maximo permitido (1 hora)"></i>
+                            <i class="bi bi-exclamation-triangle-fill text-danger" title="Excede el máximo permitido (1 hora)"></i>
                         }
                     </td>
                     <td>
@@ -104,7 +104,7 @@
 </div>
 
 <div id="sinResultados" class="text-center text-muted py-4" style="display:none;">
-    No se encontraron citas con esa busqueda.
+    No se encontraron citas con esa búsqueda.
 </div>
 
 <nav>

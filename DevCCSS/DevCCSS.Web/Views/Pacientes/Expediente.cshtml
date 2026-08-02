@@ -1,8 +1,8 @@
-﻿@model DevCCSS.Web.Contracts.ExpedienteDto
+@model DevCCSS.Web.Contracts.ExpedienteDto
 @{
-    ViewData["Title"] = "Expediente medico";
+    ViewData["Title"] = "Expediente médico";
 }
-<h2 class="mb-1"><i class="bi bi-clipboard2-pulse"></i> Expediente medico</h2>
+<h2 class="mb-1"><i class="bi bi-clipboard2-pulse"></i> Expediente médico</h2>
 <p class="text-muted">Paciente: <strong>@ViewData["NombrePaciente"]</strong></p>
 
 <div class="card shadow-sm">
@@ -32,7 +32,7 @@
                     <input asp-for="Estatura" type="number" step="0.01" class="form-control" />
                 </div>
                 <div class="col-12">
-                    <label class="form-label">Antecedentes medicos</label>
+                    <label class="form-label">Antecedentes médicos</label>
                     <textarea asp-for="AntecedentesMedicos" class="form-control" rows="3"></textarea>
                 </div>
                 <div class="col-12">
@@ -51,7 +51,7 @@
 
 <div class="card shadow-sm mt-4">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <strong><i class="bi bi-clipboard2-pulse"></i> Examenes medicos</strong>
+        <strong><i class="bi bi-clipboard2-pulse"></i> Exámenes médicos</strong>
         @if (User.IsInRole("Administrador") || User.IsInRole("Medico"))
         {
             <a class="btn btn-sm btn-primary"
@@ -69,7 +69,7 @@
         }
         @if (examenes.Count == 0)
         {
-            <p class="text-muted p-3 mb-0">El paciente no tiene examenes medicos registrados.</p>
+            <p class="text-muted p-3 mb-0">El paciente no tiene exámenes médicos registrados.</p>
         }
         else
         {
@@ -79,7 +79,7 @@
                         <tr>
                             <th>Fecha</th>
                             <th>Tipo</th>
-                            <th>Medico</th>
+                            <th>Médico</th>
                             <th>Estado</th>
                             <th class="text-end">Detalle</th>
                         </tr>

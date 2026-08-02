@@ -3,7 +3,7 @@
     ViewData["Title"] = "Nacimientos";
 }
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2><i class="bi bi-heart-pulse"></i> Recien nacidos</h2>
+    <h2><i class="bi bi-heart-pulse"></i> Recién nacidos</h2>
     <a class="btn btn-primary" asp-action="Registrar"><i class="bi bi-plus-lg"></i> Registrar nacimiento</a>
 </div>
 
@@ -11,11 +11,11 @@
 <div class="row g-2 mb-3">
     <div class="col-md-8">
         <input type="text" id="buscador" class="form-control"
-               placeholder="Buscar por nombre, identificacion o madre..." />
+               placeholder="Buscar por nombre, identificación o madre..." />
     </div>
     <div class="col-md-4">
         <select id="filtroSexo" class="form-select" data-campo="sexo">
-            <option value="">Todos los generos</option>
+            <option value="">Todos los géneros</option>
             @foreach (var sexo in Model.Where(n => !string.IsNullOrEmpty(n.SexoBiologico))
                                         .Select(n => n.SexoBiologico).Distinct().OrderBy(x => x))
             {
@@ -29,10 +29,10 @@
     <table class="table table-striped table-hover align-middle">
         <thead class="table-dark">
             <tr>
-                <th>Identificacion</th>
+                <th>Identificación</th>
                 <th>Nombre</th>
                 <th>Nacimiento</th>
-                <th>Genero</th>
+                <th>Género</th>
                 <th>Sangre</th>
                 <th>Madre</th>
                 <th>Apgar (1'/5')</th>
@@ -64,7 +64,7 @@
 </div>
 
 <div id="sinResultados" class="text-center text-muted py-4" style="display:none;">
-    No se encontraron nacimientos con esa busqueda.
+    No se encontraron nacimientos con esa búsqueda.
 </div>
 
 <nav>

@@ -1,11 +1,11 @@
 @model DevCCSS.Web.Contracts.RegistrarNacimientoDto
 @{
     ViewData["Title"] = "Editar nacimiento";
-    string[] escalaApariencia = { "Cianotico / palido", "Acrocianosis (manos/pies azules)", "Rosado completo" };
+    string[] escalaApariencia = { "Cianótico / pálido", "Acrocianosis (manos/pies azules)", "Rosado completo" };
     string[] escalaPulso = { "Ausente", "Menor a 100 lpm", "Mayor a 100 lpm" };
     string[] escalaGesto = { "Sin respuesta", "Mueca / gesto", "Llanto vigoroso / tos" };
-    string[] escalaActividad = { "Flacido", "Alguna flexion", "Movimiento activo" };
-    string[] escalaRespiracion = { "Ausente", "Debil / irregular", "Buena / llanto fuerte" };
+    string[] escalaActividad = { "Flácido", "Alguna flexión", "Movimiento activo" };
+    string[] escalaRespiracion = { "Ausente", "Débil / irregular", "Buena / llanto fuerte" };
 }
 <h2 class="mb-3"><i class="bi bi-pencil-square"></i> Editar nacimiento — <span class="text-muted">@ViewBag.Identificacion</span></h2>
 
@@ -15,7 +15,7 @@
     <div asp-validation-summary="All" class="text-danger small mb-3"></div>
 
     <div class="card shadow-sm mb-3">
-        <div class="card-header fw-bold"><i class="bi bi-person-vcard"></i> Datos del recien nacido</div>
+        <div class="card-header fw-bold"><i class="bi bi-person-vcard"></i> Datos del recién nacido</div>
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-6">
@@ -32,7 +32,7 @@
                     <input asp-for="FechaNacimiento" type="date" class="form-control" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Genero</label>
+                    <label class="form-label">Género</label>
                     <select asp-for="IdSexoBiologico" class="form-select">
                         <option value="">-- Seleccione --</option>
                         @foreach (var s in (List<DevCCSS.Web.Contracts.SexoBiologicoDto>)ViewBag.SexosBiologicos)
@@ -112,7 +112,7 @@
                             }
                         </tr>
                         <tr>
-                            <td>Pulso / frecuencia cardiaca</td>
+                            <td>Pulso / frecuencia cardíaca</td>
                             @for (int i = 0; i < Model.Apgar.Count; i++)
                             {
                                 <td>
@@ -145,7 +145,7 @@
                             }
                         </tr>
                         <tr>
-                            <td>Respiracion</td>
+                            <td>Respiración</td>
                             @for (int i = 0; i < Model.Apgar.Count; i++)
                             {
                                 <td>
@@ -169,15 +169,15 @@
     </div>
 
     <div class="card shadow-sm mb-3">
-        <div class="card-header fw-bold"><i class="bi bi-rulers"></i> Examen fisico</div>
+        <div class="card-header fw-bold"><i class="bi bi-rulers"></i> Examen físico</div>
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-3">
-                    <label class="form-label">Perimetro cefalico (cm)</label>
+                    <label class="form-label">Perímetro cefálico (cm)</label>
                     <input asp-for="PerimetroCefalico" type="number" step="0.1" class="form-control" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Perimetro toracico (cm)</label>
+                    <label class="form-label">Perímetro torácico (cm)</label>
                     <input asp-for="PerimetroToracico" type="number" step="0.1" class="form-control" />
                 </div>
                 <div class="col-md-3">
@@ -185,17 +185,17 @@
                     <input asp-for="Temperatura" type="number" step="0.1" class="form-control" />
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Coloracion de piel</label>
+                    <label class="form-label">Coloración de piel</label>
                     <select asp-for="ColoracionPiel" class="form-select">
                         <option value="">-- Seleccione --</option>
                         <option>Rosada</option>
                         <option>Ictericia</option>
-                        <option>Cianotica</option>
-                        <option>Palida</option>
+                        <option>Cianótica</option>
+                        <option>Pálida</option>
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Frecuencia cardiaca (lpm)</label>
+                    <label class="form-label">Frecuencia cardíaca (lpm)</label>
                     <input asp-for="FrecuenciaCardiaca" type="number" class="form-control" />
                 </div>
                 <div class="col-md-4">
@@ -204,7 +204,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Reflejos presentes</label>
-                    <input asp-for="Reflejos" class="form-control" placeholder="Ej: Moro, succion, prension palmar" />
+                    <input asp-for="Reflejos" class="form-control" placeholder="Ej: Moro, succión, prensión palmar" />
                 </div>
                 <div class="col-12">
                     <label class="form-label">Observaciones generales del examen</label>

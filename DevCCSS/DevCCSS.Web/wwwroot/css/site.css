@@ -50,6 +50,37 @@
     --bs-tertiary-bg: #f5f7f8;
 }
 
+/* ------------------------------------------------------------
+   Modo oscuro: mismo azul/teal de marca, solo cambian fondos y
+   superficies. Se activa con data-bs-theme="dark" en <html>
+   (boton en el navbar, persistido en localStorage).
+   ------------------------------------------------------------ */
+:root[data-bs-theme="dark"] {
+    --bs-body-bg: #101820;
+    --bs-body-bg-rgb: 16, 24, 32;
+    --bs-body-color: #e7edf1;
+    --bs-body-color-rgb: 231, 237, 241;
+    --bs-tertiary-bg: #17212b;
+    --bs-tertiary-bg-rgb: 23, 33, 43;
+    --bs-secondary-bg: #17212b;
+    --bs-secondary-bg-rgb: 23, 33, 43;
+    --bs-border-color: #2a3a47;
+    --bs-primary-bg-subtle: #12303f;
+    --bs-secondary-bg-subtle: #12333a;
+}
+
+:root[data-bs-theme="dark"] body {
+    background-color: var(--bs-body-bg);
+}
+
+:root[data-bs-theme="dark"] .card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-bs-theme="dark"] .table {
+    --bs-table-color: var(--bs-body-color);
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -281,4 +312,16 @@ footer {
      background-color: rgba(255, 255, 255, 0.95);
      border: none;
      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* Modo oscuro: fondo mas apagado y tarjeta acorde a la paleta */
+:root[data-bs-theme="dark"] .login-page {
+    background:
+        linear-gradient(rgba(8, 13, 17, 0.6), rgba(8, 13, 17, 0.6)),
+        url('/imagenes/fondo_login.png') right center / cover no-repeat;
+}
+:root[data-bs-theme="dark"] .login-page .card {
+    background-color: rgba(16, 24, 32, 0.95);
+    color: var(--bs-body-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }

@@ -45,7 +45,7 @@ namespace DevCCSS.Wcf.Models
             using var cmd = conn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "dbo.sp_Empleado_Crear";
-            AgregarParametros(cmd, m, incluirId: false);
+            AgregarParametrosComunes(cmd, m);
             var pId = new SqlParameter("@IdGenerado", SqlDbType.Int) { Direction = ParameterDirection.Output };
             cmd.Parameters.Add(pId);
             conn.Open();
@@ -59,7 +59,9 @@ namespace DevCCSS.Wcf.Models
             using var cmd = conn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "dbo.sp_Empleado_Actualizar";
-            AgregarParametros(cmd, m, incluirId: true);
+            cmd.Parameters.Add(new SqlParameter("@IdEmpleado", SqlDbType.Int) { Value = m.IdEmpleado });
+            cmd.Parameters.Add(new SqlParameter("@Identificacion", SqlDbType.NVarChar, 50) { Value = m.Identificacion });
+            AgregarParametrosComunes(cmd, m);
             conn.Open();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro actualizado correctamente." };
@@ -77,11 +79,8 @@ namespace DevCCSS.Wcf.Models
             return new RespuestaCrud { Ok = true, Mensaje = "Registro eliminado correctamente." };
         }
 
-        private static void AgregarParametros(SqlCommand cmd, EmpleadoDto m, bool incluirId)
+        private static void AgregarParametrosComunes(SqlCommand cmd, EmpleadoDto m)
         {
-            if (incluirId)
-                cmd.Parameters.Add(new SqlParameter("@IdEmpleado", SqlDbType.Int) { Value = m.IdEmpleado });
-            cmd.Parameters.Add(new SqlParameter("@Identificacion", SqlDbType.NVarChar, 50) { Value = m.Identificacion });
             cmd.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.NVarChar, 100) { Value = m.Nombre });
             cmd.Parameters.Add(new SqlParameter("@Apellidos", SqlDbType.NVarChar, 100) { Value = m.Apellidos });
             cmd.Parameters.Add(new SqlParameter("@Especialidad", SqlDbType.NVarChar, 100) { Value = (object?)m.Especialidad ?? DBNull.Value });

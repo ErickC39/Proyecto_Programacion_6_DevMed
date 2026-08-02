@@ -1,14 +1,17 @@
 @model DevCCSS.Web.Models.LoginViewModel
 @{
-    ViewData["Title"] = "Iniciar sesion";
+    ViewData["Title"] = "Iniciar sesión";
     ViewData["OcultarNavbar"] = true;
 }
 <div class="login-page">
     <div class="col-12 col-md-6 col-lg-4">
-        <div class="card shadow-sm">
+        <div class="card shadow-sm position-relative">
+            <button id="themeToggle" class="btn btn-outline-secondary btn-sm position-absolute" style="top:.75rem; left:.75rem;" type="button" title="Modo oscuro">
+                <i class="bi bi-moon-stars"></i>
+            </button>
             <div class="card-body p-4">
                 <div class="text-center mb-4">
-                    <img src="~/imagenes/logo_login.png"
+                    <img src="~/imagenes/logo_devmed.png"
                          asp-append-version="true"
                          alt="DevMed"
                          class="img-fluid mb-3"
@@ -33,7 +36,7 @@
                         <label class="form-label">Contraseña</label>
                         <div class="input-group">
                             <input asp-for="Password" id="passwordInput" class="form-control" autocomplete="current-password" />
-                            <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1" aria-label="Mostrar contrasenia">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1" aria-label="Mostrar contraseña">
                                 <i class="bi bi-eye" id="togglePasswordIcon"></i>
                             </button>
                         </div>

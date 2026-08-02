@@ -1,12 +1,12 @@
 @model DevCCSS.Web.Contracts.ExamenMedicoDto
 @{
-    ViewData["Title"] = "Eliminar examen medico";
+    ViewData["Title"] = "Eliminar examen médico";
 }
 
-<h2 class="mb-3"><i class="bi bi-trash"></i> Eliminar examen medico</h2>
+<h2 class="mb-3"><i class="bi bi-trash"></i> Eliminar examen médico</h2>
 
 <div class="alert alert-warning">
-    Esta seguro de eliminar el examen <strong>@Model.TipoExamen</strong> del paciente
+    Está seguro de eliminar el examen <strong>@Model.TipoExamen</strong> del paciente
     <strong>@Model.PacienteNombreCompleto</strong>?
 </div>
 
@@ -17,7 +17,7 @@
             <dd class="col-sm-9">@Model.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</dd>
             <dt class="col-sm-3">Estado</dt>
             <dd class="col-sm-9">@Model.EstadoExamen</dd>
-            <dt class="col-sm-3">Medico</dt>
+            <dt class="col-sm-3">Médico</dt>
             <dd class="col-sm-9">@Model.MedicoNombreCompleto</dd>
         </dl>
     </div>

@@ -11,11 +11,11 @@
 <div class="row g-2 mb-3">
     <div class="col-md-8">
         <input type="text" id="buscador" class="form-control"
-               placeholder="Buscar por numero de factura, cliente o empleado..." />
+               placeholder="Buscar por número de factura, cliente o empleado..." />
     </div>
     <div class="col-md-4">
         <select id="filtroMetodo" class="form-select" data-campo="metodo">
-            <option value="">Todos los metodos de pago</option>
+            <option value="">Todos los métodos de pago</option>
             @foreach (var metodo in Model.Select(v => v.MetodoPago).Distinct().OrderBy(x => x))
             {
                 <option value="@metodo">@metodo</option>
@@ -50,7 +50,7 @@
 </div>
 
 <div id="sinResultados" class="text-center text-muted py-4" style="display:none;">
-    No se encontraron ventas con esa busqueda.
+    No se encontraron ventas con esa búsqueda.
 </div>
 
 <nav>
