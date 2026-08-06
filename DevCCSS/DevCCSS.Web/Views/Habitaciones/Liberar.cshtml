@@ -1,47 +1,55 @@
-@model DevCCSS.Web.Contracts.HabitacionDto
+@model List<DevCCSS.Web.Contracts.OcupanteHabitacionDto>
 @{
     ViewData["Title"] = "Liberar habitación";
+    var habitacion = (DevCCSS.Web.Contracts.HabitacionDto)ViewBag.Habitacion;
+    var empleados = (List<DevCCSS.Web.Contracts.EmpleadoHabitacionDto>)ViewBag.Empleados;
 }
 
 <h2 class="mb-3"><i class="bi bi-box-arrow-right"></i> Liberar habitación</h2>
 
 <div class="alert alert-info">
-    Habitación <strong>@Model.NumeroHabitacion</strong> — paciente actual:
-    <strong>@Model.PacienteNombreCompleto</strong>
+    Habitación <strong>@habitacion.NumeroHabitacion</strong> (@habitacion.TipoHabitacion) —
+    ocupación actual: <strong>@habitacion.OcupantesActuales / @habitacion.Capacidad</strong>
 </div>
 
 <div class="card shadow-sm">
     <div class="card-body">
-        <form asp-action="Liberar" method="post">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="All" class="text-danger small mb-3"></div>
-            <input type="hidden" name="IdHabitacion" value="@Model.IdHabitacion" />
+        <p class="text-muted">Seleccione el paciente que sale, el responsable y la fecha de salida.</p>
 
-            <div class="row g-3">
-                <div class="col-md-6">
+        @foreach (var o in Model)
+        {
+            <form asp-action="Liberar" method="post" class="row g-2 align-items-end border-bottom pb-3 mb-3">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="IdHabitacion" value="@o.IdHabitacion" />
+                <input type="hidden" name="IdPaciente" value="@o.IdPaciente" />
+
+                <div class="col-md-4">
+                    <label class="form-label">Paciente</label>
+                    <input class="form-control" value="@o.PacienteNombreCompleto (@o.PacienteIdentificacion)" disabled />
+                </div>
+                <div class="col-md-3">
                     <label class="form-label">Responsable del egreso</label>
                     <select name="IdEmpleadoResponsable" class="form-select">
                         <option value="0">-- Seleccione --</option>
-                        @foreach (var empleado in (List<DevCCSS.Web.Contracts.EmpleadoHabitacionDto>)ViewBag.Empleados)
+                        @foreach (var empleado in empleados)
                         {
                             <option value="@empleado.IdEmpleado">@empleado.NombreCompleto</option>
                         }
                     </select>
                 </div>
-
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label class="form-label">Fecha de salida</label>
                     <input name="FechaSalida" type="datetime-local" class="form-control"
                            value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
                 </div>
-            </div>
+                <div class="col-md-2">
+                    <button class="btn btn-warning w-100" type="submit">
+                        <i class="bi bi-box-arrow-right"></i> Liberar
+                    </button>
+                </div>
+            </form>
+        }
 
-            <div class="mt-4">
-                <button class="btn btn-warning" type="submit">
-                    <i class="bi bi-box-arrow-right"></i> Liberar
-                </button>
-                <a class="btn btn-secondary" asp-action="Details" asp-route-id="@Model.IdHabitacion">Cancelar</a>
-            </div>
-        </form>
+        <a class="btn btn-secondary" asp-action="Details" asp-route-id="@habitacion.IdHabitacion">Volver</a>
     </div>
 </div>

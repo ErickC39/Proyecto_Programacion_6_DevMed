@@ -64,5 +64,8 @@ namespace DevCCSS.Web.Services
 
         public Task<RespuestaCrud> EliminarAsync(int id) =>
             EjecutarAsync(c => c.EliminarAsync(id));
+
+        public Task<RespuestaCrud> CrearTipoExamenAsync(TipoExamenDto tipo) =>
+            EjecutarAsync(c => c.CrearTipoExamenAsync(tipo));
     }
 }

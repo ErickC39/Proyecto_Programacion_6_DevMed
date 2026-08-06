@@ -72,5 +72,8 @@ namespace DevCCSS.Web.Services
 
         public Task<RespuestaCrud> EliminarAsync(int id) =>
             EjecutarAsync(c => c.EliminarAsync(id));
+
+        public Task<List<OcupanteHabitacionDto>> ListarOcupantesActivosAsync(int idHabitacion) =>
+            EjecutarAsync(c => c.ListarOcupantesActivosAsync(idHabitacion));
     }
 }

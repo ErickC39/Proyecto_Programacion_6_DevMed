@@ -131,5 +131,39 @@ namespace DevCCSS.Web.Controllers
             TempData[respuesta.Ok ? "Ok" : "Error"] = respuesta.Mensaje;
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: /ExamenesMedicos/TiposExamen
+        public async Task<IActionResult> TiposExamen()
+        {
+            var lista = await _examenes.ListarTiposExamenAsync();
+            return View(lista);
+        }
+
+        // GET: /ExamenesMedicos/CrearTipoExamen
+        [Authorize(Roles = "Administrador,Medico")]
+        public IActionResult CrearTipoExamen()
+        {
+            return View(new TipoExamenDto());
+        }
+
+        // POST: /ExamenesMedicos/CrearTipoExamen
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador,Medico")]
+        public async Task<IActionResult> CrearTipoExamen(TipoExamenDto model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var respuesta = await _examenes.CrearTipoExamenAsync(model);
+            if (!respuesta.Ok)
+            {
+                ModelState.AddModelError("", respuesta.Mensaje);
+                return View(model);
+            }
+
+            TempData["Ok"] = respuesta.Mensaje;
+            return RedirectToAction(nameof(TiposExamen));
+        }
     }
 }

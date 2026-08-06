@@ -5,6 +5,14 @@
 
 <h2 class="mb-3"><i class="bi bi-person-check"></i> Asignar paciente a la habitación</h2>
 
+@{
+    var habitacion = (DevCCSS.Web.Contracts.HabitacionDto)ViewBag.Habitacion;
+}
+<div class="alert alert-info">
+    Habitación <strong>@habitacion.NumeroHabitacion</strong> (@habitacion.TipoHabitacion) —
+    ocupación actual: <strong>@habitacion.OcupantesActuales / @habitacion.Capacidad</strong>
+</div>
+
 <div class="card shadow-sm">
     <div class="card-body">
         <form asp-action="Asignar" method="post">

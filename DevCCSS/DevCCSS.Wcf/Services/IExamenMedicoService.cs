@@ -35,5 +35,8 @@ namespace DevCCSS.Wcf.Services
 
         [OperationContract]
         RespuestaCrud Eliminar(int id);
+
+        [OperationContract]
+        RespuestaCrud CrearTipoExamen(TipoExamenDto tipo);
     }
 }
