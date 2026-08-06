@@ -226,6 +226,27 @@ namespace DevCCSS.Wcf.Models
             };
         }
 
+        public RespuestaCrud CrearTipoExamen(TipoExamenDto tipo)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "dbo.sp_TipoExamen_Crear";
+            cmd.Parameters.Add(new SqlParameter("@Descripcion", SqlDbType.NVarChar, 100) { Value = tipo.Descripcion });
+            var pId = new SqlParameter("@IdGenerado", SqlDbType.Int) { Direction = ParameterDirection.Output };
+            cmd.Parameters.Add(pId);
+
+            conn.Open();
+            cmd.ExecuteNonQuery();
+
+            return new RespuestaCrud
+            {
+                Ok = true,
+                Mensaje = "Tipo de examen registrado correctamente.",
+                IdGenerado = pId.Value == DBNull.Value ? 0 : (int)pId.Value
+            };
+        }
+
         private static void AgregarParametrosComunes(
             SqlCommand cmd,
             ExamenMedicoDto examen,

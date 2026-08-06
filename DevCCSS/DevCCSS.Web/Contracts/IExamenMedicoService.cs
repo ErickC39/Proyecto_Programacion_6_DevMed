@@ -34,5 +34,8 @@ namespace DevCCSS.Web.Contracts
 
         [OperationContract]
         Task<RespuestaCrud> EliminarAsync(int id);
+
+        [OperationContract]
+        Task<RespuestaCrud> CrearTipoExamenAsync(TipoExamenDto tipo);
     }
 }

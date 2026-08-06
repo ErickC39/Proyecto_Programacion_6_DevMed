@@ -1,0 +1,32 @@
+@model DevCCSS.Web.Contracts.TipoExamenDto
+@{
+    ViewData["Title"] = "Nuevo tipo de examen";
+}
+
+<h2 class="mb-3"><i class="bi bi-plus-circle"></i> Nuevo tipo de examen</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="CrearTipoExamen" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripcion</label>
+                <input asp-for="Descripcion" class="form-control" maxlength="100" placeholder="Ej: Prueba de alergias" />
+                <span asp-validation-for="Descripcion" class="text-danger small"></span>
+            </div>
+
+            <div class="mt-4">
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-save"></i> Registrar
+                </button>
+                <a class="btn btn-secondary" asp-action="TiposExamen">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

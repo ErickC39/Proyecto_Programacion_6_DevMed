@@ -49,7 +49,7 @@ namespace DevCCSS.Wcf.Models
 
             using var conn = new SqlConnection(_connectionString);
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT IdTipoHabitacion, Descripcion FROM dbo.Tipos_Habitacion WHERE Activo = 1 ORDER BY Descripcion;";
+            cmd.CommandText = "SELECT IdTipoHabitacion, Descripcion, Capacidad FROM dbo.Tipos_Habitacion WHERE Activo = 1 ORDER BY Descripcion;";
 
             conn.Open();
             using var reader = cmd.ExecuteReader();
@@ -58,7 +58,8 @@ namespace DevCCSS.Wcf.Models
                 lista.Add(new TipoHabitacionDto
                 {
                     IdTipoHabitacion = reader.GetInt32(reader.GetOrdinal("IdTipoHabitacion")),
-                    Descripcion = reader.GetString(reader.GetOrdinal("Descripcion"))
+                    Descripcion = reader.GetString(reader.GetOrdinal("Descripcion")),
+                    Capacidad = reader.GetInt32(reader.GetOrdinal("Capacidad"))
                 });
             }
 
@@ -204,6 +205,7 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "dbo.sp_Habitacion_Liberar";
             cmd.Parameters.Add(new SqlParameter("@IdHabitacion", SqlDbType.Int) { Value = liberacion.IdHabitacion });
+            cmd.Parameters.Add(new SqlParameter("@IdPaciente", SqlDbType.Int) { Value = liberacion.IdPaciente });
             cmd.Parameters.Add(new SqlParameter("@FechaSalida", SqlDbType.DateTime2) { Value = liberacion.FechaSalida });
             cmd.Parameters.Add(new SqlParameter("@IdEmpleadoResponsable", SqlDbType.Int) { Value = liberacion.IdEmpleadoResponsable });
 
@@ -227,6 +229,38 @@ namespace DevCCSS.Wcf.Models
             return new RespuestaCrud { Ok = true, Mensaje = "Habitacion eliminada correctamente." };
         }
 
+        public List<OcupanteHabitacionDto> ListarOcupantesActivos(int idHabitacion)
+        {
+            var lista = new List<OcupanteHabitacionDto>();
+
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "dbo.sp_Habitacion_ListarOcupantesActivos";
+            cmd.Parameters.Add(new SqlParameter("@IdHabitacion", SqlDbType.Int) { Value = idHabitacion });
+
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                lista.Add(new OcupanteHabitacionDto
+                {
+                    IdOcupante = reader.GetInt32(reader.GetOrdinal("IdOcupante")),
+                    IdHabitacion = reader.GetInt32(reader.GetOrdinal("IdHabitacion")),
+                    NumeroHabitacion = reader.GetString(reader.GetOrdinal("NumeroHabitacion")),
+                    IdPaciente = reader.GetInt32(reader.GetOrdinal("IdPaciente")),
+                    PacienteIdentificacion = reader.GetString(reader.GetOrdinal("PacienteIdentificacion")),
+                    PacienteNombreCompleto = reader.GetString(reader.GetOrdinal("PacienteNombreCompleto")),
+                    FechaIngreso = reader.GetDateTime(reader.GetOrdinal("FechaIngreso")),
+                    FechaSalida = reader["FechaSalida"] == DBNull.Value ? null : reader.GetDateTime(reader.GetOrdinal("FechaSalida")),
+                    ResponsableIngreso = reader.GetString(reader.GetOrdinal("ResponsableIngreso")),
+                    ResponsableSalida = reader["ResponsableSalida"] as string
+                });
+            }
+
+            return lista;
+        }
+
         private static HabitacionDto Map(SqlDataReader r)
         {
             return new HabitacionDto
@@ -235,15 +269,10 @@ namespace DevCCSS.Wcf.Models
                 NumeroHabitacion = r.GetString(r.GetOrdinal("NumeroHabitacion")),
                 IdTipoHabitacion = r.GetInt32(r.GetOrdinal("IdTipoHabitacion")),
                 TipoHabitacion = r.GetString(r.GetOrdinal("TipoHabitacion")),
+                Capacidad = r.GetInt32(r.GetOrdinal("Capacidad")),
                 IdEstadoHabitacion = r.GetInt32(r.GetOrdinal("IdEstadoHabitacion")),
                 EstadoHabitacion = r.GetString(r.GetOrdinal("EstadoHabitacion")),
-                IdPaciente = r["IdPaciente"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdPaciente")),
-                PacienteIdentificacion = r["PacienteIdentificacion"] as string,
-                PacienteNombreCompleto = r["PacienteNombreCompleto"] as string,
-                FechaIngreso = r["FechaIngreso"] == DBNull.Value ? null : r.GetDateTime(r.GetOrdinal("FechaIngreso")),
-                FechaSalida = r["FechaSalida"] == DBNull.Value ? null : r.GetDateTime(r.GetOrdinal("FechaSalida")),
-                IdEmpleadoResponsable = r["IdEmpleadoResponsable"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdEmpleadoResponsable")),
-                ResponsableNombreCompleto = r["ResponsableNombreCompleto"] as string
+                OcupantesActuales = r.GetInt32(r.GetOrdinal("OcupantesActuales"))
             };
         }
     }

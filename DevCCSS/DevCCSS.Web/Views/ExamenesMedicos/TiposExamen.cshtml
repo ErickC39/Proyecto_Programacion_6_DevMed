@@ -1,0 +1,62 @@
+@model List<DevCCSS.Web.Contracts.TipoExamenDto>
+@{
+    ViewData["Title"] = "Tipos de examen";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-list-check"></i> Tipos de examen registrados</h2>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Medico"))
+    {
+        <a class="btn btn-primary" asp-action="CrearTipoExamen">
+            <i class="bi bi-plus-lg"></i> Nuevo tipo de examen
+        </a>
+    }
+</div>
+
+<div class="row g-2 mb-3">
+    <div class="col-md-8">
+        <input type="text" id="buscador" class="form-control" placeholder="Buscar por descripcion..." />
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Descripcion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tipo in Model.OrderBy(x => x.Descripcion))
+            {
+                <tr class="fila-tipo" data-buscar="@tipo.Descripcion.ToLower()">
+                    <td>@tipo.Descripcion</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="sinResultados" class="text-center text-muted py-4" style="display:none;">
+    No se encontraron tipos de examen con esa busqueda.
+</div>
+
+<nav>
+    <ul class="pagination justify-content-center" id="paginacion"></ul>
+</nav>
+
+<div class="mt-3">
+    <a class="btn btn-secondary" asp-action="Index">Volver</a>
+</div>
+
+@section Scripts {
+    <script>
+        initTablaFiltro({
+            filas: '.fila-tipo',
+            buscador: '#buscador',
+            filtros: [],
+            contenedorPaginacion: '#paginacion',
+            sinResultados: '#sinResultados'
+        });
+    </script>
+}

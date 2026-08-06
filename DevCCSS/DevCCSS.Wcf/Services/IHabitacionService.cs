@@ -38,5 +38,8 @@ namespace DevCCSS.Wcf.Services
 
         [OperationContract]
         RespuestaCrud Eliminar(int id);
+
+        [OperationContract]
+        List<OcupanteHabitacionDto> ListarOcupantesActivos(int idHabitacion);
     }
 }

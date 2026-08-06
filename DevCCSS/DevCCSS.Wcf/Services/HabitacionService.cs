@@ -53,5 +53,8 @@ namespace DevCCSS.Wcf.Services
             try { return new HabitacionRepository(_config).Eliminar(id); }
             catch (Exception ex) { return new RespuestaCrud { Ok = false, Mensaje = ex.Message }; }
         }
+
+        public List<OcupanteHabitacionDto> ListarOcupantesActivos(int idHabitacion) =>
+            new HabitacionRepository(_config).ListarOcupantesActivos(idHabitacion);
     }
 }

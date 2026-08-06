@@ -37,5 +37,8 @@ namespace DevCCSS.Web.Contracts
 
         [OperationContract]
         Task<RespuestaCrud> EliminarAsync(int id);
+
+        [OperationContract]
+        Task<List<OcupanteHabitacionDto>> ListarOcupantesActivosAsync(int idHabitacion);
     }
 }
