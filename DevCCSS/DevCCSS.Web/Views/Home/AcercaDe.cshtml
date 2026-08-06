@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<div class="p-4 mb-4 bg-body-tertiary rounded-3 shadow-sm">
+    <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+        <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+            <i class="bi bi-hospital text-primary fs-1"></i>
+        </div>
+        <div>
+            <h1 class="display-6 mb-1">Hospital DevMed</h1>
+            <p class="lead text-muted mb-0">Sistema universitario de gestión hospitalaria</p>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-semibold">
+                <i class="bi bi-info-circle"></i> Información del sistema
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0 align-middle">
+                        <tbody>
+                            <tr><th class="ps-3">Acrónimo</th><td>DevMed</td></tr>
+                            <tr><th class="ps-3">Nombre</th><td>Hospital DevMed</td></tr>
+                            <tr><th class="ps-3">Versión</th><td><span class="badge text-bg-primary">1.0.0</span></td></tr>
+                            <tr><th class="ps-3">Fecha de versión</th><td>02 de agosto de 2026</td></tr>
+                            <tr><th class="ps-3">Propietario académico</th><td>Grupo 2</td></tr>
+                            <tr><th class="ps-3">Desarrollado por</th><td>Grupo 2 — Programación VI</td></tr>
+                            <tr><th class="ps-3">Tipo de proyecto</th><td>Sistema universitario con fines académicos</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-semibold">
+                <i class="bi bi-code-slash"></i> Plataforma tecnológica
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span>Lenguaje principal</span><strong>C#</strong>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span>Plataforma</span><strong>.NET 8</strong>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span>Aplicación Web</span><strong>ASP.NET Core MVC</strong>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span>Servicios</span><strong>CoreWCF / SOAP</strong>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span>Base de datos</span><strong>SQL Server</strong>
+                    </li>
+                    <li class="list-group-item px-0 d-flex justify-content-between">
+                        <span>Interfaz</span><strong>Bootstrap 5</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mt-4">
+    <div class="card-body">
+        <h2 class="h5"><i class="bi"></i> Propósito</h2>
+        <p class="mb-0">
+            DevMed centraliza procesos de pacientes, expedientes, citas, personal, medicamentos,
+            exámenes médicos, habitaciones, inventario, facturación, visitantes y auditoría mediante
+            permisos definidos por rol.
+        </p>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a class="btn btn-primary" asp-action="Index"><i class="bi bi-house"></i> Volver al inicio</a>
+</div>
