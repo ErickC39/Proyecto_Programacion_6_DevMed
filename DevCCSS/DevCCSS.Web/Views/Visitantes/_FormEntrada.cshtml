@@ -1,0 +1,29 @@
+@model DevCCSS.Web.Contracts.VisitanteDto
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label class="form-label">Identificación del visitante</label>
+        <input class="form-control" value="Se asignará automáticamente (VIS-###)" disabled />
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Nombre completo</label>
+        <input asp-for="NombreCompleto" class="form-control" />
+        <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Paciente a visitar</label>
+        <input type="text" id="filtroPacienteAVisitar" class="form-control form-control-sm mb-1" placeholder="Buscar paciente..." />
+        <select asp-for="IdPacienteAVisitar" class="form-select">
+            <option value="">-- Seleccione --</option>
+            @foreach (var p in (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Pacientes)
+            {
+                <option value="@p.IdPaciente">@p.Nombre @p.Apellidos</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Fecha y hora de entrada</label>
+        <input asp-for="FechaHoraEntrada" type="datetime-local" class="form-control" />
+        <span asp-validation-for="FechaHoraEntrada" class="text-danger small"></span>
+    </div>
+</div>

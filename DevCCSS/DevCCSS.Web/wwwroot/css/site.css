@@ -65,15 +65,48 @@
     --bs-secondary-bg: #17212b;
     --bs-secondary-bg-rgb: 23, 33, 43;
     --bs-border-color: #2a3a47;
+
+    /* Tonos "-subtle"/"-emphasis" de cada color de la paleta (fondos claros de
+       alertas y badges *-subtle): Bootstrap los recalcula solo si nunca se
+       tocan en :root; como site.css SI redefine primary/secondary/etc. en
+       :root (para botones, links...), hay que dar tambien su version oscura
+       aqui o quedan con el tono claro fijo -> cuadros blancos/pastel en modo
+       oscuro (alertas, badges "Normal", etc.) y texto oscuro casi invisible.
+       Fondo oscuro y saturado + texto claro del mismo tono para buen contraste. */
     --bs-primary-bg-subtle: #12303f;
+    --bs-primary-border-subtle: #1d4c66;
+    --bs-primary-text-emphasis: #7fb3d1;
+
     --bs-secondary-bg-subtle: #12333a;
+    --bs-secondary-border-subtle: #1c4f58;
+    --bs-secondary-text-emphasis: #7fc7cc;
+
+    --bs-success-bg-subtle: #12332e;
+    --bs-success-border-subtle: #1d5147;
+    --bs-success-text-emphasis: #7fd4c2;
+
+    --bs-info-bg-subtle: #122a3a;
+    --bs-info-border-subtle: #1d4560;
+    --bs-info-text-emphasis: #86bceb;
+
+    --bs-warning-bg-subtle: #3a2f10;
+    --bs-warning-border-subtle: #5c4a1a;
+    --bs-warning-text-emphasis: #ffd980;
+
+    --bs-danger-bg-subtle: #3a1712;
+    --bs-danger-border-subtle: #5c2620;
+    --bs-danger-text-emphasis: #f0968a;
 }
 
 :root[data-bs-theme="dark"] body {
     background-color: var(--bs-body-bg);
 }
 
+/* En modo oscuro los .card quedaban casi sin contorno (sin borde, la sombra
+   apenas se nota sobre el fondo oscuro); se estandariza TODA la app con el
+   mismo borde verde de la paleta que ya usaban los cards del dashboard. */
 :root[data-bs-theme="dark"] .card {
+    border: 1px solid var(--bs-success) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
@@ -233,6 +266,44 @@ body {
 .alert-danger { --bs-alert-color: var(--bs-danger-text-emphasis); --bs-alert-bg: var(--bs-danger-bg-subtle); --bs-alert-border-color: var(--bs-danger-border-subtle); }
 .alert-warning { --bs-alert-color: var(--bs-warning-text-emphasis); --bs-alert-bg: var(--bs-warning-bg-subtle); --bs-alert-border-color: var(--bs-warning-border-subtle); }
 .alert-info { --bs-alert-color: var(--bs-info-text-emphasis); --bs-alert-bg: var(--bs-info-bg-subtle); --bs-alert-border-color: var(--bs-info-border-subtle); }
+
+/* ------------------------------------------------------------
+   Paginacion (Bootstrap .pagination/.page-link): igual que los
+   botones, Bootstrap 5.3 compila estas variables con un azul FIJO
+   que no seria var(--bs-primary) en tiempo real. La usan tanto
+   los DataTables como cualquier otra paginacion nativa de Bootstrap.
+   ------------------------------------------------------------ */
+.pagination {
+    --bs-pagination-color: var(--bs-primary);
+    --bs-pagination-hover-color: var(--bs-primary);
+    --bs-pagination-focus-color: var(--bs-primary);
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+    --bs-pagination-active-bg: var(--bs-primary);
+    --bs-pagination-active-border-color: var(--bs-primary);
+}
+
+/* ------------------------------------------------------------
+   DataTables: se apoya en componentes base de Bootstrap
+   (.pagination, .form-select) que ya siguen la paleta gracias a
+   lo de arriba; solo hacen falta un par de retoques puntuales
+   para que combine con el resto de la app y con el modo oscuro.
+   ------------------------------------------------------------ */
+.dt-container .dt-length,
+.dt-container .dt-info {
+    color: var(--bs-body-color);
+}
+
+table.dataTable > thead > tr > th {
+    border-bottom-color: var(--bs-border-color, #dee2e6);
+}
+
+:root[data-bs-theme="dark"] table.dataTable {
+    color: var(--bs-body-color);
+}
+:root[data-bs-theme="dark"] table.dataTable > tbody > tr > td,
+:root[data-bs-theme="dark"] table.dataTable > tbody > tr > th {
+    border-bottom-color: var(--bs-border-color);
+}
 
 /* Foco de campos de formulario, acorde al azul primario de la marca */
 .form-control:focus,

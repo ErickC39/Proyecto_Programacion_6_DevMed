@@ -1,3 +1,4 @@
+using DevCCSS.Web.Common;
 using DevCCSS.Web.Contracts;
 using DevCCSS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevCCSS.Web.Controllers
 {
     [Authorize(Roles = "Administrador,Recepcionista")]
+    [Modulo("Visitantes")]
     public class VisitantesController : Controller
     {
         private readonly VisitanteClient _servicio;
@@ -38,7 +40,7 @@ namespace DevCCSS.Web.Controllers
         public async Task<IActionResult> Create()
         {
             await CargarListas();
-            return View(new VisitanteDto());
+            return View(new VisitanteDto { FechaHoraEntrada = DateTime.Now });
         }
 
         [HttpPost]
@@ -69,6 +71,15 @@ namespace DevCCSS.Web.Controllers
             if (!r.Ok) { ModelState.AddModelError("", r.Mensaje); await CargarListas(); return View(model); }
             TempData["Ok"] = r.Mensaje;
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegistrarSalida(int id)
+        {
+            var r = await _servicio.RegistrarSalidaAsync(id, DateTime.Now);
+            TempData[r.Ok ? "Ok" : "Error"] = r.Mensaje;
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         public async Task<IActionResult> Delete(int id)

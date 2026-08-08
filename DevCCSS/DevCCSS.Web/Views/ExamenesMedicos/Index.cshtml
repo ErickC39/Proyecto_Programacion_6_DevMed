@@ -11,9 +11,6 @@
         </a>
         @if (User.IsInRole("Administrador") || User.IsInRole("Medico"))
         {
-            <a class="btn btn-outline-primary" asp-action="CrearTipoExamen">
-                <i class="bi bi-plus-lg"></i> Nuevo tipo de examen
-            </a>
             <a class="btn btn-primary" asp-action="Create">
                 <i class="bi bi-plus-lg"></i> Solicitar examen
             </a>

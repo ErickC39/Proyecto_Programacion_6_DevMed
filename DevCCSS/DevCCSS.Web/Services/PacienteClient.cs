@@ -7,11 +7,13 @@ namespace DevCCSS.Web.Services
     public class PacienteClient
     {
         private readonly string _url;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PacienteClient(IConfiguration config)
+        public PacienteClient(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             _url = config["Wcf:PacienteServiceUrl"]
                 ?? throw new InvalidOperationException("Falta Wcf:PacienteServiceUrl en appsettings.json");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // Helper para no repetir el abrir/cerrar canal en cada metodo.
@@ -29,6 +31,7 @@ namespace DevCCSS.Web.Services
 
             try
             {
+                using var _ = AuditoriaHttpHelper.AplicarUsuarioActual((IContextChannel)client, _httpContextAccessor);
                 var result = await accion(client);
                 ((IClientChannel)client).Close();
                 factory.Close();

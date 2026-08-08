@@ -1,3 +1,4 @@
+using DevCCSS.Web.Common;
 using DevCCSS.Web.Contracts;
 using DevCCSS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -6,20 +7,37 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevCCSS.Web.Controllers
 {
     [Authorize(Roles = "Administrador,Medico,Enfermeria,Recepcionista")]
+    [Modulo("Citas")]
     public class CitasController : Controller
     {
         private readonly CitaClient _citas;
         private readonly EmpleadoClient _empleados;
+        private readonly MedicoClient _medicos;
+        private readonly EspecialidadClient _especialidades;
+        private readonly ExamenMedicoClient _examenes;
 
-        public CitasController(CitaClient citas, EmpleadoClient empleados)
+        public CitasController(CitaClient citas, EmpleadoClient empleados, MedicoClient medicos, EspecialidadClient especialidades, ExamenMedicoClient examenes)
         {
             _citas = citas;
             _empleados = empleados;
+            _medicos = medicos;
+            _especialidades = especialidades;
+            _examenes = examenes;
         }
+
+        // Carga los medicos (activos) junto con su especialidad -- vía la relacion
+        // Medicos->Especialidades -- para que el formulario pueda filtrar segun la
+        // necesidad del paciente en vez de depender del texto libre Empleados.Especialidad.
+        private async Task CargarMedicos()
+        {
+            ViewBag.Medicos = (await _medicos.ListarAsync()).Where(m => m.Activo).ToList();
+            ViewBag.Especialidades = await _especialidades.ListarAsync();
+        }
+
         public async Task<IActionResult> Agendar()
         {
-            ViewBag.Medicos = (await _empleados.ListarAsync())
-                .Where(e => !string.IsNullOrEmpty(e.Especialidad)).ToList();
+            await CargarMedicos();
+            ViewBag.Pacientes = await _examenes.ListarPacientesAsync();
             return View(new AgendarCitaDto { FechaHoraCita = DateTime.Now.AddHours(1) });
         }
         public async Task<IActionResult> Index()
@@ -56,7 +74,8 @@ namespace DevCCSS.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Medicos = (await _empleados.ListarAsync()).Where(e => !string.IsNullOrEmpty(e.Especialidad)).ToList();
+                await CargarMedicos();
+                ViewBag.Pacientes = await _examenes.ListarPacientesAsync();
                 return View(model);
             }
 
@@ -75,7 +94,8 @@ namespace DevCCSS.Web.Controllers
                 }
                 else
                     ModelState.AddModelError("", r.Mensaje);
-                ViewBag.Medicos = (await _empleados.ListarAsync()).Where(e => !string.IsNullOrEmpty(e.Especialidad)).ToList();
+                await CargarMedicos();
+                ViewBag.Pacientes = await _examenes.ListarPacientesAsync();
                 return View(model);
             }
 
@@ -85,7 +105,7 @@ namespace DevCCSS.Web.Controllers
 
         public async Task<IActionResult> AgendarEmergencia(int? idEmpleado)
         {
-            ViewBag.Medicos = (await _empleados.ListarAsync()).Where(e => !string.IsNullOrEmpty(e.Especialidad)).ToList();
+            await CargarMedicos();
             ViewBag.EmpleadosVinculados = (await _empleados.ListarAsync()).Where(e => e.IdPacienteVinculado.HasValue).ToList();
             return View(new AgendarEmergenciaDto { IdEmpleado = idEmpleado ?? 0, FechaHoraCita = DateTime.Now.AddMinutes(15) });
         }
@@ -96,7 +116,7 @@ namespace DevCCSS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Medicos = (await _empleados.ListarAsync()).Where(e => !string.IsNullOrEmpty(e.Especialidad)).ToList();
+                await CargarMedicos();
                 ViewBag.EmpleadosVinculados = (await _empleados.ListarAsync()).Where(e => e.IdPacienteVinculado.HasValue).ToList();
                 return View(model);
             }
@@ -104,7 +124,7 @@ namespace DevCCSS.Web.Controllers
             if (!r.Ok)
             {
                 ModelState.AddModelError("", r.Mensaje);
-                ViewBag.Medicos = (await _empleados.ListarAsync()).Where(e => !string.IsNullOrEmpty(e.Especialidad)).ToList();
+                await CargarMedicos();
                 ViewBag.EmpleadosVinculados = (await _empleados.ListarAsync()).Where(e => e.IdPacienteVinculado.HasValue).ToList();
                 return View(model);
             }

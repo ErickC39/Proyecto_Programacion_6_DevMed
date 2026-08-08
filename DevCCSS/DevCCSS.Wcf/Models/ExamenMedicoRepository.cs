@@ -1,4 +1,5 @@
 using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -179,6 +180,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pId);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
@@ -199,6 +201,7 @@ namespace DevCCSS.Wcf.Models
             AgregarParametrosComunes(cmd, examen, incluirEstado: true);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
@@ -217,6 +220,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@IdExamenMedico", SqlDbType.Int) { Value = id });
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
@@ -237,6 +241,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pId);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
@@ -289,7 +294,8 @@ namespace DevCCSS.Wcf.Models
                 Observaciones = r["Observaciones"] as string,
                 FechaResultado = r["FechaResultado"] == DBNull.Value
                     ? null
-                    : r.GetDateTime(r.GetOrdinal("FechaResultado"))
+                    : r.GetDateTime(r.GetOrdinal("FechaResultado")),
+                IdCitaVinculada = r["IdCitaVinculada"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdCitaVinculada"))
             };
         }
     }

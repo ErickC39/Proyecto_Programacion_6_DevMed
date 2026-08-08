@@ -12,6 +12,8 @@ namespace DevCCSS.Wcf.Services
 
         [OperationContract]
         List<BitacoraErrorDto> ListarErrores(int top);
-    
+
+        [OperationContract]
+        List<BitacoraNotificacionDto> ListarNotificaciones(int top);
     }
 }

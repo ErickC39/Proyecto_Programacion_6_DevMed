@@ -30,6 +30,7 @@ namespace DevCCSS.Wcf.Contracts
         [DataMember] public string? Resultado { get; set; }
         [DataMember] public string? Observaciones { get; set; }
         [DataMember] public DateTime? FechaResultado { get; set; }
+        [DataMember] public int? IdCitaVinculada { get; set; }
     }
 
     [DataContract(Namespace = "http://devccss/contracts")]

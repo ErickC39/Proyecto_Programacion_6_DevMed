@@ -21,7 +21,7 @@ namespace DevCCSS.Wcf.Models
             using var cmd = conn.CreateCommand();
 
             cmd.CommandText = @"
-SELECT IdUsuario, Username, PasswordHash, PasswordSalt, Activo
+SELECT IdUsuario, Username, Nombre, PasswordHash, PasswordSalt, Activo, IntentosFallidos, BloqueadoHasta
 FROM dbo.Usuarios
 WHERE Username = @Username;";
 
@@ -35,10 +35,39 @@ WHERE Username = @Username;";
             {
                 IdUsuario = reader.GetInt32(reader.GetOrdinal("IdUsuario")),
                 Username = reader.GetString(reader.GetOrdinal("Username")),
+                Nombre = reader["Nombre"] as string ?? string.Empty,
                 PasswordHash = (byte[])reader["PasswordHash"],
                 PasswordSalt = (byte[])reader["PasswordSalt"],
-                Activo = reader.GetBoolean(reader.GetOrdinal("Activo"))
+                Activo = reader.GetBoolean(reader.GetOrdinal("Activo")),
+                IntentosFallidos = reader.GetInt32(reader.GetOrdinal("IntentosFallidos")),
+                BloqueadoHasta = reader["BloqueadoHasta"] == DBNull.Value ? null : reader.GetDateTime(reader.GetOrdinal("BloqueadoHasta"))
             };
+        }
+
+        // Se llama cuando la contrasenia no coincide; a partir del intento
+        // numero @MaxIntentos la cuenta queda bloqueada temporalmente
+        // (ver sp_Usuario_RegistrarIntentoFallido).
+        public void RegistrarIntentoFallido(int idUsuario)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "dbo.sp_Usuario_RegistrarIntentoFallido";
+            cmd.Parameters.Add(new SqlParameter("@IdUsuario", SqlDbType.Int) { Value = idUsuario });
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        // Se llama tras un login correcto para reiniciar el contador.
+        public void RegistrarLoginExitoso(int idUsuario)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "dbo.sp_Usuario_RegistrarLoginExitoso";
+            cmd.Parameters.Add(new SqlParameter("@IdUsuario", SqlDbType.Int) { Value = idUsuario });
+            conn.Open();
+            cmd.ExecuteNonQuery();
         }
 
         // En este modelo cada usuario tiene UN rol (IdRol en la tabla Usuarios).

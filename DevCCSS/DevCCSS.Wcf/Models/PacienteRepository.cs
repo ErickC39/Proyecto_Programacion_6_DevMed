@@ -1,10 +1,11 @@
 using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace DevCCSS.Wcf.Models
 {
-   
+
     public class PacienteRepository
     {
         private readonly string _connectionString;
@@ -60,6 +61,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pId);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
@@ -80,6 +82,7 @@ namespace DevCCSS.Wcf.Models
             AgregarParametros(cmd, p, incluirId: true);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud { Ok = true, Mensaje = "Paciente actualizado correctamente." };
@@ -95,6 +98,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@IdPaciente", SqlDbType.Int) { Value = id });
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud { Ok = true, Mensaje = "Paciente eliminado correctamente." };
@@ -159,6 +163,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@Alergias", SqlDbType.VarChar) { Value = (object?)e.Alergias ?? DBNull.Value });
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Expediente guardado correctamente." };
         }

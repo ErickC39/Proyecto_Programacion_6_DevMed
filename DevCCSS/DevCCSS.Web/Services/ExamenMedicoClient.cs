@@ -6,11 +6,13 @@ namespace DevCCSS.Web.Services
     public class ExamenMedicoClient
     {
         private readonly string _url;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ExamenMedicoClient(IConfiguration config)
+        public ExamenMedicoClient(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             _url = config["Wcf:ExamenMedicoServiceUrl"]
                 ?? throw new InvalidOperationException("Falta Wcf:ExamenMedicoServiceUrl en appsettings.json");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private async Task<T> EjecutarAsync<T>(Func<IExamenMedicoService, Task<T>> accion)
@@ -22,6 +24,7 @@ namespace DevCCSS.Web.Services
 
             try
             {
+                using var _ = AuditoriaHttpHelper.AplicarUsuarioActual((IContextChannel)client, _httpContextAccessor);
                 var result = await accion(client);
                 ((IClientChannel)client).Close();
                 factory.Close();

@@ -7,9 +7,28 @@
     <dl class="row mb-0">
             <dt class="col-sm-4">Nombre del producto</dt><dd class="col-sm-8">@Model.NombreProducto</dd>
             <dt class="col-sm-4">Descripción</dt><dd class="col-sm-8">@Model.Descripcion</dd>
-            <dt class="col-sm-4">Stock</dt><dd class="col-sm-8">@Model.CantidadStock</dd>
+            <dt class="col-sm-4">Stock</dt>
+            <dd class="col-sm-8">
+                @Model.CantidadStock
+                @if (Model.CantidadStock <= Model.StockMinimo)
+                {
+                    <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Stock bajo</span>
+                }
+            </dd>
+            <dt class="col-sm-4">Stock mínimo</dt><dd class="col-sm-8">@Model.StockMinimo</dd>
             <dt class="col-sm-4">Precio unitario</dt><dd class="col-sm-8">@Model.PrecioUnitario</dd>
-            <dt class="col-sm-4">Es insumo médico</dt><dd class="col-sm-8">@Model.EsInsumoMedico</dd>
+            <dt class="col-sm-4">Es insumo médico</dt><dd class="col-sm-8">@(Model.EsInsumoMedico ? "Sí" : "No")</dd>
+            <dt class="col-sm-4">Medicamento vinculado</dt>
+            <dd class="col-sm-8">
+                @if (Model.IdMedicamento.HasValue)
+                {
+                    <span class="badge bg-info text-dark"><i class="bi bi-capsule"></i> @Model.NombreMedicamentoVinculado</span>
+                }
+                else
+                {
+                    <span class="text-muted">Ninguno</span>
+                }
+            </dd>
     </dl>
 </div></div>
 <div class="mt-3">

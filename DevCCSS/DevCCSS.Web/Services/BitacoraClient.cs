@@ -40,6 +40,6 @@ namespace DevCCSS.Web.Services
 
         public Task<List<BitacoraAuditoriaDto>> ListarAuditoriaAsync(int top = 200) => EjecutarAsync(c => c.ListarAuditoriaAsync(top));
         public Task<List<BitacoraErrorDto>> ListarErroresAsync(int top = 200) => EjecutarAsync(c => c.ListarErroresAsync(top));
-        
+        public Task<List<BitacoraNotificacionDto>> ListarNotificacionesAsync(int top = 200) => EjecutarAsync(c => c.ListarNotificacionesAsync(top));
     }
 }

@@ -13,6 +13,8 @@ namespace DevCCSS.Wcf.Services
 
         public List<BitacoraErrorDto> ListarErrores(int top)
             => new BitacoraRepository(_config).ListarErrores(top <= 0 ? 200 : top);
-        
+
+        public List<BitacoraNotificacionDto> ListarNotificaciones(int top)
+            => new BitacoraRepository(_config).ListarNotificaciones(top <= 0 ? 200 : top);
     }
 }

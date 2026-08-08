@@ -31,7 +31,7 @@ namespace DevCCSS.Web.Controllers
 
             if (response is null || !response.Success)
             {
-                ModelState.AddModelError("", "Usuario o contrasenia incorrectos.");
+                ModelState.AddModelError("", response?.Message ?? "Usuario o contrasenia incorrectos.");
                 return View(model);
             }
 
@@ -39,7 +39,8 @@ namespace DevCCSS.Web.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, response.IdUsuario.ToString()),
-                new Claim(ClaimTypes.Name, response.Username)
+                new Claim(ClaimTypes.Name, response.Username),
+                new Claim(ClaimTypes.GivenName, string.IsNullOrWhiteSpace(response.Nombre) ? response.Username : response.Nombre)
             };
 
             foreach (var role in response.Roles)

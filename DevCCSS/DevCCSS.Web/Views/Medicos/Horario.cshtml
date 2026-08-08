@@ -1,0 +1,91 @@
+@model DevCCSS.Web.Contracts.HorarioMedicoDto
+
+<h2>
+    Agregar horario médico
+</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form asp-action="Horario"
+      method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           asp-for="IdMedico" />
+
+    <div class="mb-3">
+
+        <label>
+            Día
+        </label>
+
+        <select asp-for="DiaSemana"
+                class="form-control">
+
+            <option value="1">
+                Lunes
+            </option>
+
+            <option value="2">
+                Martes
+            </option>
+
+            <option value="3">
+                Miércoles
+            </option>
+
+            <option value="4">
+                Jueves
+            </option>
+
+            <option value="5">
+                Viernes
+            </option>
+
+            <option value="6">
+                Sábado
+            </option>
+
+            <option value="7">
+                Domingo
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>
+            Hora inicio
+        </label>
+
+        <input asp-for="HoraInicio"
+               type="time"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>
+            Hora fin
+        </label>
+
+        <input asp-for="HoraFin"
+               type="time"
+               class="form-control" />
+
+    </div>
+
+    <button class="btn btn-success">
+
+        Guardar horario
+
+    </button>
+
+</form>
