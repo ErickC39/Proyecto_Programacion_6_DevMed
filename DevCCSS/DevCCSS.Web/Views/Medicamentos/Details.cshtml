@@ -15,6 +15,25 @@
             <dd class="col-sm-9">@Model.Restricciones</dd>
             <dt class="col-sm-3">Horas de aplicación</dt>
             <dd class="col-sm-9">@Model.HorasAplicacionRecomendada</dd>
+            <dt class="col-sm-3">Stock</dt>
+            <dd class="col-sm-9">
+                @if (!Model.CantidadStock.HasValue)
+                {
+                    <span class="text-muted">Sin vincular a inventario (no disponible para la venta)</span>
+                }
+                else if (Model.CantidadStock.Value <= 0)
+                {
+                    <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Sin stock</span>
+                }
+                else
+                {
+                    <span class="badge bg-success">@Model.CantidadStock disponibles</span>
+                    @if (Model.PrecioUnitario.HasValue)
+                    {
+                        <span class="text-muted small ms-2">₡@Model.PrecioUnitario.Value.ToString("N2")</span>
+                    }
+                }
+            </dd>
         </dl>
     </div>
 </div>

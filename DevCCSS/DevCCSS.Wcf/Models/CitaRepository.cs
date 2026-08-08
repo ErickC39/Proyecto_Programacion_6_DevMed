@@ -1,4 +1,5 @@
 ﻿using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -61,6 +62,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pHora);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             int codigo = pCode.Value == DBNull.Value ? -1 : (int)pCode.Value;
@@ -96,6 +98,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pCode);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             int codigo = pCode.Value == DBNull.Value ? -1 : (int)pCode.Value;
@@ -134,6 +137,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pCode);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             int codigo = pCode.Value == DBNull.Value ? -1 : (int)pCode.Value;
@@ -169,6 +173,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pCode);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             int codigo = pCode.Value == DBNull.Value ? -1 : (int)pCode.Value;
@@ -200,6 +205,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pCode);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             string msg = pMsg.Value?.ToString() ?? string.Empty;
@@ -225,6 +231,7 @@ namespace DevCCSS.Wcf.Models
             var pCode = new SqlParameter("@CodigoSalida", SqlDbType.Int) { Direction = ParameterDirection.Output };
             cmd.Parameters.Add(pMsg); cmd.Parameters.Add(pCode);
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             int codigo = pCode.Value == DBNull.Value ? -1 : (int)pCode.Value;
             return new RespuestaCita { Ok = codigo == 0, Mensaje = pMsg.Value?.ToString() ?? string.Empty };
@@ -241,6 +248,7 @@ namespace DevCCSS.Wcf.Models
             var pCode = new SqlParameter("@CodigoSalida", SqlDbType.Int) { Direction = ParameterDirection.Output };
             cmd.Parameters.Add(pMsg); cmd.Parameters.Add(pCode);
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             int codigo = pCode.Value == DBNull.Value ? -1 : (int)pCode.Value;
             return new RespuestaCita { Ok = codigo == 0, Mensaje = pMsg.Value?.ToString() ?? string.Empty };
@@ -266,6 +274,10 @@ namespace DevCCSS.Wcf.Models
             CitaPreviaEsControl = r["CitaPreviaEsControl"] != DBNull.Value && r.GetBoolean(r.GetOrdinal("CitaPreviaEsControl")),
             FueReagendadaPorEmergencia = r["FueReagendadaPorEmergencia"] != DBNull.Value && r.GetBoolean(r.GetOrdinal("FueReagendadaPorEmergencia")),
             MensajeReagendo = r["MensajeReagendo"] as string,
+            IdTipoHabitacionRequerido = r["IdTipoHabitacionRequerido"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdTipoHabitacionRequerido")),
+            TipoHabitacionRequerido = r["TipoHabitacionRequerido"] as string,
+            IdHabitacionAsignada = r["IdHabitacionAsignada"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdHabitacionAsignada")),
+            NumeroHabitacionAsignada = r["NumeroHabitacionAsignada"] as string,
         };
     }
 }

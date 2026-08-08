@@ -1,3 +1,4 @@
+using DevCCSS.Web.Common;
 using DevCCSS.Web.Contracts;
 using DevCCSS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevCCSS.Web.Controllers
 {
     [Authorize(Roles = "Administrador")]
+    [Modulo("Empleados")]
     public class EmpleadosController : Controller
     {
         private readonly EmpleadoClient _servicio;
@@ -88,6 +90,15 @@ namespace DevCCSS.Web.Controllers
             var r = await _servicio.EliminarAsync(id);
             TempData[r.Ok ? "Ok" : "Error"] = r.Mensaje;
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CambiarEstado(int id, bool activo)
+        {
+            var r = await _servicio.CambiarEstadoAsync(id, activo);
+            TempData[r.Ok ? "Ok" : "Error"] = r.Mensaje;
+            return RedirectToAction(nameof(Details), new { id });
         }
     }
 }

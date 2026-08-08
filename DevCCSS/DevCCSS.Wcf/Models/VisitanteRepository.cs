@@ -1,4 +1,5 @@
 using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -45,12 +46,29 @@ namespace DevCCSS.Wcf.Models
             using var cmd = conn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "dbo.sp_Visitante_Crear";
-            AgregarParametrosComunes(cmd, m);
+            cmd.Parameters.Add(new SqlParameter("@NombreCompleto", SqlDbType.NVarChar, 150) { Value = m.NombreCompleto });
+            cmd.Parameters.Add(new SqlParameter("@IdPacienteAVisitar", SqlDbType.Int) { Value = m.IdPacienteAVisitar });
+            cmd.Parameters.Add(new SqlParameter("@FechaHoraEntrada", SqlDbType.DateTime) { Value = m.FechaHoraEntrada });
             var pId = new SqlParameter("@IdGenerado", SqlDbType.Int) { Direction = ParameterDirection.Output };
             cmd.Parameters.Add(pId);
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
-            return new RespuestaCrud { Ok = true, Mensaje = "Registro creado correctamente.", IdGenerado = pId.Value == DBNull.Value ? 0 : (int)pId.Value };
+            return new RespuestaCrud { Ok = true, Mensaje = "Entrada registrada correctamente.", IdGenerado = pId.Value == DBNull.Value ? 0 : (int)pId.Value };
+        }
+
+        public RespuestaCrud RegistrarSalida(int idVisita, DateTime? fechaHoraSalida)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "dbo.sp_Visitante_RegistrarSalida";
+            cmd.Parameters.Add(new SqlParameter("@IdVisita", SqlDbType.Int) { Value = idVisita });
+            cmd.Parameters.Add(new SqlParameter("@FechaHoraSalida", SqlDbType.DateTime) { Value = (object?)fechaHoraSalida ?? DBNull.Value });
+            conn.Open();
+            conn.EstablecerUsuarioAuditoria();
+            cmd.ExecuteNonQuery();
+            return new RespuestaCrud { Ok = true, Mensaje = "Salida registrada correctamente." };
         }
 
         public RespuestaCrud Actualizar(VisitanteDto m)
@@ -61,8 +79,12 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandText = "dbo.sp_Visitante_Actualizar";
             cmd.Parameters.Add(new SqlParameter("@IdVisita", SqlDbType.Int) { Value = m.IdVisita });
             cmd.Parameters.Add(new SqlParameter("@Identificacion", SqlDbType.NVarChar, 50) { Value = m.Identificacion });
-            AgregarParametrosComunes(cmd, m);
+            cmd.Parameters.Add(new SqlParameter("@NombreCompleto", SqlDbType.NVarChar, 150) { Value = m.NombreCompleto });
+            cmd.Parameters.Add(new SqlParameter("@IdPacienteAVisitar", SqlDbType.Int) { Value = m.IdPacienteAVisitar });
+            cmd.Parameters.Add(new SqlParameter("@FechaHoraEntrada", SqlDbType.DateTime) { Value = m.FechaHoraEntrada });
+            cmd.Parameters.Add(new SqlParameter("@FechaHoraSalida", SqlDbType.DateTime) { Value = (object?)m.FechaHoraSalida ?? DBNull.Value });
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro actualizado correctamente." };
         }
@@ -75,16 +97,9 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandText = "dbo.sp_Visitante_Eliminar";
             cmd.Parameters.Add(new SqlParameter("@IdVisita", SqlDbType.Int) { Value = id });
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro eliminado correctamente." };
-        }
-
-        private static void AgregarParametrosComunes(SqlCommand cmd, VisitanteDto m)
-        {
-            cmd.Parameters.Add(new SqlParameter("@NombreCompleto", SqlDbType.NVarChar, 150) { Value = m.NombreCompleto });
-            cmd.Parameters.Add(new SqlParameter("@IdPacienteAVisitar", SqlDbType.Int) { Value = m.IdPacienteAVisitar });
-            cmd.Parameters.Add(new SqlParameter("@FechaHoraEntrada", SqlDbType.DateTime) { Value = m.FechaHoraEntrada });
-            cmd.Parameters.Add(new SqlParameter("@FechaHoraSalida", SqlDbType.DateTime) { Value = (object?)m.FechaHoraSalida ?? DBNull.Value });
         }
 
         private static VisitanteDto Map(SqlDataReader r)

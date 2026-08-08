@@ -1,3 +1,4 @@
+using DevCCSS.Web.Common;
 using DevCCSS.Web.Contracts;
 using DevCCSS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevCCSS.Web.Controllers
 {
     [Authorize(Roles = "Administrador,Medico,Enfermeria,Recepcionista")]
+    [Modulo("Pacientes")]
     public class PacientesController : Controller
     {
         private readonly PacienteClient _pacientes;
@@ -54,6 +56,11 @@ namespace DevCCSS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PacienteDto model)
         {
+            if (model.FechaNacimiento.Date > DateTime.Today)
+            {
+                ModelState.AddModelError(nameof(model.FechaNacimiento), "La fecha de nacimiento no puede ser una fecha futura.");
+            }
+
             if (!ModelState.IsValid)
             {
                 await CargarCatalogos();
@@ -85,6 +92,11 @@ namespace DevCCSS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(PacienteDto model)
         {
+            if (model.FechaNacimiento.Date > DateTime.Today)
+            {
+                ModelState.AddModelError(nameof(model.FechaNacimiento), "La fecha de nacimiento no puede ser una fecha futura.");
+            }
+
             if (!ModelState.IsValid)
             {
                 await CargarCatalogos();

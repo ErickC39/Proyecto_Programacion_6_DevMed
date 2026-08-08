@@ -2,6 +2,7 @@
 
 <div class="row g-3">
     <input type="hidden" asp-for="IdEmpleado" />
+    <input type="hidden" asp-for="Activo" />
     @if (Model.IdEmpleado > 0)
     {
         <div class="col-md-6">
@@ -50,6 +51,7 @@
 
     <div class="col-md-6">
         <label class="form-label">Vincular como paciente (acceso de emergencia)</label>
+        <input type="text" id="filtroPacienteVinculado" class="form-control form-control-sm mb-1" placeholder="Buscar paciente..." />
         <select asp-for="IdPacienteVinculado" class="form-select">
             <option value="">-- Sin vincular --</option>
             @foreach (var p in (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Pacientes)

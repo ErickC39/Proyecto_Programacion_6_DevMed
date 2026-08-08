@@ -1,4 +1,5 @@
 using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -49,6 +50,7 @@ namespace DevCCSS.Wcf.Models
             var pId = new SqlParameter("@IdGenerado", SqlDbType.Int) { Direction = ParameterDirection.Output };
             cmd.Parameters.Add(pId);
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro creado correctamente.", IdGenerado = pId.Value == DBNull.Value ? 0 : (int)pId.Value };
         }
@@ -63,6 +65,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@Identificacion", SqlDbType.NVarChar, 50) { Value = m.Identificacion });
             AgregarParametrosComunes(cmd, m);
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro actualizado correctamente." };
         }
@@ -75,8 +78,23 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandText = "dbo.sp_Empleado_Eliminar";
             cmd.Parameters.Add(new SqlParameter("@IdEmpleado", SqlDbType.Int) { Value = id });
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro eliminado correctamente." };
+        }
+
+        public RespuestaCrud CambiarEstado(int idEmpleado, bool activo)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "dbo.sp_Empleado_CambiarEstado";
+            cmd.Parameters.Add(new SqlParameter("@IdEmpleado", SqlDbType.Int) { Value = idEmpleado });
+            cmd.Parameters.Add(new SqlParameter("@Activo", SqlDbType.Bit) { Value = activo });
+            conn.Open();
+            conn.EstablecerUsuarioAuditoria();
+            cmd.ExecuteNonQuery();
+            return new RespuestaCrud { Ok = true, Mensaje = activo ? "Empleado activado." : "Empleado desactivado." };
         }
 
         private static void AgregarParametrosComunes(SqlCommand cmd, EmpleadoDto m)
@@ -87,6 +105,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@SalarioPorHora", SqlDbType.Decimal) { Value = m.SalarioPorHora });
             cmd.Parameters.Add(new SqlParameter("@IdUsuario", SqlDbType.Int) { Value = m.IdUsuario });
             cmd.Parameters.Add(new SqlParameter("@IdPacienteVinculado", SqlDbType.Int) { Value = (object?)m.IdPacienteVinculado ?? DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Activo", SqlDbType.Bit) { Value = m.Activo });
         }
 
         private static EmpleadoDto Map(SqlDataReader r)
@@ -101,7 +120,9 @@ namespace DevCCSS.Wcf.Models
                 SalarioPorHora = r.GetDecimal(r.GetOrdinal("SalarioPorHora")),
                 IdUsuario = r.GetInt32(r.GetOrdinal("IdUsuario")),
                 UsuarioAsignado = r["UsuarioAsignado"] as string,
-                IdPacienteVinculado = r["IdPacienteVinculado"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdPacienteVinculado"))
+                IdPacienteVinculado = r["IdPacienteVinculado"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdPacienteVinculado")),
+                NombrePacienteVinculado = r["NombrePacienteVinculado"] as string,
+                Activo = r.GetBoolean(r.GetOrdinal("Activo"))
             };
         }
     }

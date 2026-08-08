@@ -12,6 +12,7 @@
             <div class="col-md-6">
                 <label class="form-label">Contraseña</label>
                 <input asp-for="Password" type="password" class="form-control" />
+                <div class="form-text">Minimo 8 caracteres, con al menos una letra y un numero.</div>
                 <span asp-validation-for="Password" class="text-danger small"></span>
             </div>
         </div>

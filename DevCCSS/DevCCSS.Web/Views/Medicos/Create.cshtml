@@ -1,0 +1,204 @@
+@model DevCCSS.Web.Contracts.MedicoDto
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="input-group mb-3">
+
+        <input id="identificacion"
+               class="form-control"
+               placeholder="EMP-001" />
+
+        <button type="button"
+                class="btn btn-secondary"
+                onclick="buscarEmpleado()">
+            Buscar
+        </button>
+
+    </div>
+
+    <input type="hidden"
+           asp-for="IdEmpleado"
+           id="IdEmpleado" />
+
+    <div class="mb-3">
+
+        <label>Nombre</label>
+
+        <input id="Nombre"
+               class="form-control"
+               readonly />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Apellidos</label>
+
+        <input id="Apellidos"
+               class="form-control"
+               readonly />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Especialidad</label>
+
+        <select asp-for="IdEspecialidad"
+                class="form-control">
+
+            <option value="0">
+                Seleccione una especialidad
+            </option>
+
+            @foreach (var especialidad in ViewBag.Especialidades)
+            {
+                <option value="@especialidad.IdEspecialidad">
+                    @especialidad.Nombre
+                </option>
+            }
+
+        </select>
+
+    </div>
+
+    <h4>
+        Horario de atención
+    </h4>
+
+    <div class="mb-3">
+
+        <label>Días de atención</label>
+
+        <div>
+            <input type="checkbox"
+                   name="dias"
+                   value="1" />
+            Lunes
+        </div>
+
+        <div>
+            <input type="checkbox"
+                   name="dias"
+                   value="2" />
+            Martes
+        </div>
+
+        <div>
+            <input type="checkbox"
+                   name="dias"
+                   value="3" />
+            Miércoles
+        </div>
+
+        <div>
+            <input type="checkbox"
+                   name="dias"
+                   value="4" />
+            Jueves
+        </div>
+
+        <div>
+            <input type="checkbox"
+                   name="dias"
+                   value="5" />
+            Viernes
+        </div>
+
+        <div>
+            <input type="checkbox"
+                   name="dias"
+                   value="6" />
+            Sábado
+        </div>
+
+        <div>
+            <input type="checkbox"
+                   name="dias"
+                   value="7" />
+            Domingo
+        </div>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Hora inicio</label>
+
+        <input type="time"
+               name="HoraInicio"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Hora fin</label>
+
+        <input type="time"
+               name="HoraFin"
+               class="form-control" />
+
+    </div>
+
+    <button type="submit"
+            class="btn btn-success">
+        Guardar Médico
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Volver
+    </a>
+
+</form>
+
+<script>
+
+    async function buscarEmpleado() {
+        let identificacion =
+            document.getElementById("identificacion").value;
+
+        if (!identificacion) {
+            alert("Ingrese la identificación");
+            return;
+        }
+
+        try {
+
+            let respuesta = await fetch(
+                '/Medicos/BuscarEmpleado?identificacion='
+                + identificacion
+            );
+
+            if (!respuesta.ok) {
+                alert("Empleado no encontrado");
+                return;
+            }
+
+            let empleado = await respuesta.json();
+
+            document.getElementById("IdEmpleado").value =
+                empleado.idEmpleado;
+
+            document.getElementById("Nombre").value =
+                empleado.nombre;
+
+            document.getElementById("Apellidos").value =
+                empleado.apellidos;
+
+        }
+        catch (error) {
+            console.error(error);
+            alert("Error buscando empleado");
+        }
+
+    }
+
+</script>

@@ -3,10 +3,10 @@
 }
 
 <div class="p-4 mb-4 bg-body-tertiary rounded-3 shadow-sm">
-    <h1 class="display-6">Bienvenido, @User.Identity?.Name</h1>
+    <h1 class="display-6">Bienvenido, @(User.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value ?? User.Identity?.Name)</h1>
     <p class="lead text-muted mb-2">Sistema de gestión hospitalaria DevMed.</p>
     <p class="small mb-0">
-        Roles:
+        Rol:
         @foreach (var c in User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role))
         {
             <span class="badge bg-secondary">@c.Value</span>
@@ -17,7 +17,7 @@
 <!-- Estadisticas rapidas -->
 <div class="row g-3 mb-4">
     <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card dashboard-card border-0 shadow-sm h-100">
             <div class="card-body d-flex align-items-center">
                 <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
                     <i class="bi bi-people text-primary fs-3"></i>
@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card dashboard-card border-0 shadow-sm h-100">
             <div class="card-body d-flex align-items-center">
                 <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
                     <i class="bi bi-box-seam text-success fs-3"></i>
@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card dashboard-card border-0 shadow-sm h-100">
             <div class="card-body d-flex align-items-center">
                 <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
                     <i class="bi bi-capsule text-info fs-3"></i>
@@ -63,7 +63,7 @@
     @if (User.IsInRole("Administrador") || User.IsInRole("Medico") || User.IsInRole("Enfermeria") || User.IsInRole("Recepcionista"))
     {
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-people"></i> Pacientes</h5>
                     <p class="card-text small text-muted">Registro, expediente y control de pacientes.</p>
@@ -72,7 +72,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-calendar-check"></i> Citas</h5>
                     <p class="card-text small text-muted">Agenda y control de citas médicas.</p>
@@ -84,7 +84,7 @@
     @if (User.IsInRole("Administrador"))
     {
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-person-badge"></i> Empleados</h5>
                     <p class="card-text small text-muted">Personal del hospital.</p>
@@ -92,11 +92,20 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="card dashboard-card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-heart-pulse"></i> Médicos</h5>
+                    <p class="card-text small text-muted">Especialidades y horarios de atención.</p>
+                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Medicos" asp-action="Index">Entrar</a>
+                </div>
+            </div>
+        </div>
     }
     @if (User.IsInRole("Administrador") || User.IsInRole("Medico") || User.IsInRole("Enfermeria"))
     {
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-virus"></i> Enfermedades</h5>
                     <p class="card-text small text-muted">Catálogo de enfermedades y tratamientos.</p>
@@ -105,7 +114,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-capsule"></i> Medicamentos</h5>
                     <p class="card-text small text-muted">Indicaciones, restricciones y horas de aplicación.</p>
@@ -114,7 +123,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-clipboard2-pulse"></i> Exámenes médicos</h5>
                     <p class="card-text small text-muted">Solicitud y resultados de exámenes.</p>
@@ -123,7 +132,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-clipboard2-heart"></i> Nacimientos</h5>
                     <p class="card-text small text-muted">Registro de recién nacidos y Apgar.</p>
@@ -132,7 +141,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-door-open"></i> Habitaciones</h5>
                     <p class="card-text small text-muted">Control de ocupación de habitaciones.</p>
@@ -144,7 +153,7 @@
     @if (User.IsInRole("Administrador") || User.IsInRole("Facturacion"))
     {
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-box-seam"></i> Inventario</h5>
                     <p class="card-text small text-muted">Insumos médicos y productos de venta.</p>
@@ -153,7 +162,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-receipt"></i> Ventas</h5>
                     <p class="card-text small text-muted">Facturación y control de ventas.</p>
@@ -165,7 +174,7 @@
     @if (User.IsInRole("Administrador") || User.IsInRole("Recepcionista"))
     {
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-person-lines-fill"></i> Visitantes</h5>
                     <p class="card-text small text-muted">Control de entrada y salida de visitantes.</p>
@@ -177,7 +186,7 @@
     @if (User.IsInRole("Administrador"))
     {
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card dashboard-card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-shield-lock"></i> Administración</h5>
                     <p class="card-text small text-muted">Usuarios, roles y bitácoras.</p>

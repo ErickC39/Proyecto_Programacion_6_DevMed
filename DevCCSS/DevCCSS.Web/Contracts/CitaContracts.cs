@@ -25,6 +25,10 @@ namespace DevCCSS.Web.Contracts
         [DataMember] public bool CitaPreviaEsControl { get; set; }
         [DataMember] public bool FueReagendadaPorEmergencia { get; set; }
         [DataMember] public string? MensajeReagendo { get; set; }
+        [DataMember] public int? IdTipoHabitacionRequerido { get; set; }
+        [DataMember] public string? TipoHabitacionRequerido { get; set; }
+        [DataMember] public int? IdHabitacionAsignada { get; set; }
+        [DataMember] public string? NumeroHabitacionAsignada { get; set; }
     }
 
     [DataContract(Namespace = "http://devccss/contracts")]

@@ -1,4 +1,5 @@
 ﻿using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -19,7 +20,9 @@ namespace DevCCSS.Wcf.Models
             var lista = new List<ProductoDto>();
             using var conn = new SqlConnection(_connectionString);
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT IdProducto, NombreProducto, Descripcion, PrecioUnitario, CantidadStock FROM dbo.vw_Inventario ORDER BY NombreProducto;";
+            // Solo se venden productos que NO esten marcados como insumo medico
+            // (los insumos son de uso clinico interno, no articulos de venta/factura).
+            cmd.CommandText = "SELECT IdProducto, NombreProducto, Descripcion, PrecioUnitario, CantidadStock, EsInsumoMedico, IdMedicamento FROM dbo.vw_Inventario WHERE ISNULL(EsInsumoMedico, 0) = 0 ORDER BY NombreProducto;";
             conn.Open();
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -30,7 +33,9 @@ namespace DevCCSS.Wcf.Models
                     NombreProducto = reader.GetString(reader.GetOrdinal("NombreProducto")),
                     Descripcion = reader["Descripcion"] as string,
                     PrecioUnitario = reader.GetDecimal(reader.GetOrdinal("PrecioUnitario")),
-                    CantidadStock = reader["CantidadStock"] == DBNull.Value ? 0 : reader.GetInt32(reader.GetOrdinal("CantidadStock"))
+                    CantidadStock = reader["CantidadStock"] == DBNull.Value ? 0 : reader.GetInt32(reader.GetOrdinal("CantidadStock")),
+                    EsInsumoMedico = reader["EsInsumoMedico"] != DBNull.Value && reader.GetBoolean(reader.GetOrdinal("EsInsumoMedico")),
+                    IdMedicamento = reader["IdMedicamento"] == DBNull.Value ? null : reader.GetInt32(reader.GetOrdinal("IdMedicamento"))
                 });
             }
             return lista;
@@ -139,6 +144,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pCodigo);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             int codigo = pCodigo.Value == DBNull.Value ? -1 : (int)pCodigo.Value;

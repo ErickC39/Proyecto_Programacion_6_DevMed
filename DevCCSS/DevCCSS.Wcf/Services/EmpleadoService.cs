@@ -44,5 +44,11 @@ namespace DevCCSS.Wcf.Services
                 return new RespuestaCrud { Ok = false, Mensaje = ex.Message };
             }
         }
+
+        public RespuestaCrud CambiarEstado(int idEmpleado, bool activo)
+        {
+            try { return new EmpleadoRepository(_config).CambiarEstado(idEmpleado, activo); }
+            catch (Exception ex) { return new RespuestaCrud { Ok = false, Mensaje = ex.Message }; }
+        }
     }
 }

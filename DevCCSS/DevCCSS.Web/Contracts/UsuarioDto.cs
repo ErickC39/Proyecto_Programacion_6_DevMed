@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace DevCCSS.Web.Contracts
@@ -8,6 +9,9 @@ namespace DevCCSS.Web.Contracts
         [DataMember] public int IdUsuario { get; set; }
         [DataMember] public string Nombre { get; set; } = string.Empty;
         [DataMember] public string Username { get; set; } = string.Empty;
+
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "La contrasenia debe tener al menos 8 caracteres.")]
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d).+$", ErrorMessage = "La contrasenia debe incluir al menos una letra y un numero.")]
         [DataMember] public string? Password { get; set; }   // solo se usa al crear
         [DataMember] public int IdRol { get; set; }
         [DataMember] public string? Rol { get; set; }        // solo para mostrar

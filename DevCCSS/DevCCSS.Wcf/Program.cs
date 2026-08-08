@@ -1,14 +1,29 @@
 using CoreWCF;
 using CoreWCF.Configuration;
 using CoreWCF.Description;
+using DevCCSS.Wcf.Infrastructure;
 using DevCCSS.Wcf.Models;
 using DevCCSS.Wcf.Services;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/wcf-.log", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 15)
+    .CreateLogger();
+
+try
+{
+    Log.Information("Iniciando DevCCSS.Wcf...");
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 // Servicios de CoreWCF (el intermediario)
 builder.Services.AddServiceModelServices();
 builder.Services.AddServiceModelMetadata();
+builder.Services.AddHttpContextAccessor();
 
 // Aqui registramos cada servicio del hospital.
 // Cuando un companero termine su servicio, lo agrega aqui igual que estos.
@@ -29,9 +44,18 @@ builder.Services.AddTransient<BitacoraService>();
 builder.Services.AddTransient<PermisoService>();
 builder.Services.AddTransient<ExamenMedicoService>();
 builder.Services.AddTransient<HabitacionService>();
+builder.Services.AddTransient<EspecialidadService>();
+builder.Services.AddTransient<MedicoService>();
 //  agregar aqui EmpleadoService, CitaService, etc.
 
+// Purga automatica de bitacoras viejas (retencion de 15 dias) -- ver BitacoraCleanupService.
+builder.Services.AddHostedService<BitacoraCleanupService>();
+
 var app = builder.Build();
+
+// Permite a los repositorios leer el IdUsuario de la peticion HTTP entrante
+// (encabezado X-IdUsuario) para marcar SESSION_CONTEXT antes de escrituras.
+AuditContext.Accessor = app.Services.GetRequiredService<IHttpContextAccessor>();
 
 // Cuota de mensaje elevada (por defecto BasicHttpBinding es de solo 64KB,
 // muy poco para listados grandes como la bitacora de auditoria).
@@ -122,6 +146,16 @@ app.UseServiceModel(serviceBuilder =>
         binding,
         "/HabitacionService.svc");
 
+    serviceBuilder.AddService<EspecialidadService>();
+    serviceBuilder.AddServiceEndpoint<EspecialidadService, IEspecialidadService>(
+        binding,
+        "/EspecialidadService.svc");
+
+    serviceBuilder.AddService<MedicoService>();
+    serviceBuilder.AddServiceEndpoint<MedicoService, IMedicoService>(
+        binding,
+        "/MedicoService.svc");
+
     //  cada modulo agrega su AddService + AddServiceEndpoint aqui.
 });
 
@@ -130,3 +164,12 @@ var metadata = app.Services.GetRequiredService<ServiceMetadataBehavior>();
 metadata.HttpGetEnabled = true;
 
 app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "DevCCSS.Wcf se detuvo de forma inesperada.");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

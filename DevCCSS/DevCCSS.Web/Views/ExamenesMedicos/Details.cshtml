@@ -41,6 +41,20 @@
 
             <dt class="col-sm-3">Observaciones</dt>
             <dd class="col-sm-9" style="white-space: pre-wrap;">@(Model.Observaciones ?? "Sin observaciones")</dd>
+
+            <dt class="col-sm-3">Cita programada</dt>
+            <dd class="col-sm-9">
+                @if (Model.IdCitaVinculada.HasValue)
+                {
+                    <a asp-controller="Citas" asp-action="Details" asp-route-id="@Model.IdCitaVinculada">
+                        <i class="bi bi-calendar2-check"></i> Ver cita #@Model.IdCitaVinculada
+                    </a>
+                }
+                else
+                {
+                    <span class="text-muted">-</span>
+                }
+            </dd>
         </dl>
     </div>
 </div>

@@ -11,8 +11,15 @@
 
     <div class="row g-3 mb-3">
         <div class="col-md-6">
-            <label class="form-label">Cédula del paciente (opcional)</label>
-            <input asp-for="PacienteIdentificacion" class="form-control" placeholder="Dejar vacío si es cliente ocasional" />
+            <label class="form-label">Paciente (opcional)</label>
+            <input asp-for="PacienteIdentificacion" class="form-control" list="listaPacientesVenta"
+                   placeholder="Dejar vacío si es cliente ocasional, o buscar por nombre/cédula..." autocomplete="off" />
+            <datalist id="listaPacientesVenta">
+                @foreach (var p in (List<DevCCSS.Web.Contracts.PacienteExamenDto>)ViewBag.Pacientes)
+                {
+                    <option value="@p.Identificacion">@p.NombreCompleto (@p.Identificacion)</option>
+                }
+            </datalist>
         </div>
         <div class="col-md-3">
             <label class="form-label">Método de pago</label>
@@ -59,7 +66,7 @@
         <tr id="filaVacia"><td colspan="5" class="text-center text-muted py-3">Agregue productos al carrito</td></tr>
     </table>
 
-    <div class="card bg-light border-0 mt-3">
+    <div class="card bg-body-tertiary border-0 mt-3">
         <div class="card-body">
             <dl class="row mb-0">
                 <dt class="col-sm-9 text-end">Subtotal</dt>

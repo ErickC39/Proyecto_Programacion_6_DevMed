@@ -29,6 +29,10 @@ namespace DevCCSS.Wcf.Contracts
         // Indica si ESTA cita fue trasladada porque el médico atendió una emergencia.
         [DataMember] public bool FueReagendadaPorEmergencia { get; set; }
         [DataMember] public string? MensajeReagendo { get; set; }
+        [DataMember] public int? IdTipoHabitacionRequerido { get; set; }
+        [DataMember] public string? TipoHabitacionRequerido { get; set; }
+        [DataMember] public int? IdHabitacionAsignada { get; set; }
+        [DataMember] public string? NumeroHabitacionAsignada { get; set; }
     }
 
     [DataContract(Namespace = "http://devccss/contracts")]

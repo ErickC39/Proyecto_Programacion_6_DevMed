@@ -29,7 +29,8 @@
 
                 <div class="col-md-3">
                     <label class="form-label">Fecha de nacimiento</label>
-                    <input asp-for="FechaNacimiento" type="date" class="form-control" />
+                    <input asp-for="FechaNacimiento" type="date" class="form-control" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="FechaNacimiento" class="text-danger small"></span>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Género</label>
@@ -53,6 +54,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Madre (opcional)</label>
+                    <input type="text" id="filtroMadre" class="form-control form-control-sm mb-1" placeholder="Buscar madre..." />
                     <select asp-for="IdMadre" class="form-select">
                         <option value="">-- Sin vincular --</option>
                         @foreach (var m in (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Madres)
@@ -88,7 +90,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered align-middle mb-0">
-                    <thead class="table-light">
+                    <thead class="table-dark">
                         <tr>
                             <th>Signo</th>
                             <th style="width:32%">1 minuto</th>
@@ -155,7 +157,7 @@
                                 </td>
                             }
                         </tr>
-                        <tr class="table-light fw-bold">
+                        <tr class="table-secondary fw-bold">
                             <td>Total</td>
                             @for (int i = 0; i < Model.Apgar.Count; i++)
                             {
@@ -219,7 +221,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table align-middle mb-0">
-                    <thead class="table-light">
+                    <thead class="table-dark">
                         <tr><th>Tamizaje</th><th style="width:120px">Realizado</th><th>Resultado</th></tr>
                     </thead>
                     <tbody>
@@ -266,5 +268,7 @@
         }
         document.querySelectorAll('.apgar-campo').forEach(sel => sel.addEventListener('change', recalcularApgar));
         recalcularApgar();
+
+        initSelectBuscable('#IdMadre', '#filtroMadre');
     </script>
 }

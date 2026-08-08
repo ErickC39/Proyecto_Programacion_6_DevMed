@@ -1,4 +1,5 @@
 using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -155,6 +156,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pId);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
@@ -176,6 +178,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@IdTipoHabitacion", SqlDbType.Int) { Value = habitacion.IdTipoHabitacion });
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud { Ok = true, Mensaje = "Habitacion actualizada correctamente." };
@@ -193,6 +196,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@IdEmpleadoResponsable", SqlDbType.Int) { Value = asignacion.IdEmpleadoResponsable });
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud { Ok = true, Mensaje = "Paciente asignado a la habitacion correctamente." };
@@ -210,6 +214,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@IdEmpleadoResponsable", SqlDbType.Int) { Value = liberacion.IdEmpleadoResponsable });
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud { Ok = true, Mensaje = "Habitacion liberada correctamente." };
@@ -224,6 +229,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@IdHabitacion", SqlDbType.Int) { Value = id });
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud { Ok = true, Mensaje = "Habitacion eliminada correctamente." };

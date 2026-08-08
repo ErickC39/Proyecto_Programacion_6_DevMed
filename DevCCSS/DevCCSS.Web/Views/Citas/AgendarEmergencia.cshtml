@@ -26,12 +26,23 @@
             }
         </div>
         <div class="col-md-4">
-            <label class="form-label">Médico</label>
-            <select asp-for="IdMedico" class="form-select">
-                <option value="">-- Seleccione --</option>
-                @foreach (var m in (List<DevCCSS.Web.Contracts.EmpleadoDto>)ViewBag.Medicos)
+            <label class="form-label">Especialidad requerida</label>
+            <select id="filtroEspecialidad" class="form-select">
+                <option value="">-- Todas --</option>
+                @foreach (var esp in (List<DevCCSS.Web.Contracts.EspecialidadDto>)ViewBag.Especialidades)
                 {
-                    <option value="@m.IdEmpleado">@m.Nombre @m.Apellidos — @m.Especialidad</option>
+                    <option value="@esp.IdEspecialidad">@esp.Nombre</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Médico</label>
+            <select asp-for="IdMedico" id="selectMedico" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var m in (List<DevCCSS.Web.Contracts.MedicoDto>)ViewBag.Medicos)
+                {
+                    <option value="@m.IdEmpleado" data-especialidad="@m.IdEspecialidad">@m.Nombre @m.Apellidos — @m.Especialidad</option>
                 }
             </select>
             <span asp-validation-for="IdMedico" class="text-danger"></span>
@@ -54,4 +65,22 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var filtro = document.getElementById('filtroEspecialidad');
+            var select = document.getElementById('selectMedico');
+            if (!filtro || !select) return;
+            var opciones = Array.from(select.options);
+            filtro.addEventListener('change', function () {
+                var idEsp = filtro.value;
+                opciones.forEach(function (opt) {
+                    if (!opt.value) { opt.hidden = false; return; }
+                    opt.hidden = idEsp !== '' && opt.dataset.especialidad !== idEsp;
+                });
+                if (select.selectedOptions[0] && select.selectedOptions[0].hidden) {
+                    select.value = '';
+                }
+            });
+        })();
+    </script>
 }

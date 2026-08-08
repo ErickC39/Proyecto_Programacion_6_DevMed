@@ -6,10 +6,12 @@ namespace DevCCSS.Web.Services
     public class UsuarioClient
     {
         private readonly string _url;
-        public UsuarioClient(IConfiguration config)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UsuarioClient(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             _url = config["Wcf:UsuarioServiceUrl"]
                 ?? throw new InvalidOperationException("Falta Wcf:UsuarioServiceUrl en appsettings.json");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private async Task<T> EjecutarAsync<T>(Func<IUsuarioService, Task<T>> accion)
@@ -25,6 +27,7 @@ namespace DevCCSS.Web.Services
             var client = factory.CreateChannel();
             try
             {
+                using var _ = AuditoriaHttpHelper.AplicarUsuarioActual((IContextChannel)client, _httpContextAccessor);
                 var result = await accion(client);
                 ((IClientChannel)client).Close();
                 factory.Close();

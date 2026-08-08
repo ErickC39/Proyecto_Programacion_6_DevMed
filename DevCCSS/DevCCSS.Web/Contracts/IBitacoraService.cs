@@ -11,5 +11,7 @@ namespace DevCCSS.Web.Contracts
         [OperationContract]
         Task<List<BitacoraErrorDto>> ListarErroresAsync(int top);
 
+        [OperationContract]
+        Task<List<BitacoraNotificacionDto>> ListarNotificacionesAsync(int top);
     }
 }

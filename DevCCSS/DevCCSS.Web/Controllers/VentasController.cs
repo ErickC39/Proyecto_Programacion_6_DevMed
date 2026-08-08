@@ -1,3 +1,4 @@
+using DevCCSS.Web.Common;
 using DevCCSS.Web.Contracts;
 using DevCCSS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -9,18 +10,21 @@ using QuestPDF.Infrastructure;
 namespace DevCCSS.Web.Controllers
 {
     [Authorize(Roles = "Administrador,Facturacion")]
+    [Modulo("Ventas")]
     public class VentasController : Controller
     {
-        private const string ColorPrimario = "#0F4A68";
-        private const string ColorSecundario = "#1F7F85";
-        private const string ColorPrimarioSubtle = "#D6E4EA";
+        private const string ColorPrimario = DevMedPalette.Primario;
+        private const string ColorSecundario = DevMedPalette.Secundario;
+        private const string ColorPrimarioSubtle = DevMedPalette.PrimarioSubtle;
 
         private readonly VentaClient _ventas;
         private readonly IWebHostEnvironment _env;
-        public VentasController(VentaClient ventas, IWebHostEnvironment env)
+        private readonly ExamenMedicoClient _examenes;
+        public VentasController(VentaClient ventas, IWebHostEnvironment env, ExamenMedicoClient examenes)
         {
             _ventas = ventas;
             _env = env;
+            _examenes = examenes;
         }
 
         private byte[] LeerLogo() =>
@@ -42,6 +46,7 @@ namespace DevCCSS.Web.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Productos = await _ventas.ListarProductosAsync();
+            ViewBag.Pacientes = await _examenes.ListarPacientesAsync();
             return View(new CrearVentaDto());
         }
 
@@ -55,6 +60,7 @@ namespace DevCCSS.Web.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.Productos = await _ventas.ListarProductosAsync();
+                ViewBag.Pacientes = await _examenes.ListarPacientesAsync();
                 return View(model);
             }
 
@@ -70,6 +76,7 @@ namespace DevCCSS.Web.Controllers
                         ModelState.AddModelError("", r.Mensaje);
 
                     ViewBag.Productos = await _ventas.ListarProductosAsync();
+                    ViewBag.Pacientes = await _examenes.ListarPacientesAsync();
                     return View(model);
                 }
 
@@ -80,6 +87,7 @@ namespace DevCCSS.Web.Controllers
             {
                 ModelState.AddModelError("", "Error de comunicacion con el servicio de ventas: " + ex.Message);
                 ViewBag.Productos = await _ventas.ListarProductosAsync();
+                ViewBag.Pacientes = await _examenes.ListarPacientesAsync();
                 return View(model);
             }
         }

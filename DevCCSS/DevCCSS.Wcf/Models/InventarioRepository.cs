@@ -1,4 +1,5 @@
 using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -49,6 +50,7 @@ namespace DevCCSS.Wcf.Models
             var pId = new SqlParameter("@IdGenerado", SqlDbType.Int) { Direction = ParameterDirection.Output };
             cmd.Parameters.Add(pId);
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro creado correctamente.", IdGenerado = pId.Value == DBNull.Value ? 0 : (int)pId.Value };
         }
@@ -61,6 +63,7 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandText = "dbo.sp_Inventario_Actualizar";
             AgregarParametros(cmd, m, incluirId: true);
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro actualizado correctamente." };
         }
@@ -73,6 +76,7 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandText = "dbo.sp_Inventario_Eliminar";
             cmd.Parameters.Add(new SqlParameter("@IdProducto", SqlDbType.Int) { Value = id });
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Registro eliminado correctamente." };
         }
@@ -86,6 +90,8 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@CantidadStock", SqlDbType.Int) { Value = m.CantidadStock });
             cmd.Parameters.Add(new SqlParameter("@PrecioUnitario", SqlDbType.Decimal) { Value = m.PrecioUnitario });
             cmd.Parameters.Add(new SqlParameter("@EsInsumoMedico", SqlDbType.Bit) { Value = m.EsInsumoMedico });
+            cmd.Parameters.Add(new SqlParameter("@StockMinimo", SqlDbType.Int) { Value = m.StockMinimo });
+            cmd.Parameters.Add(new SqlParameter("@IdMedicamento", SqlDbType.Int) { Value = (object?)m.IdMedicamento ?? DBNull.Value });
         }
 
         private static ProductoDto Map(SqlDataReader r)
@@ -97,7 +103,10 @@ namespace DevCCSS.Wcf.Models
                 Descripcion = r["Descripcion"] as string,
                 CantidadStock = r.GetInt32(r.GetOrdinal("CantidadStock")),
                 PrecioUnitario = r.GetDecimal(r.GetOrdinal("PrecioUnitario")),
-                EsInsumoMedico = r.GetBoolean(r.GetOrdinal("EsInsumoMedico"))
+                EsInsumoMedico = r.GetBoolean(r.GetOrdinal("EsInsumoMedico")),
+                StockMinimo = r.GetInt32(r.GetOrdinal("StockMinimo")),
+                IdMedicamento = r["IdMedicamento"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdMedicamento")),
+                NombreMedicamentoVinculado = r["NombreMedicamentoVinculado"] as string
             };
         }
     }
