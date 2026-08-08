@@ -7,7 +7,7 @@
             <h4 class="alert-heading">Acceso denegado</h4>
             <p>No tienes permisos para acceder a esta página.</p>
             <hr />
-            <p class="mb-0">Usuario: <strong>@User.Identity?.Name</strong></p>
+            <p class="mb-0">Usuario: <strong>@(User.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value ?? User.Identity?.Name)</strong></p>
         </div>
         <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Volver al inicio</a>
     </div>

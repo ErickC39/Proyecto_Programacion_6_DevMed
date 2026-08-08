@@ -1,0 +1,152 @@
+@model DevCCSS.Web.Models.MedicoDetalleViewModel
+@{
+    string[] nombresDias = { "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+    string NombreDia(int dia) => dia >= 1 && dia <= 7 ? nombresDias[dia] : dia.ToString();
+}
+
+<h2>
+    Detalle Médico
+</h2>
+
+<hr />
+
+<h4>
+    Datos personales
+</h4>
+
+<p>
+    <strong>Identificación:</strong>
+    @Model.Medico.Identificacion
+</p>
+
+<p>
+    <strong>Nombre:</strong>
+    @Model.Medico.Nombre
+    @Model.Medico.Apellidos
+</p>
+
+<p>
+    <strong>Estado:</strong>
+
+    @if (Model.Medico.Activo)
+    {
+        <span>
+            Activo
+        </span>
+    }
+    else
+    {
+        <span>
+            Inactivo
+        </span>
+    }
+
+</p>
+
+<h4>
+    Especialidad
+</h4>
+
+<p>
+    @Model.Medico.Especialidad
+</p>
+
+<a asp-action="Horario"
+   asp-route-id="@Model.Medico.IdMedico"
+   class="btn btn-primary">
+
+    Agregar Horario
+
+</a>
+
+<hr />
+
+<h4>
+    Horarios de atención
+</h4>
+
+<table class="table">
+
+    <tr>
+
+        <th>
+            Día
+        </th>
+
+        <th>
+            Inicio
+        </th>
+
+        <th>
+            Fin
+        </th>
+
+    </tr>
+
+    @foreach (var h in Model.Horarios)
+    {
+
+        <tr>
+
+            <td>
+                @NombreDia(h.DiaSemana)
+            </td>
+
+            <td>
+                @h.HoraInicio
+            </td>
+
+            <td>
+                @h.HoraFin
+            </td>
+
+        </tr>
+
+    }
+
+</table>
+
+<h4>
+    Citas asignadas
+</h4>
+
+<table class="table">
+
+    <tr>
+
+        <th>
+            Paciente
+        </th>
+
+        <th>
+            Fecha
+        </th>
+
+        <th>
+            Estado
+        </th>
+
+    </tr>
+
+    @foreach (var c in Model.Citas)
+    {
+
+        <tr>
+
+            <td>
+                @c.PacienteNombreCompleto
+            </td>
+
+            <td>
+                @c.FechaHoraCita
+            </td>
+
+            <td>
+                @c.EstadoCita
+            </td>
+
+        </tr>
+
+    }
+
+</table>

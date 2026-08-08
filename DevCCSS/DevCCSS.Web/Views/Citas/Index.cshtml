@@ -41,6 +41,7 @@
                 <th>Espera (min)</th>
                 <th>Estado</th>
                 <th>Prioridad</th>
+                <th>Espacio</th>
                 <th class="text-end">Acciones</th>
             </tr>
         </thead>
@@ -88,7 +89,17 @@
                         }
                         else
                         {
-                            <span class="badge bg-light text-dark">Normal</span>
+                            <span class="badge bg-secondary-subtle text-secondary-emphasis">Normal</span>
+                        }
+                    </td>
+                    <td>
+                        @if (c.NumeroHabitacionAsignada != null)
+                        {
+                            <span class="badge bg-info text-dark" title="@c.TipoHabitacionRequerido"><i class="bi bi-door-open"></i> @c.NumeroHabitacionAsignada</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted small">@(c.TipoHabitacionRequerido ?? "-")</span>
                         }
                     </td>
                     <td class="text-end">

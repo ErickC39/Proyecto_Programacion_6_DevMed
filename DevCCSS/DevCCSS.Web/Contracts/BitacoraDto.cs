@@ -26,5 +26,16 @@ namespace DevCCSS.Web.Contracts
         [DataMember] public string MensajeError { get; set; } = string.Empty;
         [DataMember] public int? LineaError { get; set; }
     }
-   
+
+    [DataContract(Namespace = "http://devccss/contracts")]
+    public class BitacoraNotificacionDto
+    {
+        [DataMember] public int IdNotificacion { get; set; }
+        [DataMember] public DateTime Fecha { get; set; }
+        [DataMember] public int? IdCitaAfectada { get; set; }
+        [DataMember] public int? IdCitaEmergencia { get; set; }
+        [DataMember] public string? PacienteAfectado { get; set; }
+        [DataMember] public string Mensaje { get; set; } = string.Empty;
+    }
+
 }

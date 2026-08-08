@@ -56,6 +56,21 @@
                 <span class="badge bg-secondary">@Model.EstadoCita</span>
             </dd>
 
+            <dt class="col-sm-3">Espacio requerido</dt>
+            <dd class="col-sm-9">
+                @(Model.TipoHabitacionRequerido ?? "-")
+                @if (Model.NumeroHabitacionAsignada != null)
+                {
+                    <span class="badge bg-info text-dark ms-1">
+                        <i class="bi bi-door-open"></i> Asignado: @Model.NumeroHabitacionAsignada
+                    </span>
+                }
+                else if (Model.EstadoCita == "En Progreso" || Model.EstadoCita == "Finalizada")
+                {
+                    <span class="text-muted small ms-1">(sin espacio disponible al momento de atender)</span>
+                }
+            </dd>
+
             <dt class="col-sm-3">Prioridad</dt>
             <dd class="col-sm-9">
                 @if (Model.PrioridadCita == "Alta")
@@ -64,7 +79,7 @@
                 }
                 else
                 {
-                    <span class="badge bg-light text-dark">Normal</span>
+                    <span class="badge bg-secondary-subtle text-secondary-emphasis">Normal</span>
                 }
             </dd>
 

@@ -6,10 +6,12 @@ namespace DevCCSS.Web.Services
     public class InventarioClient
     {
         private readonly string _url;
-        public InventarioClient(IConfiguration config)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public InventarioClient(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             _url = config["Wcf:InventarioServiceUrl"]
                 ?? throw new InvalidOperationException("Falta Wcf:InventarioServiceUrl en appsettings.json");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private async Task<T> EjecutarAsync<T>(Func<IInventarioService, Task<T>> accion)
@@ -25,6 +27,7 @@ namespace DevCCSS.Web.Services
             var client = factory.CreateChannel();
             try
             {
+                using var _ = AuditoriaHttpHelper.AplicarUsuarioActual((IContextChannel)client, _httpContextAccessor);
                 var result = await accion(client);
                 ((IClientChannel)client).Close();
                 factory.Close();

@@ -26,20 +26,37 @@ namespace DevCCSS.Wcf.Services
             if (user is null || !user.Activo)
                 return new LoginResponse { Success = false, Message = "Usuario o contrasenia incorrectos." };
 
-            // 2) validar password contra hash + salt
+            // 2) bloqueo por intentos fallidos (fuerza bruta)
+            if (user.BloqueadoHasta.HasValue && user.BloqueadoHasta.Value > DateTime.Now)
+            {
+                var minutosRestantes = Math.Max(1, (int)Math.Ceiling((user.BloqueadoHasta.Value - DateTime.Now).TotalMinutes));
+                return new LoginResponse
+                {
+                    Success = false,
+                    Message = $"Cuenta bloqueada temporalmente por demasiados intentos fallidos. Intente de nuevo en {minutosRestantes} minuto(s)."
+                };
+            }
+
+            // 3) validar password contra hash + salt
             bool ok = PasswordVerifier.VerifySha512(user.PasswordSalt, user.PasswordHash, password);
             if (!ok)
+            {
+                repo.RegistrarIntentoFallido(user.IdUsuario);
                 return new LoginResponse { Success = false, Message = "Usuario o contrasenia incorrectos." };
+            }
 
-            // 3) traer rol(es)
+            repo.RegistrarLoginExitoso(user.IdUsuario);
+
+            // 4) traer rol(es)
             var roles = repo.GetRolesByUserId(user.IdUsuario);
 
-            // 4) responder exito
+            // 5) responder exito
             return new LoginResponse
             {
                 Success = true,
                 IdUsuario = user.IdUsuario,
                 Username = user.Username,
+                Nombre = user.Nombre,
                 Activo = user.Activo,
                 Roles = roles.ToArray(),
                 Message = "Login correcto"

@@ -19,5 +19,8 @@ namespace DevCCSS.Web.Contracts
 
         [OperationContract]
         Task<RespuestaCrud> EliminarAsync(int id);
+
+        [OperationContract]
+        Task<RespuestaCrud> RegistrarSalidaAsync(int idVisita, DateTime? fechaHoraSalida);
     }
 }

@@ -52,7 +52,8 @@
 
     <div class="col-md-4">
         <label class="form-label">Fecha de nacimiento</label>
-        <input asp-for="FechaNacimiento" type="date" class="form-control" />
+        <input asp-for="FechaNacimiento" type="date" class="form-control" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="FechaNacimiento" class="text-danger small"></span>
     </div>
     <div class="col-md-4">
         <label class="form-label">Peso (kg)</label>

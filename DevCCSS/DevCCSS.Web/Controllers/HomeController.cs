@@ -28,6 +28,21 @@ namespace DevCCSS.Web.Controllers
             return View();
         }
 
+        public IActionResult AcercaDe()
+        {
+            return View();
+        }
+
+        public IActionResult Ayuda()
+        {
+            return View();
+        }
+
+        public IActionResult Terminos()
+        {
+            return View();
+        }
+
         // Helper: si el WCF no responde, devolvemos 0 y el dashboard no se cae.
         private static async Task<int> ContarAsync(Func<Task<int>> contar)
         {

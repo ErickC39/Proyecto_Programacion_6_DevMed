@@ -119,7 +119,10 @@ namespace DevCCSS.Wcf.Models
                 Nombre = r.GetString(r.GetOrdinal("Nombre")),
                 IndicacionesUso = r.GetString(r.GetOrdinal("IndicacionesUso")),
                 Restricciones = r["Restricciones"] as string,
-                HorasAplicacionRecomendada = r["HorasAplicacionRecomendada"] as string
+                HorasAplicacionRecomendada = r["HorasAplicacionRecomendada"] as string,
+                IdProducto = r["IdProducto"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdProducto")),
+                CantidadStock = r["CantidadStock"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("CantidadStock")),
+                PrecioUnitario = r["PrecioUnitario"] == DBNull.Value ? null : r.GetDecimal(r.GetOrdinal("PrecioUnitario"))
             };
         }
     }

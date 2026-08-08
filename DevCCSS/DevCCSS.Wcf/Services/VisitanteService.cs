@@ -26,5 +26,10 @@ namespace DevCCSS.Wcf.Services
             try { return new VisitanteRepository(_config).Eliminar(id); }
             catch (Exception ex) { return new RespuestaCrud { Ok = false, Mensaje = ex.Message }; }
         }
+        public RespuestaCrud RegistrarSalida(int idVisita, DateTime? fechaHoraSalida)
+        {
+            try { return new VisitanteRepository(_config).RegistrarSalida(idVisita, fechaHoraSalida); }
+            catch (Exception ex) { return new RespuestaCrud { Ok = false, Mensaje = ex.Message }; }
+        }
     }
 }

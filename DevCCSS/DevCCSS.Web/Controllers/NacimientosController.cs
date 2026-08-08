@@ -1,3 +1,4 @@
+using DevCCSS.Web.Common;
 using DevCCSS.Web.Contracts;
 using DevCCSS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevCCSS.Web.Controllers
 {
     [Authorize(Roles = "Administrador,Medico,Enfermeria")]
+    [Modulo("Nacimientos")]
     public class NacimientosController : Controller
     {
         // Tamizajes neonatales estandar que se piden siempre (Costa Rica: CCSS).
@@ -60,6 +62,11 @@ namespace DevCCSS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registrar(RegistrarNacimientoDto model)
         {
+            if (model.FechaNacimiento.Date > DateTime.Today)
+            {
+                ModelState.AddModelError(nameof(model.FechaNacimiento), "La fecha de nacimiento no puede ser una fecha futura.");
+            }
+
             if (!ModelState.IsValid)
             {
                 await CargarListas();
@@ -126,6 +133,11 @@ namespace DevCCSS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(RegistrarNacimientoDto model)
         {
+            if (model.FechaNacimiento.Date > DateTime.Today)
+            {
+                ModelState.AddModelError(nameof(model.FechaNacimiento), "La fecha de nacimiento no puede ser una fecha futura.");
+            }
+
             if (!ModelState.IsValid)
             {
                 await CargarListas();

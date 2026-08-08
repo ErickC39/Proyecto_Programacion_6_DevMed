@@ -15,15 +15,25 @@ namespace DevCCSS.Web.Contracts
         [DataMember] public int IdTipoHabitacion { get; set; }
 
         [DataMember] public string TipoHabitacion { get; set; } = string.Empty;
+        [DataMember] public int Capacidad { get; set; }
         [DataMember] public int IdEstadoHabitacion { get; set; }
         [DataMember] public string EstadoHabitacion { get; set; } = string.Empty;
-        [DataMember] public int? IdPaciente { get; set; }
-        [DataMember] public string? PacienteIdentificacion { get; set; }
-        [DataMember] public string? PacienteNombreCompleto { get; set; }
-        [DataMember] public DateTime? FechaIngreso { get; set; }
+        [DataMember] public int OcupantesActuales { get; set; }
+    }
+
+    [DataContract(Namespace = "http://devccss/contracts")]
+    public class OcupanteHabitacionDto
+    {
+        [DataMember] public int IdOcupante { get; set; }
+        [DataMember] public int IdHabitacion { get; set; }
+        [DataMember] public string NumeroHabitacion { get; set; } = string.Empty;
+        [DataMember] public int IdPaciente { get; set; }
+        [DataMember] public string PacienteIdentificacion { get; set; } = string.Empty;
+        [DataMember] public string PacienteNombreCompleto { get; set; } = string.Empty;
+        [DataMember] public DateTime FechaIngreso { get; set; }
         [DataMember] public DateTime? FechaSalida { get; set; }
-        [DataMember] public int? IdEmpleadoResponsable { get; set; }
-        [DataMember] public string? ResponsableNombreCompleto { get; set; }
+        [DataMember] public string ResponsableIngreso { get; set; } = string.Empty;
+        [DataMember] public string? ResponsableSalida { get; set; }
     }
 
     [DataContract(Namespace = "http://devccss/contracts")]
@@ -31,6 +41,7 @@ namespace DevCCSS.Web.Contracts
     {
         [DataMember] public int IdTipoHabitacion { get; set; }
         [DataMember] public string Descripcion { get; set; } = string.Empty;
+        [DataMember] public int Capacidad { get; set; }
     }
 
     [DataContract(Namespace = "http://devccss/contracts")]
@@ -73,6 +84,10 @@ namespace DevCCSS.Web.Contracts
     public class LiberarHabitacionDto
     {
         [DataMember] public int IdHabitacion { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un paciente.")]
+        [DataMember] public int IdPaciente { get; set; }
+
         [DataMember] public DateTime FechaSalida { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un responsable.")]

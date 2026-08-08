@@ -65,6 +65,36 @@ namespace DevCCSS.Wcf.Models
             return lista;
         }
 
-      
+        public List<BitacoraNotificacionDto> ListarNotificaciones(int top)
+        {
+            var lista = new List<BitacoraNotificacionDto>();
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"
+                SELECT TOP (@Top)
+                    n.IdNotificacion, n.Fecha, n.IdCitaAfectada, n.IdCitaEmergencia,
+                    p.Nombre + ' ' + p.Apellidos AS PacienteAfectado,
+                    n.Mensaje
+                FROM dbo.Bitacora_Notificaciones n
+                LEFT JOIN dbo.Citas_Medicas c ON c.IdCita = COALESCE(n.IdCitaAfectada, n.IdCitaEmergencia)
+                LEFT JOIN dbo.Pacientes p ON p.IdPaciente = c.IdPaciente
+                ORDER BY n.Fecha DESC;";
+            cmd.Parameters.Add(new SqlParameter("@Top", SqlDbType.Int) { Value = top });
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                lista.Add(new BitacoraNotificacionDto
+                {
+                    IdNotificacion = reader.GetInt32(reader.GetOrdinal("IdNotificacion")),
+                    Fecha = reader.GetDateTime(reader.GetOrdinal("Fecha")),
+                    IdCitaAfectada = reader["IdCitaAfectada"] == DBNull.Value ? null : reader.GetInt32(reader.GetOrdinal("IdCitaAfectada")),
+                    IdCitaEmergencia = reader["IdCitaEmergencia"] == DBNull.Value ? null : reader.GetInt32(reader.GetOrdinal("IdCitaEmergencia")),
+                    PacienteAfectado = reader["PacienteAfectado"] as string,
+                    Mensaje = reader.GetString(reader.GetOrdinal("Mensaje"))
+                });
+            }
+            return lista;
+        }
     }
 }

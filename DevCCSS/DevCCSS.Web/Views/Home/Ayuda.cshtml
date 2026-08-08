@@ -1,0 +1,151 @@
+@{
+    ViewData["Title"] = "Ayuda";
+    var roles = User.Claims
+        .Where(c => c.Type == System.Security.Claims.ClaimTypes.Role)
+        .Select(c => c.Value)
+        .ToList();
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1"><i class="bi bi-question-circle text-primary"></i> Ayuda del sistema</h1>
+        <p class="text-muted mb-0">Guía rápida de uso de Hospital DevMed según las funciones asignadas.</p>
+    </div>
+    <div>
+        <span class="small text-muted me-1">Sus roles:</span>
+        @foreach (var rol in roles)
+        {
+            <span class="badge text-bg-secondary">@rol</span>
+        }
+    </div>
+</div>
+
+<div class="alert alert-info d-flex gap-3" role="alert">
+    <i class="bi bi-lightbulb fs-4"></i>
+    <div>
+        El menú y el panel principal muestran únicamente las opciones permitidas para su rol.
+        Si necesita acceso adicional, debe solicitarlo a un Administrador.
+    </div>
+</div>
+
+<div class="accordion shadow-sm" id="ayudaSistema">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ayudaGeneral">
+                <i class="bi bi-compass me-2"></i> Primeros pasos y uso general
+            </button>
+        </h2>
+        <div id="ayudaGeneral" class="accordion-collapse collapse show" data-bs-parent="#ayudaSistema">
+            <div class="accordion-body">
+                <ol class="mb-0">
+                    <li class="mb-2">Inicie sesión con el usuario suministrado por el Administrador.</li>
+                    <li class="mb-2">Use el panel de inicio o la barra superior para abrir un módulo.</li>
+                    <li class="mb-2">Utilice los buscadores y filtros para localizar registros.</li>
+                    <li class="mb-2">En los formularios, complete los campos requeridos y revise los mensajes de validación.</li>
+                    <li class="mb-2">Use el botón de luna o sol de la barra superior para cambiar el tema.</li>
+                    <li>Cierre la sesión con el botón <strong>Salir</strong> cuando termine.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ayudaAdmin">
+                <i class="bi bi-shield-lock me-2"></i> Administrador
+            </button>
+        </h2>
+        <div id="ayudaAdmin" class="accordion-collapse collapse" data-bs-parent="#ayudaSistema">
+            <div class="accordion-body">
+                <ul class="mb-0">
+                    <li class="mb-2"><strong>Usuarios y roles:</strong> cree cuentas, asigne roles y desactive accesos.</li>
+                    <li class="mb-2"><strong>Permisos:</strong> revise las operaciones disponibles para cada rol.</li>
+                    <li class="mb-2"><strong>Empleados:</strong> registre al personal y vincule su cuenta de usuario.</li>
+                    <li class="mb-2"><strong>Bitácoras:</strong> consulte acciones realizadas y errores registrados.</li>
+                    <li><strong>Módulos operativos:</strong> el Administrador puede supervisar y mantener la información general del sistema.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ayudaClinica">
+                <i class="bi bi-heart-pulse me-2"></i> Médico y Enfermería
+            </button>
+        </h2>
+        <div id="ayudaClinica" class="accordion-collapse collapse" data-bs-parent="#ayudaSistema">
+            <div class="accordion-body">
+                <ol class="mb-0">
+                    <li class="mb-2">Busque al paciente desde <strong>Pacientes</strong> y consulte sus datos.</li>
+                    <li class="mb-2">Abra el <strong>Expediente</strong> para revisar antecedentes, alergias y exámenes.</li>
+                    <li class="mb-2">Gestione citas y registre la atención según el estado correspondiente.</li>
+                    <li class="mb-2">El Médico puede solicitar exámenes y registrar sus resultados; Enfermería puede consultarlos.</li>
+                    <li class="mb-2">Consulte enfermedades, tratamientos y medicamentos disponibles.</li>
+                    <li>Use Habitaciones para consultar o gestionar ocupación según sus permisos.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ayudaRecepcion">
+                <i class="bi bi-calendar2-check me-2"></i> Recepción
+            </button>
+        </h2>
+        <div id="ayudaRecepcion" class="accordion-collapse collapse" data-bs-parent="#ayudaSistema">
+            <div class="accordion-body">
+                <ul class="mb-0">
+                    <li class="mb-2">Registre y actualice los datos administrativos de pacientes.</li>
+                    <li class="mb-2">Agende citas y registre la llegada del paciente.</li>
+                    <li>Controle la entrada y salida de visitantes desde el módulo Visitantes.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ayudaFacturacion">
+                <i class="bi bi-receipt me-2"></i> Facturación
+            </button>
+        </h2>
+        <div id="ayudaFacturacion" class="accordion-collapse collapse" data-bs-parent="#ayudaSistema">
+            <div class="accordion-body">
+                <ul class="mb-0">
+                    <li class="mb-2">Revise existencias y precios desde Inventario.</li>
+                    <li class="mb-2">Registre la venta, el detalle de productos, descuentos y método de pago.</li>
+                    <li>Consulte el detalle de la factura y utilice las opciones de exportación disponibles.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ayudaProblemas">
+                <i class="bi bi-tools me-2"></i> Problemas frecuentes
+            </button>
+        </h2>
+        <div id="ayudaProblemas" class="accordion-collapse collapse" data-bs-parent="#ayudaSistema">
+            <div class="accordion-body">
+                <dl class="mb-0">
+                    <dt>No aparece un módulo</dt>
+                    <dd>Su rol no tiene acceso. Consulte al Administrador.</dd>
+                    <dt>No se pueden cargar los datos</dt>
+                    <dd>Verifique que el servidor WCF esté ejecutándose antes que la aplicación Web.</dd>
+                    <dt>El formulario no guarda</dt>
+                    <dd>Revise los mensajes de validación y complete los campos obligatorios.</dd>
+                    <dt>La sesión terminó</dt>
+                    <dd>Por seguridad, vuelva a iniciar sesión.</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex flex-wrap gap-2">
+    <a class="btn btn-primary" asp-action="Index"><i class="bi bi-house"></i> Volver al inicio</a>
+    <a class="btn btn-outline-secondary" asp-action="AcercaDe"><i class="bi bi-info-circle"></i> Acerca de</a>
+</div>

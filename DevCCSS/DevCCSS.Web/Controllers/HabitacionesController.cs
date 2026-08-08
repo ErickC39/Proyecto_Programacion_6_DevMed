@@ -1,3 +1,4 @@
+using DevCCSS.Web.Common;
 using DevCCSS.Web.Contracts;
 using DevCCSS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevCCSS.Web.Controllers
 {
     [Authorize(Roles = "Administrador,Medico,Enfermeria")]
+    [Modulo("Habitaciones")]
     public class HabitacionesController : Controller
     {
         private readonly HabitacionClient _habitaciones;
@@ -38,6 +40,7 @@ namespace DevCCSS.Web.Controllers
         {
             var habitacion = await _habitaciones.ObtenerPorIdAsync(id);
             if (habitacion is null) return NotFound();
+            ViewBag.Ocupantes = await _habitaciones.ListarOcupantesActivosAsync(id);
             return View(habitacion);
         }
 
@@ -113,13 +116,14 @@ namespace DevCCSS.Web.Controllers
         {
             var habitacion = await _habitaciones.ObtenerPorIdAsync(id);
             if (habitacion is null) return NotFound();
-            if (habitacion.EstadoHabitacion == "Ocupada")
+            if (habitacion.OcupantesActuales >= habitacion.Capacidad)
             {
-                TempData["Error"] = "La habitacion ya esta ocupada. Debe liberarla antes de asignarla nuevamente.";
+                TempData["Error"] = "La habitacion ya alcanzo su capacidad maxima. Debe liberar un espacio antes de asignarla nuevamente.";
                 return RedirectToAction(nameof(Details), new { id });
             }
 
             await CargarCatalogosAsignacion();
+            ViewBag.Habitacion = habitacion;
             return View(new AsignarHabitacionDto { IdHabitacion = id, FechaIngreso = DateTime.Now });
         }
 
@@ -132,6 +136,7 @@ namespace DevCCSS.Web.Controllers
             if (!ModelState.IsValid)
             {
                 await CargarCatalogosAsignacion();
+                ViewBag.Habitacion = await _habitaciones.ObtenerPorIdAsync(model.IdHabitacion);
                 return View(model);
             }
 
@@ -140,6 +145,7 @@ namespace DevCCSS.Web.Controllers
             {
                 ModelState.AddModelError("", respuesta.Mensaje);
                 await CargarCatalogosAsignacion();
+                ViewBag.Habitacion = await _habitaciones.ObtenerPorIdAsync(model.IdHabitacion);
                 return View(model);
             }
 
@@ -153,14 +159,16 @@ namespace DevCCSS.Web.Controllers
         {
             var habitacion = await _habitaciones.ObtenerPorIdAsync(id);
             if (habitacion is null) return NotFound();
-            if (habitacion.EstadoHabitacion != "Ocupada")
+            if (habitacion.OcupantesActuales == 0)
             {
-                TempData["Error"] = "La habitacion no esta ocupada actualmente.";
+                TempData["Error"] = "La habitacion no tiene pacientes activos actualmente.";
                 return RedirectToAction(nameof(Details), new { id });
             }
 
-            await CargarCatalogosAsignacion();
-            return View(habitacion);
+            ViewBag.Habitacion = habitacion;
+            ViewBag.Empleados = await _habitaciones.ListarEmpleadosAsync();
+            var ocupantes = await _habitaciones.ListarOcupantesActivosAsync(id);
+            return View(ocupantes);
         }
 
         // POST: /Habitaciones/Liberar/5

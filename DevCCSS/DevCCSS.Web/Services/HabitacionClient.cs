@@ -6,11 +6,13 @@ namespace DevCCSS.Web.Services
     public class HabitacionClient
     {
         private readonly string _url;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HabitacionClient(IConfiguration config)
+        public HabitacionClient(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             _url = config["Wcf:HabitacionServiceUrl"]
                 ?? throw new InvalidOperationException("Falta Wcf:HabitacionServiceUrl en appsettings.json");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private async Task<T> EjecutarAsync<T>(Func<IHabitacionService, Task<T>> accion)
@@ -27,6 +29,7 @@ namespace DevCCSS.Web.Services
 
             try
             {
+                using var _ = AuditoriaHttpHelper.AplicarUsuarioActual((IContextChannel)client, _httpContextAccessor);
                 var result = await accion(client);
                 ((IClientChannel)client).Close();
                 factory.Close();
@@ -72,5 +75,8 @@ namespace DevCCSS.Web.Services
 
         public Task<RespuestaCrud> EliminarAsync(int id) =>
             EjecutarAsync(c => c.EliminarAsync(id));
+
+        public Task<List<OcupanteHabitacionDto>> ListarOcupantesActivosAsync(int idHabitacion) =>
+            EjecutarAsync(c => c.ListarOcupantesActivosAsync(idHabitacion));
     }
 }

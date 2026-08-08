@@ -1,3 +1,4 @@
+using DevCCSS.Web.Common;
 using DevCCSS.Web.Contracts;
 using DevCCSS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevCCSS.Web.Controllers
 {
     [Authorize(Roles = "Administrador,Medico,Enfermeria")]
+    [Modulo("ExamenesMedicos")]
     public class ExamenesMedicosController : Controller
     {
         private readonly ExamenMedicoClient _examenes;
@@ -130,6 +132,40 @@ namespace DevCCSS.Web.Controllers
             var respuesta = await _examenes.EliminarAsync(id);
             TempData[respuesta.Ok ? "Ok" : "Error"] = respuesta.Mensaje;
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: /ExamenesMedicos/TiposExamen
+        public async Task<IActionResult> TiposExamen()
+        {
+            var lista = await _examenes.ListarTiposExamenAsync();
+            return View(lista);
+        }
+
+        // GET: /ExamenesMedicos/CrearTipoExamen
+        [Authorize(Roles = "Administrador,Medico")]
+        public IActionResult CrearTipoExamen()
+        {
+            return View(new TipoExamenDto());
+        }
+
+        // POST: /ExamenesMedicos/CrearTipoExamen
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador,Medico")]
+        public async Task<IActionResult> CrearTipoExamen(TipoExamenDto model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var respuesta = await _examenes.CrearTipoExamenAsync(model);
+            if (!respuesta.Ok)
+            {
+                ModelState.AddModelError("", respuesta.Mensaje);
+                return View(model);
+            }
+
+            TempData["Ok"] = respuesta.Mensaje;
+            return RedirectToAction(nameof(TiposExamen));
         }
     }
 }

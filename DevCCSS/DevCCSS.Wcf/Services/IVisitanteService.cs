@@ -20,5 +20,8 @@ namespace DevCCSS.Wcf.Services
 
         [OperationContract]
         RespuestaCrud Eliminar(int id);
+
+        [OperationContract]
+        RespuestaCrud RegistrarSalida(int idVisita, DateTime? fechaHoraSalida);
     }
 }

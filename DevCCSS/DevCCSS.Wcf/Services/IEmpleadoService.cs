@@ -20,5 +20,8 @@ namespace DevCCSS.Wcf.Services
 
         [OperationContract]
         RespuestaCrud Eliminar(int id);
+
+        [OperationContract]
+        RespuestaCrud CambiarEstado(int idEmpleado, bool activo);
     }
 }

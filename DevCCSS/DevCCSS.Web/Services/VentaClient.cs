@@ -6,11 +6,13 @@ namespace DevCCSS.Web.Services
     public class VentaClient
     {
         private readonly string _url;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public VentaClient(IConfiguration config)
+        public VentaClient(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             _url = config["Wcf:VentaServiceUrl"]
                 ?? throw new InvalidOperationException("Falta Wcf:VentaServiceUrl en appsettings.json");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private async Task<T> EjecutarAsync<T>(Func<IVentaService, Task<T>> accion)
@@ -26,6 +28,7 @@ namespace DevCCSS.Web.Services
             var client = factory.CreateChannel();
             try
             {
+                using var _ = AuditoriaHttpHelper.AplicarUsuarioActual((IContextChannel)client, _httpContextAccessor);
                 var result = await accion(client);
                 ((IClientChannel)client).Close();
                 factory.Close();

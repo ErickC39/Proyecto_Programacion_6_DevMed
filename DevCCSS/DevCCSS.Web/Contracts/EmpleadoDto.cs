@@ -14,5 +14,7 @@ namespace DevCCSS.Web.Contracts
         [DataMember] public int IdUsuario { get; set; }
         [DataMember] public string? UsuarioAsignado { get; set; }
         [DataMember] public int? IdPacienteVinculado { get; set; }
+        [DataMember] public string? NombrePacienteVinculado { get; set; }
+        [DataMember] public bool Activo { get; set; } = true;
     }
 }

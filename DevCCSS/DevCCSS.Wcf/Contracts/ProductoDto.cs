@@ -11,5 +11,8 @@ namespace DevCCSS.Wcf.Contracts
         [DataMember] public int CantidadStock { get; set; }
         [DataMember] public decimal PrecioUnitario { get; set; }
         [DataMember] public bool EsInsumoMedico { get; set; }
+        [DataMember] public int StockMinimo { get; set; } = 5;
+        [DataMember] public int? IdMedicamento { get; set; }
+        [DataMember] public string? NombreMedicamentoVinculado { get; set; }
     }
 }

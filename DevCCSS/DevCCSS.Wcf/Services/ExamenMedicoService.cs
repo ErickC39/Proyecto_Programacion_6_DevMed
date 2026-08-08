@@ -92,5 +92,18 @@ namespace DevCCSS.Wcf.Services
                 return new RespuestaCrud { Ok = false, Mensaje = ex.Message };
             }
         }
+
+        public RespuestaCrud CrearTipoExamen(TipoExamenDto tipo)
+        {
+            var repo = new ExamenMedicoRepository(_config);
+            try
+            {
+                return repo.CrearTipoExamen(tipo);
+            }
+            catch (Exception ex)
+            {
+                return new RespuestaCrud { Ok = false, Mensaje = ex.Message };
+            }
+        }
     }
 }

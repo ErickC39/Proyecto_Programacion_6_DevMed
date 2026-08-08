@@ -20,18 +20,37 @@
     <div class="row g-3">
 
         <div class="col-md-6">
-            <label class="form-label">Identificación del paciente</label>
-            <input asp-for="PacienteIdentificacion" class="form-control" placeholder="Cédula del paciente" />
+            <label class="form-label">Paciente</label>
+            <input asp-for="PacienteIdentificacion" class="form-control" list="listaPacientes"
+                   placeholder="Escriba el nombre o la cédula para filtrar..." autocomplete="off" />
+            <datalist id="listaPacientes">
+                @foreach (var p in (List<DevCCSS.Web.Contracts.PacienteExamenDto>)ViewBag.Pacientes)
+                {
+                    <option value="@p.Identificacion">@p.NombreCompleto (@p.Identificacion)</option>
+                }
+            </datalist>
             <span asp-validation-for="PacienteIdentificacion" class="text-danger"></span>
         </div>
 
         <div class="col-md-3">
-            <label class="form-label">Médico</label>
-            <select asp-for="IdMedico" class="form-select">
-                <option value="">-- Seleccione --</option>
-                @foreach (var m in (List<DevCCSS.Web.Contracts.EmpleadoDto>)ViewBag.Medicos)
+            <label class="form-label">Especialidad requerida</label>
+            <select id="filtroEspecialidad" class="form-select">
+                <option value="">-- Todas --</option>
+                @foreach (var esp in (List<DevCCSS.Web.Contracts.EspecialidadDto>)ViewBag.Especialidades)
                 {
-                    <option value="@m.IdEmpleado">@m.Nombre @m.Apellidos — @m.Especialidad</option>
+                    <option value="@esp.IdEspecialidad">@esp.Nombre</option>
+                }
+            </select>
+            <small class="text-muted">Filtra la lista de médicos según lo que necesita el paciente.</small>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Médico</label>
+            <select asp-for="IdMedico" id="selectMedico" class="form-select">
+                <option value="">-- Seleccione --</option>
+                @foreach (var m in (List<DevCCSS.Web.Contracts.MedicoDto>)ViewBag.Medicos)
+                {
+                    <option value="@m.IdEmpleado" data-especialidad="@m.IdEspecialidad">@m.Nombre @m.Apellidos — @m.Especialidad</option>
                 }
             </select>
             <span asp-validation-for="IdMedico" class="text-danger"></span>
@@ -69,4 +88,22 @@
 </form>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var filtro = document.getElementById('filtroEspecialidad');
+            var select = document.getElementById('selectMedico');
+            if (!filtro || !select) return;
+            var opciones = Array.from(select.options);
+            filtro.addEventListener('change', function () {
+                var idEsp = filtro.value;
+                opciones.forEach(function (opt) {
+                    if (!opt.value) { opt.hidden = false; return; }
+                    opt.hidden = idEsp !== '' && opt.dataset.especialidad !== idEsp;
+                });
+                if (select.selectedOptions[0] && select.selectedOptions[0].hidden) {
+                    select.value = '';
+                }
+            });
+        })();
+    </script>
 }

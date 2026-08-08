@@ -1,4 +1,5 @@
 using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -53,6 +54,7 @@ namespace DevCCSS.Wcf.Models
             var pId = new SqlParameter("@IdGenerado", SqlDbType.Int) { Direction = ParameterDirection.Output };
             cmd.Parameters.Add(pId);
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Usuario creado correctamente.", IdGenerado = pId.Value == DBNull.Value ? 0 : (int)pId.Value };
         }
@@ -69,6 +71,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@IdRol", SqlDbType.Int) { Value = u.IdRol });
             cmd.Parameters.Add(new SqlParameter("@Activo", SqlDbType.Bit) { Value = u.Activo });
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Usuario actualizado correctamente." };
         }
@@ -81,6 +84,7 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandText = "dbo.sp_Usuario_Eliminar";
             cmd.Parameters.Add(new SqlParameter("@IdUsuario", SqlDbType.Int) { Value = id });
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
             return new RespuestaCrud { Ok = true, Mensaje = "Usuario eliminado correctamente." };
         }

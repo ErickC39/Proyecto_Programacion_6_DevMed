@@ -24,6 +24,7 @@
     </div>
     <div class="col-md-6">
         <label class="form-label">Paciente a visitar</label>
+        <input type="text" id="filtroPacienteAVisitar" class="form-control form-control-sm mb-1" placeholder="Buscar paciente..." />
         <select asp-for="IdPacienteAVisitar" class="form-select">
             <option value="">-- Seleccione --</option>
             @foreach (var p in (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Pacientes)

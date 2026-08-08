@@ -7,6 +7,17 @@
     <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg"></i> Nuevo</a>
 </div>
 
+@{
+    var stockBajo = Model.Count(x => x.CantidadStock <= x.StockMinimo);
+}
+@if (stockBajo > 0)
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i>
+        <strong>@stockBajo</strong> producto(s) con stock por debajo (o igual) del mínimo definido.
+    </div>
+}
+
 <!-- Buscador dinamico -->
 <div class="row g-2 mb-3">
     <div class="col-md-8">
@@ -17,6 +28,7 @@
         <select id="filtroTipo" class="form-select" data-campo="tipo">
             <option value="">Todos</option>
             <option value="insumo">Insumo médico</option>
+            <option value="medicamento">Medicamento</option>
             <option value="producto">Producto de venta</option>
         </select>
     </div>
@@ -28,6 +40,7 @@
             <tr>
                 <th>Nombre del producto</th>
                 <th>Descripción</th>
+                <th>Tipo</th>
                 <th>Stock</th>
                 <th>Precio unitario</th>
                 <th class="text-end">Acciones</th>
@@ -36,12 +49,35 @@
         <tbody>
         @foreach (var x in Model)
         {
+            var tipo = x.IdMedicamento.HasValue ? "medicamento" : (x.EsInsumoMedico ? "insumo" : "producto");
             <tr class="fila-producto"
                 data-buscar="@($"{x.NombreProducto} {x.Descripcion}".ToLower())"
-                data-tipo="@(x.EsInsumoMedico ? "insumo" : "producto")">
+                data-tipo="@tipo">
                 <td>@x.NombreProducto</td>
                 <td>@x.Descripcion</td>
-                <td>@x.CantidadStock</td>
+                <td>
+                    @if (x.IdMedicamento.HasValue)
+                    {
+                        <span class="badge bg-info text-dark"><i class="bi bi-capsule"></i> Medicamento</span>
+                    }
+                    else if (x.EsInsumoMedico)
+                    {
+                        <span class="badge bg-secondary">Insumo médico</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Producto de venta</span>
+                    }
+                </td>
+                <td>
+                    @x.CantidadStock
+                    @if (x.CantidadStock <= x.StockMinimo)
+                    {
+                        <span class="badge bg-warning text-dark" title="Stock minimo: @x.StockMinimo">
+                            <i class="bi bi-exclamation-triangle"></i> Stock bajo
+                        </span>
+                    }
+                </td>
                 <td>@x.PrecioUnitario</td>
                 <td class="text-end">
                     <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@x.IdProducto"><i class="bi bi-eye"></i></a>

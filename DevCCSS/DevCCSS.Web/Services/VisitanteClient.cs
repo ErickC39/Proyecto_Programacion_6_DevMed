@@ -6,10 +6,12 @@ namespace DevCCSS.Web.Services
     public class VisitanteClient
     {
         private readonly string _url;
-        public VisitanteClient(IConfiguration config)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public VisitanteClient(IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             _url = config["Wcf:VisitanteServiceUrl"]
                 ?? throw new InvalidOperationException("Falta Wcf:VisitanteServiceUrl en appsettings.json");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private async Task<T> EjecutarAsync<T>(Func<IVisitanteService, Task<T>> accion)
@@ -25,6 +27,7 @@ namespace DevCCSS.Web.Services
             var client = factory.CreateChannel();
             try
             {
+                using var _ = AuditoriaHttpHelper.AplicarUsuarioActual((IContextChannel)client, _httpContextAccessor);
                 var result = await accion(client);
                 ((IClientChannel)client).Close();
                 factory.Close();
@@ -43,5 +46,6 @@ namespace DevCCSS.Web.Services
         public Task<RespuestaCrud> CrearAsync(VisitanteDto x) => EjecutarAsync(c => c.CrearAsync(x));
         public Task<RespuestaCrud> ActualizarAsync(VisitanteDto x) => EjecutarAsync(c => c.ActualizarAsync(x));
         public Task<RespuestaCrud> EliminarAsync(int id) => EjecutarAsync(c => c.EliminarAsync(id));
+        public Task<RespuestaCrud> RegistrarSalidaAsync(int idVisita, DateTime? fechaHoraSalida) => EjecutarAsync(c => c.RegistrarSalidaAsync(idVisita, fechaHoraSalida));
     }
 }

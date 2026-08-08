@@ -1,4 +1,5 @@
 using DevCCSS.Wcf.Contracts;
+using DevCCSS.Wcf.Infrastructure;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -179,6 +180,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(pId);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
@@ -199,6 +201,7 @@ namespace DevCCSS.Wcf.Models
             AgregarParametrosComunes(cmd, examen, incluirEstado: true);
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
@@ -217,12 +220,35 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@IdExamenMedico", SqlDbType.Int) { Value = id });
 
             conn.Open();
+            conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
 
             return new RespuestaCrud
             {
                 Ok = true,
                 Mensaje = "Examen medico eliminado correctamente."
+            };
+        }
+
+        public RespuestaCrud CrearTipoExamen(TipoExamenDto tipo)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "dbo.sp_TipoExamen_Crear";
+            cmd.Parameters.Add(new SqlParameter("@Descripcion", SqlDbType.NVarChar, 100) { Value = tipo.Descripcion });
+            var pId = new SqlParameter("@IdGenerado", SqlDbType.Int) { Direction = ParameterDirection.Output };
+            cmd.Parameters.Add(pId);
+
+            conn.Open();
+            conn.EstablecerUsuarioAuditoria();
+            cmd.ExecuteNonQuery();
+
+            return new RespuestaCrud
+            {
+                Ok = true,
+                Mensaje = "Tipo de examen registrado correctamente.",
+                IdGenerado = pId.Value == DBNull.Value ? 0 : (int)pId.Value
             };
         }
 
@@ -268,7 +294,8 @@ namespace DevCCSS.Wcf.Models
                 Observaciones = r["Observaciones"] as string,
                 FechaResultado = r["FechaResultado"] == DBNull.Value
                     ? null
-                    : r.GetDateTime(r.GetOrdinal("FechaResultado"))
+                    : r.GetDateTime(r.GetOrdinal("FechaResultado")),
+                IdCitaVinculada = r["IdCitaVinculada"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdCitaVinculada"))
             };
         }
     }
