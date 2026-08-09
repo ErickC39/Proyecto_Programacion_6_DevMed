@@ -101,9 +101,8 @@ namespace DevCCSS.Wcf.Models
         {
             cmd.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.NVarChar, 100) { Value = m.Nombre });
             cmd.Parameters.Add(new SqlParameter("@Apellidos", SqlDbType.NVarChar, 100) { Value = m.Apellidos });
-            cmd.Parameters.Add(new SqlParameter("@Especialidad", SqlDbType.NVarChar, 100) { Value = (object?)m.Especialidad ?? DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@SalarioPorHora", SqlDbType.Decimal) { Value = m.SalarioPorHora });
-            cmd.Parameters.Add(new SqlParameter("@IdUsuario", SqlDbType.Int) { Value = m.IdUsuario });
+            cmd.Parameters.Add(new SqlParameter("@IdUsuario", SqlDbType.Int) { Value = (object?)m.IdUsuario ?? DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@IdPacienteVinculado", SqlDbType.Int) { Value = (object?)m.IdPacienteVinculado ?? DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@Activo", SqlDbType.Bit) { Value = m.Activo });
         }
@@ -116,10 +115,10 @@ namespace DevCCSS.Wcf.Models
                 Identificacion = r.GetString(r.GetOrdinal("Identificacion")),
                 Nombre = r.GetString(r.GetOrdinal("Nombre")),
                 Apellidos = r.GetString(r.GetOrdinal("Apellidos")),
-                Especialidad = r["Especialidad"] as string,
                 SalarioPorHora = r.GetDecimal(r.GetOrdinal("SalarioPorHora")),
-                IdUsuario = r.GetInt32(r.GetOrdinal("IdUsuario")),
+                IdUsuario = r["IdUsuario"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdUsuario")),
                 UsuarioAsignado = r["UsuarioAsignado"] as string,
+                Cargo = r["Cargo"] as string,
                 IdPacienteVinculado = r["IdPacienteVinculado"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdPacienteVinculado")),
                 NombrePacienteVinculado = r["NombrePacienteVinculado"] as string,
                 Activo = r.GetBoolean(r.GetOrdinal("Activo"))

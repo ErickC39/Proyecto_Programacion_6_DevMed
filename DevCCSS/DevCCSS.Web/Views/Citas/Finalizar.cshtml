@@ -25,13 +25,26 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 grupo-control">
                     <label class="form-label">Fecha de control</label>
                     <input asp-for="FechaControl" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="FechaControl" class="text-danger small"></span>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 grupo-control">
                     <label class="form-label">Detalles del control</label>
                     <input asp-for="DetallesControl" class="form-control" placeholder="Indicaciones del médico" />
+                    <span asp-validation-for="DetallesControl" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 grupo-control" id="grupoTipoHabitacionControl">
+                    <label class="form-label">Espacio requerido para el control</label>
+                    <select asp-for="IdTipoHabitacionRequeridoControl" class="form-select">
+                        <option value="">-- Consultorio (por defecto) --</option>
+                        @foreach (var tipo in (List<DevCCSS.Web.Contracts.TipoHabitacionDto>)ViewBag.TiposHabitacion)
+                        {
+                            <option value="@tipo.IdTipoHabitacion">@tipo.Descripcion</option>
+                        }
+                    </select>
+                    <div class="form-text">Tipo de espacio que se reservará cuando llegue el paciente a la cita de control.</div>
                 </div>
             </div>
 
@@ -45,4 +58,15 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var chk = document.getElementById('chkControl');
+            var grupos = document.querySelectorAll('.grupo-control');
+            function actualizar() {
+                grupos.forEach(function (g) { g.style.display = chk.checked ? '' : 'none'; });
+            }
+            chk.addEventListener('change', actualizar);
+            actualizar();
+        })();
+    </script>
 }

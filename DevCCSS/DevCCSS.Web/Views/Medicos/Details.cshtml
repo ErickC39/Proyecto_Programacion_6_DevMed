@@ -5,7 +5,7 @@
 }
 
 <h2>
-    Detalle Médico
+    Detalles del Médico
 </h2>
 
 <hr />
@@ -51,11 +51,11 @@
     @Model.Medico.Especialidad
 </p>
 
-<a asp-action="Horario"
+<a asp-action="Edit"
    asp-route-id="@Model.Medico.IdMedico"
    class="btn btn-primary">
 
-    Agregar Horario
+    Editar
 
 </a>
 
@@ -150,3 +150,5 @@
     }
 
 </table>
+
+<a asp-action="Index" class="btn btn-secondary">Volver</a>

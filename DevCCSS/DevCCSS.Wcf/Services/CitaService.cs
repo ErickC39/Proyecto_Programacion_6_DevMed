@@ -58,11 +58,11 @@ namespace DevCCSS.Wcf.Services
             }
         }
 
-        public RespuestaCita IniciarAtencion(int idCita)
+        public RespuestaCita IniciarAtencion(int idCita, int? idHabitacion)
         {
             try
             {
-                return _repo.IniciarAtencion(idCita);
+                return _repo.IniciarAtencion(idCita, idHabitacion);
             }
             catch (Exception ex)
             {

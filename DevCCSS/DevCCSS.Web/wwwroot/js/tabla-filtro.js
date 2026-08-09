@@ -116,3 +116,64 @@ function initSelectBuscable(selectorSelect, selectorInput) {
         }
     });
 }
+
+// Campo de texto unico con <datalist> (autocompletado nativo del navegador,
+// mismo patron que Ventas/Citas para el paciente) que ademas mantiene
+// sincronizado un <input type="hidden"> con el Id real a enviar -- para los
+// formularios que necesitan un FK (IdPaciente, etc.) en vez de un texto libre.
+// El <option> de cada entrada del datalist debe traer data-id="...".
+function initDatalistId(selectorInput, selectorHidden) {
+    const input = document.querySelector(selectorInput);
+    const hidden = document.querySelector(selectorHidden);
+    if (!input || !hidden) return;
+
+    const datalist = input.list;
+    if (!datalist) return;
+    const opciones = Array.from(datalist.options);
+
+    input.addEventListener('input', () => {
+        const opt = opciones.find(o => o.value === input.value);
+        hidden.value = opt ? opt.dataset.id : '';
+    });
+}
+
+// Autoformatea el campo de identificacion de Pacientes segun el tipo elegido
+// (Nacional/DIMEX/Pasaporte, ids 1/2/3 del catalogo Tipos_Identificacion):
+// Nacional se reescribe solo al formato 1-1111-1111 mientras el usuario
+// escribe, DIMEX se limita a digitos (max 12) y Pasaporte a alfanumerico
+// en mayusculas (max 9).
+function initFormatoIdentificacion(selectorTipo, selectorIdentificacion) {
+    const selTipo = document.querySelector(selectorTipo);
+    const input = document.querySelector(selectorIdentificacion);
+    if (!selTipo || !input) return;
+
+    function formatearNacional(valor) {
+        const digitos = valor.replace(/\D/g, '').slice(0, 9);
+        let resultado = digitos.slice(0, 1);
+        if (digitos.length > 1) resultado += '-' + digitos.slice(1, 5);
+        if (digitos.length > 5) resultado += '-' + digitos.slice(5, 9);
+        return resultado;
+    }
+
+    function aplicarFormato() {
+        switch (selTipo.value) {
+            case '1': // Nacional
+                input.value = formatearNacional(input.value);
+                input.maxLength = 11;
+                break;
+            case '2': // DIMEX
+                input.value = input.value.replace(/\D/g, '').slice(0, 12);
+                input.maxLength = 12;
+                break;
+            case '3': // Pasaporte
+                input.value = input.value.replace(/[^A-Za-z0-9]/g, '').slice(0, 9).toUpperCase();
+                input.maxLength = 9;
+                break;
+            default:
+                input.removeAttribute('maxlength');
+        }
+    }
+
+    input.addEventListener('input', aplicarFormato);
+    selTipo.addEventListener('change', aplicarFormato);
+}

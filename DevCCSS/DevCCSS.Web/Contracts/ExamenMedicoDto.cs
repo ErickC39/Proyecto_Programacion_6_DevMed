@@ -31,6 +31,10 @@ namespace DevCCSS.Web.Contracts
         [DataMember] public string? Observaciones { get; set; }
         [DataMember] public DateTime? FechaResultado { get; set; }
         [DataMember] public int? IdCitaVinculada { get; set; }
+
+        // Solo se usa al crear: marca la cita programada resultante como
+        // prioridad alta / emergencia (ver ExamenesMedicos/Create).
+        [DataMember] public bool PrioridadAlta { get; set; }
     }
 
     [DataContract(Namespace = "http://devccss/contracts")]

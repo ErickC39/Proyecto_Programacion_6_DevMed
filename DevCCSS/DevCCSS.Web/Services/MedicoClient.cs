@@ -59,14 +59,15 @@ namespace DevCCSS.Web.Services
 
         public Task<MedicoDto?> ObtenerPorIdAsync(int idMedico)
             => EjecutarAsync(c => c.ObtenerPorIdAsync(idMedico));
-        public Task<EmpleadoDto?> BuscarEmpleadoAsync(string identificacion)
-            => EjecutarAsync(c => c.BuscarEmpleadoAsync(identificacion));
 
         public Task<RespuestaCrud> CrearAsync(MedicoDto medico)
             => EjecutarAsync(c => c.CrearAsync(medico));
 
         public Task<RespuestaCrud> ActualizarAsync(MedicoDto medico)
             => EjecutarAsync(c => c.ActualizarAsync(medico));
+
+        public Task<RespuestaCrud> EliminarAsync(int idMedico)
+            => EjecutarAsync(c => c.EliminarAsync(idMedico));
 
         public Task<List<HorarioMedicoDto>> ListarHorariosAsync(int idMedico)
             => EjecutarAsync(c => c.ListarHorariosAsync(idMedico));

@@ -35,6 +35,7 @@
         <thead class="table-dark">
             <tr>
                 <th>Nombre</th>
+                <th>Apellidos</th>
                 <th>Usuario</th>
                 <th>Rol</th>
                 <th>Estado</th>
@@ -49,6 +50,7 @@
                 data-rol="@u.Rol"
                 data-estado="@(u.Activo ? "activo" : "inactivo")">
                 <td>@u.Nombre</td>
+                <td>@u.Apellidos</td>
                 <td>@u.Username</td>
                 <td>@u.Rol</td>
                 <td>

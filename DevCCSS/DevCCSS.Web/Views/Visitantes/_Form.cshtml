@@ -23,24 +23,30 @@
         <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
     </div>
     <div class="col-md-6">
+        @{
+            var pacientesVisita = (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Pacientes;
+            var pacienteVisitaActual = pacientesVisita.FirstOrDefault(p => p.IdPaciente == Model.IdPacienteAVisitar);
+        }
         <label class="form-label">Paciente a visitar</label>
-        <input type="text" id="filtroPacienteAVisitar" class="form-control form-control-sm mb-1" placeholder="Buscar paciente..." />
-        <select asp-for="IdPacienteAVisitar" class="form-select">
-            <option value="">-- Seleccione --</option>
-            @foreach (var p in (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Pacientes)
+        <input type="text" id="buscarPacienteVisitar" class="form-control" list="listaPacientesVisitar"
+               value="@(pacienteVisitaActual != null ? $"{pacienteVisitaActual.Nombre} {pacienteVisitaActual.Apellidos} ({pacienteVisitaActual.Identificacion})" : "")"
+               placeholder="Buscar por nombre o identificación..." autocomplete="off" />
+        <datalist id="listaPacientesVisitar">
+            @foreach (var p in pacientesVisita)
             {
-                <option value="@p.IdPaciente">@p.Nombre @p.Apellidos</option>
+                <option data-id="@p.IdPaciente" value="@($"{p.Nombre} {p.Apellidos} ({p.Identificacion})")"></option>
             }
-        </select>
+        </datalist>
+        <input type="hidden" asp-for="IdPacienteAVisitar" id="hdnIdPacienteVisitar" />
     </div>
     <div class="col-md-6">
         <label class="form-label">Fecha y hora de entrada</label>
-        <input asp-for="FechaHoraEntrada" type="datetime-local" class="form-control" />
+        <input asp-for="FechaHoraEntrada" type="datetime-local" class="form-control" value="@Model.FechaHoraEntrada.ToString("yyyy-MM-ddTHH:mm")" />
         <span asp-validation-for="FechaHoraEntrada" class="text-danger small"></span>
     </div>
     <div class="col-md-6">
         <label class="form-label">Fecha y hora de salida</label>
-        <input asp-for="FechaHoraSalida" type="datetime-local" class="form-control" />
+        <input asp-for="FechaHoraSalida" type="datetime-local" class="form-control" value="@(Model.FechaHoraSalida.HasValue ? Model.FechaHoraSalida.Value.ToString("yyyy-MM-ddTHH:mm") : "")" />
         <span asp-validation-for="FechaHoraSalida" class="text-danger small"></span>
     </div>
 </div>

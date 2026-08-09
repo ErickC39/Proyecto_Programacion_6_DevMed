@@ -112,13 +112,9 @@
 
     @if (Model.EstadoCita == "En espera")
     {
-        <form asp-action="IniciarAtencion" method="post" class="d-inline">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="id" value="@Model.IdCita" />
-            <button type="submit" class="btn btn-outline-info">
-                <i class="bi bi-person-check"></i> Iniciar atención
-            </button>
-        </form>
+        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalIniciarAtencion">
+            <i class="bi bi-person-check"></i> Iniciar atención
+        </button>
     }
 
     @if (Model.EstadoCita == "En Progreso")
@@ -158,3 +154,51 @@
     }
 
 </div>
+
+@if (Model.EstadoCita == "En espera")
+{
+    var habitacionesDisponibles = (List<DevCCSS.Web.Contracts.HabitacionDto>)(ViewBag.HabitacionesDisponibles ?? new List<DevCCSS.Web.Contracts.HabitacionDto>());
+
+    <div class="modal fade" id="modalIniciarAtencion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="IniciarAtencion" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.IdCita" />
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="bi bi-person-check"></i> Iniciar atención</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if (Model.IdTipoHabitacionRequerido.HasValue)
+                        {
+                            <label class="form-label">Habitación donde será atendido (@Model.TipoHabitacionRequerido)</label>
+                            @if (habitacionesDisponibles.Any())
+                            {
+                                <select name="idHabitacion" class="form-select">
+                                    <option value="">-- Sin asignar --</option>
+                                    @foreach (var h in habitacionesDisponibles)
+                                    {
+                                        <option value="@h.IdHabitacion">@h.NumeroHabitacion</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">No hay habitaciones disponibles del tipo requerido en este momento. La atención se puede iniciar igual, sin espacio asignado.</p>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">Esta cita no requiere un espacio físico.</p>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-info"><i class="bi bi-play-fill"></i> Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

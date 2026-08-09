@@ -1,204 +1,105 @@
 @model DevCCSS.Web.Contracts.MedicoDto
+@{
+    ViewData["Title"] = "Nuevo médico";
+}
+
+<h2 class="mb-3"><i class="bi bi-heart-pulse"></i> Nuevo médico</h2>
 
 @if (ViewBag.Error != null)
 {
     <div class="alert alert-danger">@ViewBag.Error</div>
 }
 
+<div class="card shadow-sm"><div class="card-body">
 <form asp-action="Create" method="post">
     @Html.AntiForgeryToken()
-
-    <div class="input-group mb-3">
-
-        <input id="identificacion"
-               class="form-control"
-               placeholder="EMP-001" />
-
-        <button type="button"
-                class="btn btn-secondary"
-                onclick="buscarEmpleado()">
-            Buscar
-        </button>
-
-    </div>
-
-    <input type="hidden"
-           asp-for="IdEmpleado"
-           id="IdEmpleado" />
+    <div asp-validation-summary="All" class="text-danger small mb-3"></div>
 
     <div class="mb-3">
+        <label class="form-label">Empleado</label>
+        <input type="text" id="buscarEmpleadoMedico" class="form-control" list="listaEmpleadosMedico"
+               placeholder="Buscar por identificación o nombre..." autocomplete="off" />
+        <datalist id="listaEmpleadosMedico">
+            @foreach (var e in (List<DevCCSS.Web.Contracts.EmpleadoDto>)ViewBag.Empleados)
+            {
+                <option data-id="@e.IdEmpleado" data-nombre="@e.Nombre" data-apellidos="@e.Apellidos"
+                        value="@($"{e.Nombre} {e.Apellidos} ({e.Identificacion})")"></option>
+            }
+        </datalist>
+        <span asp-validation-for="IdEmpleado" class="text-danger small"></span>
+    </div>
 
-        <label>Nombre</label>
+    <input type="hidden" asp-for="IdEmpleado" id="IdEmpleado" />
 
-        <input id="Nombre"
-               class="form-control"
-               readonly />
-
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input id="Nombre" class="form-control" readonly />
     </div>
 
     <div class="mb-3">
-
-        <label>Apellidos</label>
-
-        <input id="Apellidos"
-               class="form-control"
-               readonly />
-
+        <label class="form-label">Apellidos</label>
+        <input id="Apellidos" class="form-control" readonly />
     </div>
 
     <div class="mb-3">
-
-        <label>Especialidad</label>
-
-        <select asp-for="IdEspecialidad"
-                class="form-control">
-
-            <option value="0">
-                Seleccione una especialidad
-            </option>
-
+        <label class="form-label">Especialidad</label>
+        <select asp-for="IdEspecialidad" class="form-select">
+            <option value="0">Seleccione una especialidad</option>
             @foreach (var especialidad in ViewBag.Especialidades)
             {
-                <option value="@especialidad.IdEspecialidad">
-                    @especialidad.Nombre
-                </option>
+                <option value="@especialidad.IdEspecialidad">@especialidad.Nombre</option>
             }
-
         </select>
-
+        <span asp-validation-for="IdEspecialidad" class="text-danger small"></span>
     </div>
 
-    <h4>
-        Horario de atención
-    </h4>
+    <h4>Horario de atención</h4>
 
     <div class="mb-3">
-
-        <label>Días de atención</label>
-
-        <div>
-            <input type="checkbox"
-                   name="dias"
-                   value="1" />
-            Lunes
-        </div>
-
-        <div>
-            <input type="checkbox"
-                   name="dias"
-                   value="2" />
-            Martes
-        </div>
-
-        <div>
-            <input type="checkbox"
-                   name="dias"
-                   value="3" />
-            Miércoles
-        </div>
-
-        <div>
-            <input type="checkbox"
-                   name="dias"
-                   value="4" />
-            Jueves
-        </div>
-
-        <div>
-            <input type="checkbox"
-                   name="dias"
-                   value="5" />
-            Viernes
-        </div>
-
-        <div>
-            <input type="checkbox"
-                   name="dias"
-                   value="6" />
-            Sábado
-        </div>
-
-        <div>
-            <input type="checkbox"
-                   name="dias"
-                   value="7" />
-            Domingo
-        </div>
-
+        <label class="form-label">Días de atención</label>
+        <div class="form-check"><input class="form-check-input" type="checkbox" name="dias" value="1" id="dia1"><label class="form-check-label" for="dia1">Lunes</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" name="dias" value="2" id="dia2"><label class="form-check-label" for="dia2">Martes</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" name="dias" value="3" id="dia3"><label class="form-check-label" for="dia3">Miércoles</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" name="dias" value="4" id="dia4"><label class="form-check-label" for="dia4">Jueves</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" name="dias" value="5" id="dia5"><label class="form-check-label" for="dia5">Viernes</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" name="dias" value="6" id="dia6"><label class="form-check-label" for="dia6">Sábado</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" name="dias" value="7" id="dia7"><label class="form-check-label" for="dia7">Domingo</label></div>
     </div>
 
-    <div class="mb-3">
-
-        <label>Hora inicio</label>
-
-        <input type="time"
-               name="HoraInicio"
-               class="form-control" />
-
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Hora inicio</label>
+            <input type="time" name="HoraInicio" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Hora fin</label>
+            <input type="time" name="HoraFin" class="form-control" />
+        </div>
     </div>
 
-    <div class="mb-3">
-
-        <label>Hora fin</label>
-
-        <input type="time"
-               name="HoraFin"
-               class="form-control" />
-
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success"><i class="bi bi-save"></i> Guardar Médico</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
     </div>
-
-    <button type="submit"
-            class="btn btn-success">
-        Guardar Médico
-    </button>
-
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Volver
-    </a>
-
 </form>
+</div></div>
 
-<script>
-
-    async function buscarEmpleado() {
-        let identificacion =
-            document.getElementById("identificacion").value;
-
-        if (!identificacion) {
-            alert("Ingrese la identificación");
-            return;
-        }
-
-        try {
-
-            let respuesta = await fetch(
-                '/Medicos/BuscarEmpleado?identificacion='
-                + identificacion
-            );
-
-            if (!respuesta.ok) {
-                alert("Empleado no encontrado");
-                return;
-            }
-
-            let empleado = await respuesta.json();
-
-            document.getElementById("IdEmpleado").value =
-                empleado.idEmpleado;
-
-            document.getElementById("Nombre").value =
-                empleado.nombre;
-
-            document.getElementById("Apellidos").value =
-                empleado.apellidos;
-
-        }
-        catch (error) {
-            console.error(error);
-            alert("Error buscando empleado");
-        }
-
-    }
-
-</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var input = document.getElementById('buscarEmpleadoMedico');
+            var datalist = document.getElementById('listaEmpleadosMedico');
+            var hidden = document.getElementById('IdEmpleado');
+            var nombre = document.getElementById('Nombre');
+            var apellidos = document.getElementById('Apellidos');
+            var opciones = Array.from(datalist.options);
+            input.addEventListener('input', function () {
+                var opt = opciones.find(o => o.value === input.value);
+                hidden.value = opt ? opt.dataset.id : '';
+                nombre.value = opt ? opt.dataset.nombre : '';
+                apellidos.value = opt ? opt.dataset.apellidos : '';
+            });
+        })();
+    </script>
+}

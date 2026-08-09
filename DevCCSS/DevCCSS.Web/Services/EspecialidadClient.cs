@@ -47,5 +47,8 @@ namespace DevCCSS.Web.Services
 
         public Task<List<EspecialidadDto>> ListarAsync()
             => EjecutarAsync(c => c.ListarAsync());
+
+        public Task<RespuestaCrud> CrearAsync(EspecialidadDto especialidad)
+            => EjecutarAsync(c => c.CrearAsync(especialidad));
     }
 }

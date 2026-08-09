@@ -55,5 +55,6 @@ namespace DevCCSS.Web.Services
 
         public Task<List<SexoBiologicoDto>> ListarSexosBiologicosAsync() => EjecutarAsync(c => c.ListarSexosBiologicosAsync());
         public Task<List<IdentidadGeneroDto>> ListarIdentidadesGeneroAsync() => EjecutarAsync(c => c.ListarIdentidadesGeneroAsync());
+        public Task<List<TipoIdentificacionDto>> ListarTiposIdentificacionAsync() => EjecutarAsync(c => c.ListarTiposIdentificacionAsync());
     }
 }

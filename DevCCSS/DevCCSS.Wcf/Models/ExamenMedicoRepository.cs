@@ -141,10 +141,12 @@ namespace DevCCSS.Wcf.Models
             using var cmd = conn.CreateCommand();
             cmd.CommandText = """
                 SELECT e.IdEmpleado, e.Identificacion, e.Nombre + ' ' + e.Apellidos AS NombreCompleto,
-                       e.Especialidad
+                       esp.Nombre AS Especialidad
                 FROM dbo.Empleados e
                 INNER JOIN dbo.Usuarios u ON u.IdUsuario = e.IdUsuario
                 INNER JOIN dbo.Roles r ON r.IdRol = u.IdRol
+                LEFT JOIN dbo.Medicos m ON m.IdEmpleado = e.IdEmpleado
+                LEFT JOIN dbo.Especialidades esp ON esp.IdEspecialidad = m.IdEspecialidad
                 WHERE r.NombreRol = 'Medico' AND u.Activo = 1
                 ORDER BY e.Apellidos, e.Nombre;
                 """;
@@ -266,7 +268,11 @@ namespace DevCCSS.Wcf.Models
                 Value = (object?)examen.Observaciones ?? DBNull.Value
             });
 
-            if (!incluirEstado) return;
+            if (!incluirEstado)
+            {
+                cmd.Parameters.Add(new SqlParameter("@PrioridadAlta", SqlDbType.Bit) { Value = examen.PrioridadAlta });
+                return;
+            }
 
             cmd.Parameters.Add(new SqlParameter("@IdEstadoExamen", SqlDbType.Int) { Value = examen.IdEstadoExamen });
             cmd.Parameters.Add(new SqlParameter("@Resultado", SqlDbType.NVarChar)

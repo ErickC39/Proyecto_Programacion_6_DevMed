@@ -31,5 +31,8 @@ namespace DevCCSS.Web.Contracts
 
         [OperationContract]
         Task<List<IdentidadGeneroDto>> ListarIdentidadesGeneroAsync();
+
+        [OperationContract]
+        Task<List<TipoIdentificacionDto>> ListarTiposIdentificacionAsync();
     }
 }

@@ -7,6 +7,7 @@
 <div class="card shadow-sm">
     <div class="card-body">
         <dl class="row mb-0">
+            <dt class="col-sm-3">Tipo de identificación</dt><dd class="col-sm-9">@(Model.TipoIdentificacion ?? "-")</dd>
             <dt class="col-sm-3">Identificación</dt><dd class="col-sm-9">@Model.Identificacion</dd>
             <dt class="col-sm-3">Nacimiento</dt><dd class="col-sm-9">@Model.FechaNacimiento.ToString("dd/MM/yyyy")</dd>
             <dt class="col-sm-3">Género</dt>

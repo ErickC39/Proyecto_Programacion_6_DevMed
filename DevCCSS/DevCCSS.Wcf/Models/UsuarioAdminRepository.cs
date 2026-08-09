@@ -47,6 +47,7 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "dbo.sp_Usuario_Crear";
             cmd.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.NVarChar, 100) { Value = u.Nombre });
+            cmd.Parameters.Add(new SqlParameter("@Apellidos", SqlDbType.NVarChar, 100) { Value = (object?)u.Apellidos ?? DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@Username", SqlDbType.NVarChar, 50) { Value = u.Username });
             cmd.Parameters.Add(new SqlParameter("@Password", SqlDbType.NVarChar, 100) { Value = (object?)u.Password ?? DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@IdRol", SqlDbType.Int) { Value = u.IdRol });
@@ -67,6 +68,7 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandText = "dbo.sp_Usuario_Actualizar";
             cmd.Parameters.Add(new SqlParameter("@IdUsuario", SqlDbType.Int) { Value = u.IdUsuario });
             cmd.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.NVarChar, 100) { Value = u.Nombre });
+            cmd.Parameters.Add(new SqlParameter("@Apellidos", SqlDbType.NVarChar, 100) { Value = (object?)u.Apellidos ?? DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@Username", SqlDbType.NVarChar, 50) { Value = u.Username });
             cmd.Parameters.Add(new SqlParameter("@IdRol", SqlDbType.Int) { Value = u.IdRol });
             cmd.Parameters.Add(new SqlParameter("@Activo", SqlDbType.Bit) { Value = u.Activo });
@@ -108,6 +110,7 @@ namespace DevCCSS.Wcf.Models
             {
                 IdUsuario = r.GetInt32(r.GetOrdinal("IdUsuario")),
                 Nombre = r.GetString(r.GetOrdinal("Nombre")),
+                Apellidos = r["Apellidos"] as string,
                 Username = r.GetString(r.GetOrdinal("Username")),
                 IdRol = r.GetInt32(r.GetOrdinal("IdRol")),
                 Rol = r["Rol"] as string,

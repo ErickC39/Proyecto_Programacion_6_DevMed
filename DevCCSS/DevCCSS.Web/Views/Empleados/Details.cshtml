@@ -8,9 +8,9 @@
             <dt class="col-sm-4">Identificación</dt><dd class="col-sm-8">@Model.Identificacion</dd>
             <dt class="col-sm-4">Nombre</dt><dd class="col-sm-8">@Model.Nombre</dd>
             <dt class="col-sm-4">Apellidos</dt><dd class="col-sm-8">@Model.Apellidos</dd>
-            <dt class="col-sm-4">Especialidad</dt><dd class="col-sm-8">@Model.Especialidad</dd>
             <dt class="col-sm-4">Salario por hora</dt><dd class="col-sm-8">@Model.SalarioPorHora</dd>
-            <dt class="col-sm-4">Usuario asignado</dt><dd class="col-sm-8">@Model.UsuarioAsignado</dd>
+            <dt class="col-sm-4">Cargo</dt><dd class="col-sm-8">@(Model.Cargo ?? "-")</dd>
+            <dt class="col-sm-4">Usuario asignado</dt><dd class="col-sm-8">@(Model.UsuarioAsignado ?? "Ninguno")</dd>
             <dt class="col-sm-4">Paciente vinculado</dt><dd class="col-sm-8">@(Model.NombrePacienteVinculado ?? "Ninguno")</dd>
             <dt class="col-sm-4">Estado</dt>
             <dd class="col-sm-8">

@@ -73,6 +73,7 @@ namespace DevCCSS.Web.Contracts
         [DataMember] public bool RequiereControl { get; set; }
         [DataMember] public DateTime? FechaControl { get; set; }
         [DataMember] public string? DetallesControl { get; set; }
+        [DataMember] public int? IdTipoHabitacionRequeridoControl { get; set; }
 
         // Si el médico marca que la cita requiere control, la fecha y los detalles
         // del control pasan a ser obligatorios (antes se podían dejar vacíos).

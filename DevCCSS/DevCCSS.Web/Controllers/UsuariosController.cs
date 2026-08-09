@@ -11,7 +11,12 @@ namespace DevCCSS.Web.Controllers
     public class UsuariosController : Controller
     {
         private readonly UsuarioClient _usuarios;
-        public UsuariosController(UsuarioClient usuarios) { _usuarios = usuarios; }
+        private readonly EmpleadoClient _empleados;
+        public UsuariosController(UsuarioClient usuarios, EmpleadoClient empleados)
+        {
+            _usuarios = usuarios;
+            _empleados = empleados;
+        }
 
         private async Task CargarRoles()
         {
@@ -47,7 +52,25 @@ namespace DevCCSS.Web.Controllers
 
             var r = await _usuarios.CrearAsync(model);
             if (!r.Ok) { ModelState.AddModelError("", r.Mensaje); await CargarRoles(); return View(model); }
-            TempData["Ok"] = r.Mensaje;
+
+            var mensaje = r.Mensaje;
+            if (model.IdRol != UsuarioDto.ROL_ADMINISTRADOR)
+            {
+                var empleado = new EmpleadoDto
+                {
+                    Nombre = model.Nombre,
+                    Apellidos = model.Apellidos ?? string.Empty,
+                    SalarioPorHora = model.SalarioPorHora ?? 0,
+                    IdUsuario = r.IdGenerado,
+                    Activo = true
+                };
+                var rEmpleado = await _empleados.CrearAsync(empleado);
+                mensaje = rEmpleado.Ok
+                    ? $"{r.Mensaje} Empleado creado y vinculado."
+                    : $"{r.Mensaje} No se pudo crear el empleado vinculado: {rEmpleado.Mensaje}";
+            }
+
+            TempData["Ok"] = mensaje;
             return RedirectToAction(nameof(Index));
         }
 

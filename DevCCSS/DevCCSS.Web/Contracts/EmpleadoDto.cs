@@ -9,10 +9,10 @@ namespace DevCCSS.Web.Contracts
         [DataMember] public string Identificacion { get; set; } = string.Empty;
         [DataMember] public string Nombre { get; set; } = string.Empty;
         [DataMember] public string Apellidos { get; set; } = string.Empty;
-        [DataMember] public string? Especialidad { get; set; }
         [DataMember] public decimal SalarioPorHora { get; set; }
-        [DataMember] public int IdUsuario { get; set; }
+        [DataMember] public int? IdUsuario { get; set; }
         [DataMember] public string? UsuarioAsignado { get; set; }
+        [DataMember] public string? Cargo { get; set; }
         [DataMember] public int? IdPacienteVinculado { get; set; }
         [DataMember] public string? NombrePacienteVinculado { get; set; }
         [DataMember] public bool Activo { get; set; } = true;

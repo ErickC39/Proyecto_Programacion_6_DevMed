@@ -3,9 +3,19 @@
 <div class="row g-3">
     <input type="hidden" asp-for="IdPaciente" />
 
-    <div class="col-md-6">
+    <div class="col-md-3">
+        <label class="form-label">Tipo de identificación</label>
+        <select asp-for="IdTipoIdentificacion" class="form-select">
+            <option value="">-- Seleccione --</option>
+            @foreach (var t in (List<DevCCSS.Web.Contracts.TipoIdentificacionDto>)ViewBag.TiposIdentificacion)
+            {
+                <option value="@t.IdTipoIdentificacion">@t.Descripcion</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
         <label class="form-label">Identificación</label>
-        <input asp-for="Identificacion" class="form-control" />
+        <input asp-for="Identificacion" class="form-control" autocomplete="off" />
         <span asp-validation-for="Identificacion" class="text-danger small"></span>
     </div>
     <div class="col-md-3">

@@ -1,7 +1,7 @@
 @model DevCCSS.Web.Contracts.HorarioMedicoDto
 
 <h2>
-    Agregar horario médico
+    Editar horario
 </h2>
 
 @if (ViewBag.Error != null)
@@ -87,5 +87,9 @@
         Guardar horario
 
     </button>
+
+    <a asp-action="Edit" asp-route-id="@Model.IdMedico" class="btn btn-secondary">
+        Volver
+    </a>
 
 </form>

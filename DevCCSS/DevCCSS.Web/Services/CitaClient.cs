@@ -50,7 +50,7 @@ namespace DevCCSS.Web.Services
         public Task<RespuestaCita> AgendarAsync(AgendarCitaDto dto) => EjecutarAsync(c => c.AgendarAsync(dto));
         public Task<RespuestaCita> AgendarEmergenciaAsync(AgendarEmergenciaDto dto) => EjecutarAsync(c => c.AgendarEmergenciaAsync(dto));
         public Task<RespuestaCita> RegistrarLlegadaAsync(int idCita) => EjecutarAsync(c => c.RegistrarLlegadaAsync(idCita));
-        public Task<RespuestaCita> IniciarAtencionAsync(int idCita) => EjecutarAsync(c => c.IniciarAtencionAsync(idCita));
+        public Task<RespuestaCita> IniciarAtencionAsync(int idCita, int? idHabitacion) => EjecutarAsync(c => c.IniciarAtencionAsync(idCita, idHabitacion));
         public Task<RespuestaCita> CancelarAsync(int idCita) => EjecutarAsync(c => c.CancelarAsync(idCita));
         public Task<RespuestaCita> EliminarAsync(int idCita) => EjecutarAsync(c => c.EliminarAsync(idCita));
 

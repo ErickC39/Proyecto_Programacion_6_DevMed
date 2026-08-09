@@ -16,5 +16,21 @@ namespace DevCCSS.Wcf.Services
         {
             return new EspecialidadRepository(_config).Listar();
         }
+
+        public RespuestaCrud Crear(EspecialidadDto especialidad)
+        {
+            try
+            {
+                return new EspecialidadRepository(_config).Crear(especialidad);
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Number == 2601 || ex.Number == 2627)
+            {
+                return new RespuestaCrud { Ok = false, Mensaje = "Ya existe una especialidad con ese nombre." };
+            }
+            catch (Exception ex)
+            {
+                return new RespuestaCrud { Ok = false, Mensaje = ex.Message };
+            }
+        }
     }
 }

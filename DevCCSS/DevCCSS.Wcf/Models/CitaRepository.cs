@@ -149,7 +149,7 @@ namespace DevCCSS.Wcf.Models
             };
         }
 
-        public RespuestaCita IniciarAtencion(int idCita)
+        public RespuestaCita IniciarAtencion(int idCita, int? idHabitacion)
         {
             using var conn = new SqlConnection(_connectionString);
             using var cmd = conn.CreateCommand();
@@ -158,6 +158,7 @@ namespace DevCCSS.Wcf.Models
             cmd.CommandText = "dbo.sp_Cita_IniciarAtencion";
 
             cmd.Parameters.Add(new SqlParameter("@IdCita", SqlDbType.Int) { Value = idCita });
+            cmd.Parameters.Add(new SqlParameter("@IdHabitacionElegida", SqlDbType.Int) { Value = (object?)idHabitacion ?? DBNull.Value });
 
             var pMsg = new SqlParameter("@MensajeSalida", SqlDbType.NVarChar, 500)
             {
@@ -196,6 +197,7 @@ namespace DevCCSS.Wcf.Models
             cmd.Parameters.Add(new SqlParameter("@RequiereControl", SqlDbType.Bit) { Value = dto.RequiereControl });
             cmd.Parameters.Add(new SqlParameter("@FechaControl", SqlDbType.DateTime) { Value = (object?)dto.FechaControl ?? DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@DetallesControl", SqlDbType.NVarChar) { Value = (object?)dto.DetallesControl ?? DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@IdTipoHabitacionRequeridoControl", SqlDbType.Int) { Value = (object?)dto.IdTipoHabitacionRequeridoControl ?? DBNull.Value });
 
             var pIdControl = new SqlParameter("@IdCitaControlGenerada", SqlDbType.Int) { Direction = ParameterDirection.Output };
             var pMsg = new SqlParameter("@MensajeSalida", SqlDbType.NVarChar, 500) { Direction = ParameterDirection.Output };

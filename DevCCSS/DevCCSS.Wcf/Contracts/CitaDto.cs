@@ -62,6 +62,7 @@ namespace DevCCSS.Wcf.Contracts
         [DataMember] public bool RequiereControl { get; set; }
         [DataMember] public DateTime? FechaControl { get; set; }
         [DataMember] public string? DetallesControl { get; set; }
+        [DataMember] public int? IdTipoHabitacionRequeridoControl { get; set; }
     }
 
     [DataContract(Namespace = "http://devccss/contracts")]

@@ -9,13 +9,18 @@
         <span asp-validation-for="Nombre" class="text-danger small"></span>
     </div>
     <div class="col-md-6">
+        <label class="form-label">Apellidos</label>
+        <input asp-for="Apellidos" class="form-control" />
+        <span asp-validation-for="Apellidos" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
         <label class="form-label">Usuario (para iniciar sesión)</label>
         <input asp-for="Username" class="form-control" />
         <span asp-validation-for="Username" class="text-danger small"></span>
     </div>
     <div class="col-md-6">
         <label class="form-label">Rol</label>
-        <select asp-for="IdRol" class="form-select">
+        <select asp-for="IdRol" id="selectRolUsuario" class="form-select">
             <option value="">-- Seleccione --</option>
             @foreach (var rol in (List<DevCCSS.Web.Contracts.RolDto>)ViewBag.Roles)
             {
@@ -29,4 +34,19 @@
             <label class="form-check-label" asp-for="Activo">Usuario activo</label>
         </div>
     </div>
+
+    @if (Model.IdUsuario == 0)
+    {
+        <div class="col-12"><hr /></div>
+        <div class="col-12 grupo-empleado">
+            <div class="form-text mb-2">
+                Todo usuario que no sea Administrador se registra tambien como Empleado (ficha estandar del hospital).
+            </div>
+        </div>
+        <div class="col-md-6 grupo-empleado">
+            <label class="form-label">Salario por hora</label>
+            <input asp-for="SalarioPorHora" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="SalarioPorHora" class="text-danger small"></span>
+        </div>
+    }
 </div>

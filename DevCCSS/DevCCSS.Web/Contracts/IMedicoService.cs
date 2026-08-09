@@ -11,12 +11,11 @@ namespace DevCCSS.Web.Contracts
         Task<MedicoDto?> ObtenerPorIdAsync(int idMedico);
 
         [OperationContract]
-        Task<EmpleadoDto?> BuscarEmpleadoAsync(string identificacion);
-
-        [OperationContract]
         Task<RespuestaCrud> CrearAsync(MedicoDto medico);
         [OperationContract]
         Task<RespuestaCrud> ActualizarAsync(MedicoDto medico);
+        [OperationContract]
+        Task<RespuestaCrud> EliminarAsync(int idMedico);
         [OperationContract]
         Task<RespuestaCrud> AgregarHorarioAsync(HorarioMedicoDto horario);
         [OperationContract]

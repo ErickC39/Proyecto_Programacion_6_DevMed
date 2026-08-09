@@ -66,38 +66,6 @@ namespace DevCCSS.Wcf.Models
                 .FirstOrDefault(x => x.IdMedico == idMedico);
         }
 
-        public EmpleadoDto? BuscarEmpleado(string identificacion)
-        {
-            using var conn = new SqlConnection(_connectionString);
-            using var cmd = conn.CreateCommand();
-
-            cmd.CommandText = @"
-            SELECT
-                IdEmpleado,
-                Identificacion,
-                Nombre,
-                Apellidos
-            FROM Empleados
-            WHERE Identificacion=@Identificacion";
-
-            cmd.Parameters.AddWithValue("@Identificacion", identificacion);
-
-            conn.Open();
-
-            using var reader = cmd.ExecuteReader();
-
-            if (!reader.Read())
-                return null;
-
-            return new EmpleadoDto
-            {
-                IdEmpleado = reader.GetInt32(0),
-                Identificacion = reader.GetString(1),
-                Nombre = reader.GetString(2),
-                Apellidos = reader.GetString(3)
-            };
-        }
-
         public RespuestaCrud Crear(MedicoDto medico)
         {
             using var conn = new SqlConnection(_connectionString);
@@ -122,7 +90,6 @@ namespace DevCCSS.Wcf.Models
             conn.EstablecerUsuarioAuditoria();
 
             cmd.ExecuteNonQuery();
-            SincronizarEspecialidadEmpleado(conn, medico.IdEmpleado, medico.IdEspecialidad);
 
             return new RespuestaCrud
             {
@@ -147,7 +114,6 @@ namespace DevCCSS.Wcf.Models
             conn.Open();
             conn.EstablecerUsuarioAuditoria();
             cmd.ExecuteNonQuery();
-            SincronizarEspecialidadEmpleado(conn, medico.IdEmpleado, medico.IdEspecialidad);
 
             return new RespuestaCrud
             {
@@ -156,20 +122,31 @@ namespace DevCCSS.Wcf.Models
             };
         }
 
-        // Empleados.Especialidad (texto libre, usado por Examenes medicos y otros
-        // modulos antiguos) y Medicos.IdEspecialidad (catalogo estructurado, usado
-        // por Citas/Horarios) describen el mismo hecho; sin este paso se pueden
-        // desincronizar en cuanto alguien cambie la especialidad de un medico.
-        private static void SincronizarEspecialidadEmpleado(SqlConnection conn, int idEmpleado, int idEspecialidad)
+        public RespuestaCrud Eliminar(int idMedico)
         {
-            using var cmd = conn.CreateCommand();
-            cmd.CommandText = @"
-    UPDATE Empleados
-    SET Especialidad = (SELECT Nombre FROM Especialidades WHERE IdEspecialidad = @IdEspecialidad)
-    WHERE IdEmpleado = @IdEmpleado";
-            cmd.Parameters.AddWithValue("@IdEspecialidad", idEspecialidad);
-            cmd.Parameters.AddWithValue("@IdEmpleado", idEmpleado);
-            cmd.ExecuteNonQuery();
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            conn.EstablecerUsuarioAuditoria();
+
+            using (var cmdHorarios = conn.CreateCommand())
+            {
+                cmdHorarios.CommandText = "DELETE FROM Horarios_Medicos WHERE IdMedico = @IdMedico";
+                cmdHorarios.Parameters.AddWithValue("@IdMedico", idMedico);
+                cmdHorarios.ExecuteNonQuery();
+            }
+
+            using (var cmdMedico = conn.CreateCommand())
+            {
+                cmdMedico.CommandText = "DELETE FROM Medicos WHERE IdMedico = @IdMedico";
+                cmdMedico.Parameters.AddWithValue("@IdMedico", idMedico);
+                cmdMedico.ExecuteNonQuery();
+            }
+
+            return new RespuestaCrud
+            {
+                Ok = true,
+                Mensaje = "Medico eliminado correctamente."
+            };
         }
 
         public RespuestaCrud AgregarHorario(HorarioMedicoDto h)

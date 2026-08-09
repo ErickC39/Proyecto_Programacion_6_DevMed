@@ -8,8 +8,8 @@
             <dt class="col-sm-4">Identificación del visitante</dt><dd class="col-sm-8">@Model.Identificacion</dd>
             <dt class="col-sm-4">Nombre completo</dt><dd class="col-sm-8">@Model.NombreCompleto</dd>
             <dt class="col-sm-4">Paciente visitado</dt><dd class="col-sm-8">@Model.PacienteVisitado</dd>
-            <dt class="col-sm-4">Fecha y hora de entrada</dt><dd class="col-sm-8">@Model.FechaHoraEntrada</dd>
-            <dt class="col-sm-4">Fecha y hora de salida</dt><dd class="col-sm-8">@Model.FechaHoraSalida</dd>
+            <dt class="col-sm-4">Fecha y hora de entrada</dt><dd class="col-sm-8">@Model.FechaHoraEntrada.ToString("dd/MM/yyyy HH:mm")</dd>
+            <dt class="col-sm-4">Fecha y hora de salida</dt><dd class="col-sm-8">@(Model.FechaHoraSalida.HasValue ? Model.FechaHoraSalida.Value.ToString("dd/MM/yyyy HH:mm") : "")</dd>
             <dt class="col-sm-4">Minutos de estancia</dt><dd class="col-sm-8">@Model.MinutosEstancia</dd>
     </dl>
 </div></div>

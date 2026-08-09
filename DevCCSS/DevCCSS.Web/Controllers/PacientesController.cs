@@ -27,6 +27,7 @@ namespace DevCCSS.Web.Controllers
             ViewBag.TiposSangre = await _pacientes.ListarTiposSangreAsync();
             ViewBag.SexosBiologicos = await _pacientes.ListarSexosBiologicosAsync();
             ViewBag.IdentidadesGenero = await _pacientes.ListarIdentidadesGeneroAsync();
+            ViewBag.TiposIdentificacion = await _pacientes.ListarTiposIdentificacionAsync();
         }
 
         // GET: /Pacientes

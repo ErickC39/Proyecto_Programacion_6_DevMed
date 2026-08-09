@@ -7,5 +7,8 @@ namespace DevCCSS.Web.Contracts
     {
         [OperationContract]
         Task<List<EspecialidadDto>> ListarAsync();
+
+        [OperationContract]
+        Task<RespuestaCrud> CrearAsync(EspecialidadDto especialidad);
     }
 }
