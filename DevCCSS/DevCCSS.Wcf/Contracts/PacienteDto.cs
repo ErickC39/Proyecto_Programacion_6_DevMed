@@ -8,6 +8,8 @@ namespace DevCCSS.Wcf.Contracts
     {
         [DataMember] public int IdPaciente { get; set; }
         [DataMember] public string Identificacion { get; set; } = string.Empty;
+        [DataMember] public int? IdTipoIdentificacion { get; set; }
+        [DataMember] public string? TipoIdentificacion { get; set; }
         [DataMember] public string Nombre { get; set; } = string.Empty;
         [DataMember] public string Apellidos { get; set; } = string.Empty;
         [DataMember] public DateTime FechaNacimiento { get; set; }

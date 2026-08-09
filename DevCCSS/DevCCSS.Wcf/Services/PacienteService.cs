@@ -96,5 +96,11 @@ namespace DevCCSS.Wcf.Services
             var repo = new PacienteRepository(_config);
             return repo.ListarIdentidadesGenero();
         }
+
+        public List<TipoIdentificacionDto> ListarTiposIdentificacion()
+        {
+            var repo = new PacienteRepository(_config);
+            return repo.ListarTiposIdentificacion();
+        }
     }
 }

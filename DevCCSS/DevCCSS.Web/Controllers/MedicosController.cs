@@ -11,13 +11,25 @@ namespace DevCCSS.Web.Controllers
     {
         private readonly MedicoClient _medicoClient;
         private readonly EspecialidadClient _especialidadClient;
+        private readonly EmpleadoClient _empleadoClient;
 
         public MedicosController(
             MedicoClient medicoClient,
-            EspecialidadClient especialidadClient)
+            EspecialidadClient especialidadClient,
+            EmpleadoClient empleadoClient)
         {
             _medicoClient = medicoClient;
             _especialidadClient = especialidadClient;
+            _empleadoClient = empleadoClient;
+        }
+
+        // Solo empleados cuyo cargo (el rol de su usuario del sistema) es
+        // "Medico" pueden darse de alta como medico -- evita registrar por
+        // error a una recepcionista o enfermera, por ejemplo.
+        private async Task<List<EmpleadoDto>> CargarEmpleadosMedicos()
+        {
+            var empleados = await _empleadoClient.ListarAsync();
+            return empleados.Where(e => e.Cargo == "Medico").ToList();
         }
 
         public async Task<IActionResult> Index()
@@ -29,8 +41,8 @@ namespace DevCCSS.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var especialidades = await _especialidadClient.ListarAsync();
-            ViewBag.Especialidades = especialidades;
+            ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+            ViewBag.Empleados = await CargarEmpleadosMedicos();
 
             return View(new MedicoDto());
         }
@@ -43,6 +55,13 @@ namespace DevCCSS.Web.Controllers
             TimeSpan HoraInicio,
             TimeSpan HoraFin)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+                ViewBag.Empleados = await CargarEmpleadosMedicos();
+                return View(medico);
+            }
+
             try
             {
                 var respuesta = await _medicoClient.CrearAsync(medico);
@@ -51,6 +70,7 @@ namespace DevCCSS.Web.Controllers
                 {
                     ViewBag.Error = respuesta.Mensaje;
                     ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+                    ViewBag.Empleados = await CargarEmpleadosMedicos();
                     return View(medico);
                 }
 
@@ -63,6 +83,7 @@ namespace DevCCSS.Web.Controllers
                 {
                     ViewBag.Error = "No se pudo obtener el médico creado.";
                     ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+                    ViewBag.Empleados = await CargarEmpleadosMedicos();
                     return View(medico);
                 }
 
@@ -70,6 +91,7 @@ namespace DevCCSS.Web.Controllers
                 {
                     ViewBag.Error = "Debe seleccionar al menos un día de atención.";
                     ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+                    ViewBag.Empleados = await CargarEmpleadosMedicos();
                     return View(medico);
                 }
 
@@ -90,6 +112,7 @@ namespace DevCCSS.Web.Controllers
                     {
                         ViewBag.Error = respuestaHorario.Mensaje;
                         ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+                        ViewBag.Empleados = await CargarEmpleadosMedicos();
                         return View(medico);
                     }
                 }
@@ -101,32 +124,9 @@ namespace DevCCSS.Web.Controllers
             {
                 ViewBag.Error = ex.Message;
                 ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+                ViewBag.Empleados = await CargarEmpleadosMedicos();
                 return View(medico);
             }
-        }
-
-        // BUSCAR EMPLEADO POR IDENTIFICACION
-        [HttpGet]
-        public async Task<IActionResult> BuscarEmpleado(string identificacion)
-        {
-            var empleado =
-                await _medicoClient.BuscarEmpleadoAsync(identificacion);
-
-            if (empleado == null)
-            {
-                return NotFound(new
-                {
-                    mensaje = "Empleado no encontrado"
-                });
-            }
-
-            return Json(new
-            {
-                idEmpleado = empleado.IdEmpleado,
-                identificacion = empleado.Identificacion,
-                nombre = empleado.Nombre,
-                apellidos = empleado.Apellidos
-            });
         }
 
         public async Task<IActionResult> Details(int id)
@@ -153,6 +153,57 @@ namespace DevCCSS.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var medico = await _medicoClient.ObtenerPorIdAsync(id);
+            if (medico == null) return NotFound();
+
+            ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+            ViewBag.Horarios = await _medicoClient.ListarHorariosAsync(id);
+            return View(medico);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(MedicoDto medico)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+                ViewBag.Horarios = await _medicoClient.ListarHorariosAsync(medico.IdMedico);
+                return View(medico);
+            }
+
+            var respuesta = await _medicoClient.ActualizarAsync(medico);
+            if (!respuesta.Ok)
+            {
+                ViewBag.Error = respuesta.Mensaje;
+                ViewBag.Especialidades = await _especialidadClient.ListarAsync();
+                ViewBag.Horarios = await _medicoClient.ListarHorariosAsync(medico.IdMedico);
+                return View(medico);
+            }
+
+            TempData["Ok"] = respuesta.Mensaje;
+            return RedirectToAction(nameof(Details), new { id = medico.IdMedico });
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var medico = await _medicoClient.ObtenerPorIdAsync(id);
+            if (medico == null) return NotFound();
+            return View(medico);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var respuesta = await _medicoClient.EliminarAsync(id);
+            TempData[respuesta.Ok ? "Ok" : "Error"] = respuesta.Mensaje;
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
         public IActionResult Horario(int id)
         {
             return View(new HorarioMedicoDto { IdMedico = id });
@@ -171,7 +222,7 @@ namespace DevCCSS.Web.Controllers
             }
 
             TempData["Ok"] = respuesta.Mensaje;
-            return RedirectToAction(nameof(Details), new { id = horario.IdMedico });
+            return RedirectToAction(nameof(Edit), new { id = horario.IdMedico });
         }
     }
 }

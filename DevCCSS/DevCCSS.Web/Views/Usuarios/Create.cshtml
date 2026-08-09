@@ -22,4 +22,20 @@
         </div>
     </form>
 </div></div>
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var ROL_ADMINISTRADOR = '1';
+            var select = document.getElementById('selectRolUsuario');
+            var grupos = document.querySelectorAll('.grupo-empleado');
+            if (!select || grupos.length === 0) return;
+            function actualizar() {
+                var mostrar = select.value !== '' && select.value !== ROL_ADMINISTRADOR;
+                grupos.forEach(function (g) { g.style.display = mostrar ? '' : 'none'; });
+            }
+            select.addEventListener('change', actualizar);
+            actualizar();
+        })();
+    </script>
+}

@@ -53,15 +53,21 @@
                     </select>
                 </div>
                 <div class="col-md-3">
+                    @{
+                        var madres = (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Madres;
+                        var madreActual = madres.FirstOrDefault(m => m.IdPaciente == Model.IdMadre);
+                    }
                     <label class="form-label">Madre (opcional)</label>
-                    <input type="text" id="filtroMadre" class="form-control form-control-sm mb-1" placeholder="Buscar madre..." />
-                    <select asp-for="IdMadre" class="form-select">
-                        <option value="">-- Sin vincular --</option>
-                        @foreach (var m in (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Madres)
+                    <input type="text" id="buscarMadre" class="form-control" list="listaMadres"
+                           value="@(madreActual != null ? $"{madreActual.Nombre} {madreActual.Apellidos} ({madreActual.Identificacion})" : "")"
+                           placeholder="Buscar por nombre o identificación..." autocomplete="off" />
+                    <datalist id="listaMadres">
+                        @foreach (var m in madres)
                         {
-                            <option value="@m.IdPaciente">@m.Nombre @m.Apellidos (@m.Identificacion)</option>
+                            <option data-id="@m.IdPaciente" value="@($"{m.Nombre} {m.Apellidos} ({m.Identificacion})")"></option>
                         }
-                    </select>
+                    </datalist>
+                    <input type="hidden" asp-for="IdMadre" id="hdnIdMadre" />
                 </div>
 
                 <div class="col-md-4">
@@ -269,6 +275,6 @@
         document.querySelectorAll('.apgar-campo').forEach(sel => sel.addEventListener('change', recalcularApgar));
         recalcularApgar();
 
-        initSelectBuscable('#IdMadre', '#filtroMadre');
+        initDatalistId('#buscarMadre', '#hdnIdMadre');
     </script>
 }

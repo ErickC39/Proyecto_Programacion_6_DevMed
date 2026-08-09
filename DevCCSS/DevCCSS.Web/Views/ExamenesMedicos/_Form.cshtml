@@ -4,17 +4,21 @@
     <input type="hidden" asp-for="IdExamenMedico" />
 
     <div class="col-md-6">
+        @{
+            var pacientesExamen = (List<DevCCSS.Web.Contracts.PacienteExamenDto>)ViewBag.Pacientes;
+            var pacienteExamenActual = pacientesExamen.FirstOrDefault(p => p.IdPaciente == Model.IdPaciente);
+        }
         <label class="form-label">Paciente</label>
-        <input type="text" id="filtroPaciente" class="form-control form-control-sm mb-1" placeholder="Buscar paciente..." />
-        <select asp-for="IdPaciente" class="form-select">
-            <option value="0">-- Seleccione --</option>
-            @foreach (var paciente in (List<DevCCSS.Web.Contracts.PacienteExamenDto>)ViewBag.Pacientes)
+        <input type="text" id="buscarPacienteExamen" class="form-control" list="listaPacientesExamen"
+               value="@(pacienteExamenActual != null ? $"{pacienteExamenActual.NombreCompleto} ({pacienteExamenActual.Identificacion})" : "")"
+               placeholder="Buscar por nombre o identificación..." autocomplete="off" />
+        <datalist id="listaPacientesExamen">
+            @foreach (var paciente in pacientesExamen)
             {
-                <option value="@paciente.IdPaciente">
-                    @paciente.NombreCompleto (@paciente.Identificacion)
-                </option>
+                <option data-id="@paciente.IdPaciente" value="@($"{paciente.NombreCompleto} ({paciente.Identificacion})")"></option>
             }
-        </select>
+        </datalist>
+        <input type="hidden" asp-for="IdPaciente" id="hdnIdPacienteExamen" />
         <span asp-validation-for="IdPaciente" class="text-danger small"></span>
     </div>
 
@@ -50,6 +54,17 @@
                value="@Model.FechaSolicitud.ToString("yyyy-MM-ddTHH:mm")" />
         <span asp-validation-for="FechaSolicitud" class="text-danger small"></span>
     </div>
+
+    @if (Model.IdExamenMedico == 0)
+    {
+        <div class="col-12">
+            <div class="form-check">
+                <input asp-for="PrioridadAlta" class="form-check-input" />
+                <label class="form-check-label" asp-for="PrioridadAlta">Prioridad alta / emergencia</label>
+                <div class="form-text">La cita generada para este examen se agendará con prioridad de urgencia.</div>
+            </div>
+        </div>
+    }
 
     @if (Model.IdExamenMedico > 0)
     {

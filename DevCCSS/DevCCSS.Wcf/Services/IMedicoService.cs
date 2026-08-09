@@ -13,13 +13,13 @@ namespace DevCCSS.Wcf.Services
         MedicoDto? ObtenerPorId(int idMedico);
 
         [OperationContract]
-        EmpleadoDto? BuscarEmpleado(string identificacion);
-
-        [OperationContract]
         RespuestaCrud Crear(MedicoDto medico);
 
         [OperationContract]
         RespuestaCrud Actualizar(MedicoDto medico);
+
+        [OperationContract]
+        RespuestaCrud Eliminar(int idMedico);
 
         [OperationContract]
         RespuestaCrud AgregarHorario(HorarioMedicoDto horario);

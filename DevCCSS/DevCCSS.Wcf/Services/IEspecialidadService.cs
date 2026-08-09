@@ -8,5 +8,8 @@ namespace DevCCSS.Wcf.Services
     {
         [OperationContract]
         List<EspecialidadDto> Listar();
+
+        [OperationContract]
+        RespuestaCrud Crear(EspecialidadDto especialidad);
     }
 }

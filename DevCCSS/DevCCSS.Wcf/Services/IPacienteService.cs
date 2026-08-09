@@ -32,5 +32,8 @@ namespace DevCCSS.Wcf.Services
 
         [OperationContract]
         List<IdentidadGeneroDto> ListarIdentidadesGenero();
+
+        [OperationContract]
+        List<TipoIdentificacionDto> ListarTiposIdentificacion();
     }
 }

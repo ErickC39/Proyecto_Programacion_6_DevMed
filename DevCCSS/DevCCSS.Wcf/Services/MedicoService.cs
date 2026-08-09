@@ -30,17 +30,15 @@ namespace DevCCSS.Wcf.Services
                 .ObtenerPorId(idMedico);
         }
 
-        public EmpleadoDto? BuscarEmpleado(string identificacion)
-        {
-            return new MedicoRepository(_config)
-                .BuscarEmpleado(identificacion);
-        }
-
         public RespuestaCrud Crear(MedicoDto medico)
         {
             try
             {
                 return new MedicoRepository(_config).Crear(medico);
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Number == 547)
+            {
+                return new RespuestaCrud { Ok = false, Mensaje = "Debe seleccionar una especialidad valida." };
             }
             catch (Exception ex)
             {
@@ -53,6 +51,10 @@ namespace DevCCSS.Wcf.Services
             try
             {
                 return new MedicoRepository(_config).Actualizar(medico);
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Number == 547)
+            {
+                return new RespuestaCrud { Ok = false, Mensaje = "Debe seleccionar una especialidad valida." };
             }
             catch (Exception ex)
             {
@@ -82,6 +84,18 @@ namespace DevCCSS.Wcf.Services
         {
             return new MedicoRepository(_config)
               .ListarCitasAsignadas(idMedico);
+        }
+
+        public RespuestaCrud Eliminar(int idMedico)
+        {
+            try
+            {
+                return new MedicoRepository(_config).Eliminar(idMedico);
+            }
+            catch (Exception ex)
+            {
+                return new RespuestaCrud { Ok = false, Mensaje = ex.Message };
+            }
         }
     }
 }

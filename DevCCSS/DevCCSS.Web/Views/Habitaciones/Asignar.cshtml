@@ -23,16 +23,15 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Paciente</label>
-                    <input type="text" id="filtroPaciente" class="form-control form-control-sm mb-1" placeholder="Buscar paciente..." />
-                    <select asp-for="IdPaciente" class="form-select">
-                        <option value="0">-- Seleccione --</option>
+                    <input type="text" id="buscarPacienteAsignar" class="form-control" list="listaPacientesAsignar"
+                           placeholder="Buscar por nombre o identificación..." autocomplete="off" />
+                    <datalist id="listaPacientesAsignar">
                         @foreach (var paciente in (List<DevCCSS.Web.Contracts.PacienteHabitacionDto>)ViewBag.Pacientes)
                         {
-                            <option value="@paciente.IdPaciente">
-                                @paciente.NombreCompleto (@paciente.Identificacion)
-                            </option>
+                            <option data-id="@paciente.IdPaciente" value="@($"{paciente.NombreCompleto} ({paciente.Identificacion})")"></option>
                         }
-                    </select>
+                    </datalist>
+                    <input type="hidden" asp-for="IdPaciente" id="hdnIdPacienteAsignar" />
                     <span asp-validation-for="IdPaciente" class="text-danger small"></span>
                 </div>
 
@@ -68,5 +67,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>initSelectBuscable('#IdPaciente', '#filtroPaciente');</script>
+    <script>initDatalistId('#buscarPacienteAsignar', '#hdnIdPacienteAsignar');</script>
 }

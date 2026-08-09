@@ -5,7 +5,10 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2><i class="bi bi-heart-pulse"></i> Control de Médicos</h2>
-    <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg"></i> Nuevo Médico</a>
+    <div>
+        <a class="btn btn-outline-secondary" asp-controller="Especialidades" asp-action="Index"><i class="bi bi-clipboard2-pulse"></i> Ver especialidades</a>
+        <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg"></i> Nuevo Médico</a>
+    </div>
 </div>
 
 <div class="table-responsive">
@@ -39,7 +42,11 @@
                         }
                     </td>
                     <td class="text-end">
-                        <a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@medico.IdMedico"><i class="bi bi-eye"></i></a>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@medico.IdMedico" title="Ver detalle"><i class="bi bi-eye"></i></a>
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@medico.IdMedico" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@medico.IdMedico" title="Eliminar"><i class="bi bi-trash"></i></a>
+                        </div>
                     </td>
                 </tr>
             }

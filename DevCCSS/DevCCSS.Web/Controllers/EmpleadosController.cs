@@ -12,19 +12,16 @@ namespace DevCCSS.Web.Controllers
     {
         private readonly EmpleadoClient _servicio;
         private readonly UsuarioClient _usuarios;
-        private readonly PacienteClient _pacientes;
 
-        public EmpleadosController(EmpleadoClient servicio, UsuarioClient usuarios, PacienteClient pacientes)
+        public EmpleadosController(EmpleadoClient servicio, UsuarioClient usuarios)
         {
             _servicio = servicio;
             _usuarios = usuarios;
-            _pacientes = pacientes;
         }
 
         private async Task CargarListas()
         {
             ViewBag.Usuarios = await _usuarios.ListarAsync();
-            ViewBag.Pacientes = await _pacientes.ListarAsync();
         }
 
         public async Task<IActionResult> Index()

@@ -22,7 +22,7 @@ namespace DevCCSS.Web.Contracts
         Task<RespuestaCita> RegistrarLlegadaAsync(int idCita);
 
         [OperationContract]
-        Task<RespuestaCita> IniciarAtencionAsync(int idCita);
+        Task<RespuestaCita> IniciarAtencionAsync(int idCita, int? idHabitacion);
 
         [OperationContract]
         Task<RespuestaCita> CancelarAsync(int idCita);

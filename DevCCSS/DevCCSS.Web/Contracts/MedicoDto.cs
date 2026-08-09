@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace DevCCSS.Web.Contracts
@@ -8,6 +9,7 @@ namespace DevCCSS.Web.Contracts
         [DataMember]
         public int IdMedico { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un empleado.")]
         [DataMember]
         public int IdEmpleado { get; set; }
 
@@ -20,6 +22,7 @@ namespace DevCCSS.Web.Contracts
         [DataMember]
         public string Apellidos { get; set; } = "";
 
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar una especialidad.")]
         [DataMember]
         public int IdEspecialidad { get; set; }
 

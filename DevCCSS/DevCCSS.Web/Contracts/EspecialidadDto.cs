@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace DevCCSS.Web.Contracts
@@ -8,6 +9,7 @@ namespace DevCCSS.Web.Contracts
         [DataMember]
         public int IdEspecialidad { get; set; }
 
+        [Required(ErrorMessage = "El nombre de la especialidad es obligatorio.")]
         [DataMember]
         public string Nombre { get; set; } = string.Empty;
     }

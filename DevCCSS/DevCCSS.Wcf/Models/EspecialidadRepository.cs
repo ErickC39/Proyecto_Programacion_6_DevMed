@@ -38,5 +38,25 @@ namespace DevCCSS.Wcf.Models
 
             return lista;
         }
+
+        public RespuestaCrud Crear(EspecialidadDto especialidad)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"INSERT INTO dbo.Especialidades (Nombre) VALUES (@Nombre);
+                                 SELECT SCOPE_IDENTITY();";
+            cmd.Parameters.AddWithValue("@Nombre", especialidad.Nombre);
+
+            var idGenerado = Convert.ToInt32(cmd.ExecuteScalar());
+
+            return new RespuestaCrud
+            {
+                Ok = true,
+                Mensaje = "Especialidad agregada correctamente.",
+                IdGenerado = idGenerado
+            };
+        }
     }
 }

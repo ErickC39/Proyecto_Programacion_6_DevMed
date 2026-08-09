@@ -14,12 +14,12 @@
                placeholder="Buscar por nombre, apellidos o identificación..." />
     </div>
     <div class="col-md-4">
-        <select id="filtroEspecialidad" class="form-select" data-campo="especialidad">
-            <option value="">Todas las especialidades</option>
-            @foreach (var esp in Model.Where(x => !string.IsNullOrEmpty(x.Especialidad))
-                                       .Select(x => x.Especialidad).Distinct().OrderBy(x => x))
+        <select id="filtroCargo" class="form-select" data-campo="cargo">
+            <option value="">Todos los cargos</option>
+            @foreach (var cargo in Model.Where(x => !string.IsNullOrEmpty(x.Cargo))
+                                         .Select(x => x.Cargo).Distinct().OrderBy(x => x))
             {
-                <option value="@esp">@esp</option>
+                <option value="@cargo">@cargo</option>
             }
         </select>
     </div>
@@ -32,7 +32,7 @@
                 <th>Identificación</th>
                 <th>Nombre</th>
                 <th>Apellidos</th>
-                <th>Especialidad</th>
+                <th>Cargo</th>
                 <th>Estado</th>
                 <th class="text-end">Acciones</th>
             </tr>
@@ -42,11 +42,11 @@
             {
                 <tr class="fila-empleado"
                     data-buscar="@($"{x.Nombre} {x.Apellidos} {x.Identificacion}".ToLower())"
-                    data-especialidad="@x.Especialidad">
+                    data-cargo="@x.Cargo">
                     <td>@x.Identificacion</td>
                     <td>@x.Nombre</td>
                     <td>@x.Apellidos</td>
-                    <td>@x.Especialidad</td>
+                    <td>@(x.Cargo ?? "-")</td>
                     <td>
                         @if (x.Activo)
                         {
@@ -83,7 +83,7 @@
         initTablaFiltro({
             filas: '.fila-empleado',
             buscador: '#buscador',
-            filtros: ['#filtroEspecialidad'],
+            filtros: ['#filtroCargo'],
             contenedorPaginacion: '#paginacion',
             sinResultados: '#sinResultados'
         });

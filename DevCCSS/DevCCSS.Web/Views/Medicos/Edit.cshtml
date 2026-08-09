@@ -1,0 +1,71 @@
+@model DevCCSS.Web.Contracts.MedicoDto
+@{
+    ViewData["Title"] = "Editar médico";
+    var horarios = (List<DevCCSS.Web.Contracts.HorarioMedicoDto>)ViewBag.Horarios;
+    string[] nombresDias = { "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+    string NombreDia(int dia) => dia >= 1 && dia <= 7 ? nombresDias[dia] : dia.ToString();
+}
+
+<h2 class="mb-3"><i class="bi bi-pencil-square"></i> Editar médico</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="card shadow-sm"><div class="card-body">
+    <p><strong>Empleado:</strong> @Model.Nombre @Model.Apellidos (@Model.Identificacion)</p>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+        <input type="hidden" asp-for="IdMedico" />
+        <input type="hidden" asp-for="IdEmpleado" />
+
+        <div class="mb-3">
+            <label class="form-label">Especialidad</label>
+            <select asp-for="IdEspecialidad" class="form-select">
+                <option value="0">Seleccione una especialidad</option>
+                @foreach (var especialidad in ViewBag.Especialidades)
+                {
+                    <option value="@especialidad.IdEspecialidad">@especialidad.Nombre</option>
+                }
+            </select>
+            <span asp-validation-for="IdEspecialidad" class="text-danger small"></span>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar cambios</button>
+            <a asp-action="Details" asp-route-id="@Model.IdMedico" class="btn btn-secondary">Volver</a>
+        </div>
+    </form>
+</div></div>
+
+<div class="card shadow-sm mt-3"><div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Horario de atención</h5>
+        <a asp-action="Horario" asp-route-id="@Model.IdMedico" class="btn btn-sm btn-primary">
+            <i class="bi bi-clock"></i> Editar horario
+        </a>
+    </div>
+    @if (horarios.Any())
+    {
+        <table class="table table-sm mb-0">
+            <thead><tr><th>Día</th><th>Inicio</th><th>Fin</th></tr></thead>
+            <tbody>
+                @foreach (var h in horarios)
+                {
+                    <tr><td>@NombreDia(h.DiaSemana)</td><td>@h.HoraInicio</td><td>@h.HoraFin</td></tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted mb-0">Este médico aún no tiene horarios registrados.</p>
+    }
+</div></div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

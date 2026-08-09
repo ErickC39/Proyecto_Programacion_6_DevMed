@@ -15,14 +15,16 @@ namespace DevCCSS.Web.Controllers
         private readonly MedicoClient _medicos;
         private readonly EspecialidadClient _especialidades;
         private readonly ExamenMedicoClient _examenes;
+        private readonly HabitacionClient _habitaciones;
 
-        public CitasController(CitaClient citas, EmpleadoClient empleados, MedicoClient medicos, EspecialidadClient especialidades, ExamenMedicoClient examenes)
+        public CitasController(CitaClient citas, EmpleadoClient empleados, MedicoClient medicos, EspecialidadClient especialidades, ExamenMedicoClient examenes, HabitacionClient habitaciones)
         {
             _citas = citas;
             _empleados = empleados;
             _medicos = medicos;
             _especialidades = especialidades;
             _examenes = examenes;
+            _habitaciones = habitaciones;
         }
 
         // Carga los medicos (activos) junto con su especialidad -- vía la relacion
@@ -53,13 +55,22 @@ namespace DevCCSS.Web.Controllers
 
             if (cita.EstadoCita == "En espera" && cita.TiempoEsperaMinutos > 60)
             {
-              
+
                 ViewBag.AvisoDemora = cita.CitaPreviaEsControl
                     ? "El tiempo de espera supera la hora porque la cita anterior con este médico " +
                       "es una cita de control/revisión, por lo que puede tomar más tiempo de lo habitual."
                     : "El tiempo de espera ya supera el máximo recomendado de 1 hora. " +
                       "Esto se debe a que la cita anterior con este médico está tomando más tiempo del previsto.";
             }
+
+            if (cita.EstadoCita == "En espera" && cita.IdTipoHabitacionRequerido.HasValue && cita.IdHabitacionAsignada is null)
+            {
+                var todas = await _habitaciones.ListarAsync();
+                ViewBag.HabitacionesDisponibles = todas
+                    .Where(h => h.IdTipoHabitacion == cita.IdTipoHabitacionRequerido && h.EstadoHabitacion == "Disponible")
+                    .ToList();
+            }
+
             return View(cita);
         }
 
@@ -145,9 +156,9 @@ namespace DevCCSS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IniciarAtencion(int id)
+        public async Task<IActionResult> IniciarAtencion(int id, int? idHabitacion)
         {
-            var r = await _citas.IniciarAtencionAsync(id);
+            var r = await _citas.IniciarAtencionAsync(id, idHabitacion);
             TempData[r.Ok ? "Ok" : "Error"] = r.Mensaje;
             return RedirectToAction(nameof(Details), new { id });
         }
@@ -161,6 +172,7 @@ namespace DevCCSS.Web.Controllers
                 TempData["Error"] = "Solo se puede finalizar una cita en estado 'En Progreso'.";
                 return RedirectToAction(nameof(Details), new { id });
             }
+            ViewBag.TiposHabitacion = await _habitaciones.ListarTiposHabitacionAsync();
             return View(new FinalizarCitaDto { IdCita = id });
         }
 
@@ -168,13 +180,18 @@ namespace DevCCSS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Finalizar(FinalizarCitaDto model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                ViewBag.TiposHabitacion = await _habitaciones.ListarTiposHabitacionAsync();
+                return View(model);
+            }
 
             var r = await _citas.FinalizarAsync(model);
 
             if (!r.Ok)
             {
                 ModelState.AddModelError("", r.Mensaje);
+                ViewBag.TiposHabitacion = await _habitaciones.ListarTiposHabitacionAsync();
                 return View(model);
             }
 

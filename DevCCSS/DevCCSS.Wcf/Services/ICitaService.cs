@@ -22,7 +22,7 @@ namespace DevCCSS.Wcf.Services
         RespuestaCita RegistrarLlegada(int idCita);
 
         [OperationContract]
-        RespuestaCita IniciarAtencion(int idCita);
+        RespuestaCita IniciarAtencion(int idCita, int? idHabitacion);
 
         [OperationContract]
         RespuestaCita Eliminar(int idCita);

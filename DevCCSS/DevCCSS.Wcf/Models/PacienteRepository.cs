@@ -111,6 +111,7 @@ namespace DevCCSS.Wcf.Models
                 cmd.Parameters.Add(new SqlParameter("@IdPaciente", SqlDbType.Int) { Value = p.IdPaciente });
 
             cmd.Parameters.Add(new SqlParameter("@Identificacion", SqlDbType.NVarChar, 50) { Value = p.Identificacion });
+            cmd.Parameters.Add(new SqlParameter("@IdTipoIdentificacion", SqlDbType.Int) { Value = (object?)p.IdTipoIdentificacion ?? DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@Nombre", SqlDbType.NVarChar, 100) { Value = p.Nombre });
             cmd.Parameters.Add(new SqlParameter("@Apellidos", SqlDbType.NVarChar, 100) { Value = p.Apellidos });
             cmd.Parameters.Add(new SqlParameter("@FechaNacimiento", SqlDbType.Date) { Value = p.FechaNacimiento });
@@ -130,6 +131,8 @@ namespace DevCCSS.Wcf.Models
             {
                 IdPaciente = r.GetInt32(r.GetOrdinal("IdPaciente")),
                 Identificacion = r.GetString(r.GetOrdinal("Identificacion")),
+                IdTipoIdentificacion = r["IdTipoIdentificacion"] == DBNull.Value ? null : r.GetInt32(r.GetOrdinal("IdTipoIdentificacion")),
+                TipoIdentificacion = r["TipoIdentificacion"] as string,
                 Nombre = r.GetString(r.GetOrdinal("Nombre")),
                 Apellidos = r.GetString(r.GetOrdinal("Apellidos")),
                 FechaNacimiento = r.GetDateTime(r.GetOrdinal("FechaNacimiento")),
@@ -209,6 +212,19 @@ namespace DevCCSS.Wcf.Models
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
                 lista.Add(new IdentidadGeneroDto { IdIdentidadGenero = reader.GetInt32(0), Descripcion = reader.GetString(1) });
+            return lista;
+        }
+
+        public List<TipoIdentificacionDto> ListarTiposIdentificacion()
+        {
+            var lista = new List<TipoIdentificacionDto>();
+            using var conn = new SqlConnection(_connectionString);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT IdTipoIdentificacion, Descripcion FROM dbo.Tipos_Identificacion ORDER BY IdTipoIdentificacion;";
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+                lista.Add(new TipoIdentificacionDto { IdTipoIdentificacion = reader.GetInt32(0), Descripcion = reader.GetString(1) });
             return lista;
         }
     }

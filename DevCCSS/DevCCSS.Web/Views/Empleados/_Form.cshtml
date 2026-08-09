@@ -29,39 +29,19 @@
         <span asp-validation-for="Apellidos" class="text-danger small"></span>
     </div>
     <div class="col-md-6">
-        <label class="form-label">Especialidad</label>
-        <input asp-for="Especialidad" class="form-control" />
-        <span asp-validation-for="Especialidad" class="text-danger small"></span>
-    </div>
-    <div class="col-md-6">
         <label class="form-label">Salario por hora</label>
         <input asp-for="SalarioPorHora" type="number" step="0.01" class="form-control" />
         <span asp-validation-for="SalarioPorHora" class="text-danger small"></span>
     </div>
     <div class="col-md-6">
-        <label class="form-label">Usuario del sistema</label>
+        <label class="form-label">Usuario del sistema (opcional)</label>
         <select asp-for="IdUsuario" class="form-select">
-            <option value="">-- Seleccione --</option>
+            <option value="">-- Ninguno --</option>
             @foreach (var u in (List<DevCCSS.Web.Contracts.UsuarioDto>)ViewBag.Usuarios)
             {
                 <option value="@u.IdUsuario">@u.Username</option>
             }
         </select>
     </div>
-
-    <div class="col-md-6">
-        <label class="form-label">Vincular como paciente (acceso de emergencia)</label>
-        <input type="text" id="filtroPacienteVinculado" class="form-control form-control-sm mb-1" placeholder="Buscar paciente..." />
-        <select asp-for="IdPacienteVinculado" class="form-select">
-            <option value="">-- Sin vincular --</option>
-            @foreach (var p in (List<DevCCSS.Web.Contracts.PacienteDto>)ViewBag.Pacientes)
-            {
-                <option value="@p.IdPaciente">@p.Nombre @p.Apellidos (@p.Identificacion)</option>
-            }
-        </select>
-        <small class="text-muted">
-            Si se vincula, este empleado podrá solicitar una "cita de emergencia" desde su ficha,
-            sin turno previo, reagendando automáticamente las citas del médico que choquen.
-        </small>
-    </div>
+    <input type="hidden" asp-for="IdPacienteVinculado" />
 </div>
