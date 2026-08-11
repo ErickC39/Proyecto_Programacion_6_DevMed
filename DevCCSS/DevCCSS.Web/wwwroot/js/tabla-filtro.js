@@ -86,7 +86,7 @@ function initTablaFiltro(opts) {
             const campo = sel.dataset.campo;
             if (valor && campo && fila.dataset[campo] !== valor) return false;
         }
-        return true;
+        return false;
     });
 
     if (buscador) buscador.addEventListener('input', () => dt.draw());

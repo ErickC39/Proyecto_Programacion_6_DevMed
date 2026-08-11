@@ -58,12 +58,14 @@ var app = builder.Build();
 AuditContext.Accessor = app.Services.GetRequiredService<IHttpContextAccessor>();
 
 // Cuota de mensaje elevada (por defecto BasicHttpBinding es de solo 64KB,
-// muy poco para listados grandes como la bitacora de auditoria).
+// muy poco para listados grandes como la bitacora de auditoria). Al dejar
+// de purgarse Bitacora_Auditoria automaticamente el historial crece sin
+// limite, asi que se deja mas margen del que se necesita hoy.
 var binding = new BasicHttpBinding
 {
-    MaxReceivedMessageSize = 10 * 1024 * 1024,
-    MaxBufferSize = 10 * 1024 * 1024,
-    ReaderQuotas = { MaxArrayLength = 10 * 1024 * 1024, MaxStringContentLength = 10 * 1024 * 1024 }
+    MaxReceivedMessageSize = 50 * 1024 * 1024,
+    MaxBufferSize = 50 * 1024 * 1024,
+    ReaderQuotas = { MaxArrayLength = 50 * 1024 * 1024, MaxStringContentLength = 50 * 1024 * 1024 }
 };
 
 app.UseServiceModel(serviceBuilder =>

@@ -19,7 +19,7 @@ namespace DevCCSS.Wcf.Models
             var lista = new List<BitacoraAuditoriaDto>();
             using var conn = new SqlConnection(_connectionString);
             using var cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT TOP (@Top) * FROM dbo.vw_BitacoraAuditoria ORDER BY Fecha DESC;";
+            cmd.CommandText = "SELECT TOP (@Top) * FROM dbo.vw_BitacoraAuditoria ORDER BY FechaRegistro DESC;";
             cmd.Parameters.Add(new SqlParameter("@Top", SqlDbType.Int) { Value = top });
             conn.Open();
             using var reader = cmd.ExecuteReader();

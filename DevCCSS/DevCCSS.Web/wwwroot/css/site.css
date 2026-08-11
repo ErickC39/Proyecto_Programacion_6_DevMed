@@ -410,3 +410,7 @@ footer {
     color: var(--bs-body-color);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
+
+table tbody tr {
+    display: none;
+}

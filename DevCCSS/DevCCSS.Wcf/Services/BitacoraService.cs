@@ -9,7 +9,7 @@ namespace DevCCSS.Wcf.Services
         public BitacoraService(IConfiguration config) { _config = config; }
 
         public List<BitacoraAuditoriaDto> ListarAuditoria(int top)
-            => new BitacoraRepository(_config).ListarAuditoria(top <= 0 ? 200 : top);
+            => new BitacoraRepository(_config).ListarAuditoria(top <= 0 ? 100 : top);
 
         public List<BitacoraErrorDto> ListarErrores(int top)
             => new BitacoraRepository(_config).ListarErrores(top <= 0 ? 200 : top);
